@@ -8,26 +8,6 @@
 }
 
 :root {
-/* html.dark { */
-  --foreground-1: #f0f0f0;
-  --foreground-2: #e6e6e6;
-  --foreground-3: #dcdcdc;
-
-  --background-1: #646464;
-  --background-2: #505050;
-  --background-3: #3c3c3c;
-
-  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  --box-shadow-hover: 0 0 10px rgba(0, 0, 0, 0.2);
-
-  --display-dark: block;
-  --display-light: none;
-
-  --hr-image: linear-gradient(to right, transparent, #e6e6e6 50%, transparent);
-}
-
-html.dark {
-/* :root { */
   --background-1: #dcdcdc;
   --background-2: #e6e6e6;
   --background-3: #f0f0f0;
@@ -43,10 +23,34 @@ html.dark {
   --display-light: block;
   
   --hr-image: linear-gradient(to right, transparent, #505050 50%, transparent);
+
+  --not-allowed-cursor: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'%3E%3Cg fill=\'none\' stroke=\'%23505050\' stroke-width=\'3\' stroke-linecap=\'round\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'7.5\'/%3E%3Cline x1=\'6.7\' y1=\'17.3\' x2=\'17.3\' y2=\'6.7\'/%3E%3C/g%3E%3C/svg%3E') 12 12, not-allowed;
+}
+
+html.dark {
+  --foreground-1: #f0f0f0;
+  --foreground-2: #e6e6e6;
+  --foreground-3: #dcdcdc;
+
+  --background-1: #646464;
+  --background-2: #505050;
+  --background-3: #3c3c3c;
+
+  --box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  --box-shadow-hover: 0 0 10px rgba(0, 0, 0, 0.2);
+
+  --display-dark: block;
+  --display-light: none;
+
+  --hr-image: linear-gradient(to right, transparent, #e6e6e6 50%, transparent);
+
+  --not-allowed-cursor: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'24\' viewBox=\'0 0 24 24\'%3E%3Cg fill=\'none\' stroke=\'%23E6E6E6\' stroke-width=\'3\' stroke-linecap=\'round\'%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'7.5\'/%3E%3Cline x1=\'6.7\' y1=\'17.3\' x2=\'17.3\' y2=\'6.7\'/%3E%3C/g%3E%3C/svg%3E') 12 12, not-allowed;
 }
 
 html {
+  background: #3c3c3c;
   scroll-behavior: smooth;
+  scrollbar-gutter: stable;
 }
 
 body {

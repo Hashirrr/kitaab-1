@@ -1,0 +1,25 @@
+.add__btn__cta {
+  gap: 5px;
+  bottom: 16px;
+  width: 150px;
+  height: 40px;
+  display: flex;
+  outline: none;
+  position: fixed;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 5px;
+  align-items: center;
+  letter-spacing: 0.75;
+  justify-content: center;
+  color: var(--background-2);
+  background: var(--foreground-3);
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  transition: transform 250ms ease, background-color 250ms ease;
+}
+
+.add__btn__cta:hover {
+  color: var(--background-3);
+  background: var(--foreground-2);
+}

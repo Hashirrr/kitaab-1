@@ -17,7 +17,6 @@ import { setSidebarExpanded } from '@/store/slices/uiSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { selectSidebarExpanded } from '@/store/slices/selectors';
 import Hamburger from '@/components/primitive/hamburger/Hamburger';
-import Draggables from '@/components/composite/draggables/Draggables';
 
 const Header = ({ alt }: HeaderProps) => {
   return (
@@ -67,7 +66,7 @@ export default function Sidebar() {
     KITAAB_LOGO_ALT,
     SIDEBAR_BTN_SETTINGS,
     SIDEBAR_NAV_ARIA_LABEL,
-    SIDEBAR_BTN_HREF_SETTINGS,
+    SIDEBAR_BTN_HREF_SETTINGS
   } = PLACEHOLDERS;
 
   return (
@@ -110,7 +109,6 @@ export default function Sidebar() {
           />
         </footer>
       </aside>
-      <Draggables/>
     </>
   );
 }

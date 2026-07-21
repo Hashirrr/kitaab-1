@@ -20,5 +20,9 @@ export const PLACEHOLDERS = {
   DRAGGABLE_CARD_KEY_SUB_DEEDS: 'Sub Deeds',
   DRAGGABLE_CARD_KEY_LAST_RECORDED: 'Last Recorded',
   DRAGGABLE_CARD_BTN_VIEW_DETAILS: 'View Details',
+  PAGE_NAME_DEEDS: 'Deeds',
+  MODAL_DELETE_DEED_TITLE: 'Delete Deed',
+  MODAL_DELETE_DEED_DESCRIPTION: 'Deleting this deed will permanently delete all associated sub-deeds and records. Are you sure you want to continue?',
   NONE: 'None',
+  UNDEFINED: 'undefined'
 };

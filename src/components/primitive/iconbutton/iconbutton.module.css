@@ -1,0 +1,49 @@
+.icon__button {
+  width: 35px;
+  height: 40px;
+  display: flex;
+  outline: none;
+  flex-shrink: 0;
+  border-radius: 5px;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(0, 0, 0, 0.01);
+  transition: transform 250ms ease, background-color 250ms ease;
+}
+
+.cursor__pointer {
+  cursor: pointer;
+}
+
+.cursor__grab {
+  cursor: grab;
+}
+
+.icon__button:disabled {
+  opacity: 0.5;
+  cursor: var(--not-allowed-cursor);
+}
+
+.primary__background {
+  color: var(--foreground-3);
+  background: var(--background-2);
+}
+
+.primary__background:hover {
+  color: var(--foreground-2);
+  background: var(--background-1);
+}
+
+.secondary__background {
+  color: var(--foreground-1);
+  background: var(--background-3);
+}
+
+.secondary__background:hover {
+  color: var(--foreground-3);
+  background: var(--background-1);
+}
+
+.shadow {
+  box-shadow: var(--box-shadow);
+}

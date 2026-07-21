@@ -1,0 +1,71 @@
+.page__header {
+  gap: 16px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.hasanaat__saiyyiaat {
+  width: 100px;
+  height: 40px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  overflow: hidden;
+  perspective: 600px;
+  border-radius: 5px;
+  background: transparent;
+  box-shadow: var(--box-shadow);
+}
+
+.inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 500ms ease;
+}
+
+.flipped .inner {
+  transform: rotateY(180deg);
+}
+
+.front, .back {
+  inset: 0;
+  display: flex;
+  font-size: 14px;
+  font-weight: 600;
+  position: absolute;
+  align-items: center;
+  letter-spacing: 0.75px;
+  justify-content: center;
+  color: var(--foreground-1);
+  backface-visibility: hidden;
+  background: var(--background-3);
+  transition: background-color 250ms ease, color 250ms ease;
+}
+
+.front:hover, .back:hover {
+  color: var(--foreground-3);
+  background: var(--background-1);
+}
+
+.back {
+  transform: rotateY(180deg);
+}
+
+.page__name {
+  flex: 1;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  font-size: 14px;
+  border-radius: 5px;
+  align-items: center;
+  letter-spacing: 0.75;
+  justify-content: center;
+  color: var(--foreground-1);
+  box-shadow: var(--box-shadow);
+  background: var(--background-3);
+  transition: background-color 250ms ease, color 250ms ease;
+}
