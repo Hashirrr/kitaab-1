@@ -17,12 +17,12 @@ function ModalContainer() {
 
   return (
     <Modal
+      type={modal.type}
       title={modal.title}
       onConfirm={onConfirm}
       isOpen={modal.isOpen}
       primaryBtn={modal.confirmText}
       secondaryBtn={modal.cancelText}
-      description={modal.description}
       onClose={() => dispatch(closeModal())}
     />
   );

@@ -8,10 +8,10 @@ export const initialState: UIState = {
     height: 0,
   },
   modal: {
+    type: '',
     title: '',
     isOpen: false,
     cancelText: '',
-    description: '',
     confirmText: '',
     deedId: 0
   },

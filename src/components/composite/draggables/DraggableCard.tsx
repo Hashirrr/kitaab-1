@@ -19,7 +19,6 @@ export default function DraggableCard({ deed }: DraggableCardProps) {
     MODAL_DELETE_DEED_TITLE,
     DRAGGABLE_CARD_KEY_ADDED,
     DRAGGABLE_CARD_KEY_SUB_DEEDS,
-    MODAL_DELETE_DEED_DESCRIPTION,
     DRAGGABLE_CARD_BTN_VIEW_DETAILS,
     DRAGGABLE_CARD_KEY_LAST_RECORDED
   } = PLACEHOLDERS;
@@ -64,10 +63,10 @@ export default function DraggableCard({ deed }: DraggableCardProps) {
             variant={IconButtonBackground.primary}
             onClick={() =>
               dispatch(openModal({
+                type: 'delete',
                 deedId: Number(id),
                 confirmText: ModalCTA.delete,
                 title: MODAL_DELETE_DEED_TITLE,
-                description: MODAL_DELETE_DEED_DESCRIPTION
               }))
             }
           />

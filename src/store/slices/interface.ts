@@ -8,12 +8,12 @@ export interface UIState {
     height: number
   },
   modal: {
+    type: string,
     title: string,
     deedId: number,
     isOpen: boolean,
     cancelText: string,
-    confirmText: string,
-    description: string
+    confirmText: string
   },
   deedCategory: DeedCategory
 };
@@ -24,9 +24,9 @@ export interface ViewportPayload {
 };
 
 export interface ModalPayload {
+  type: string;
   title: string;
   deedId: number;
-  description: string;
   cancelText?: string;
   confirmText?: string;
 }

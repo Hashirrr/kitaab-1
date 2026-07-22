@@ -46,6 +46,6 @@ export const sidebarItems = [
 ];
 
 export const isActiveLocation = (location: string, href: string, styles: any) => {
-  if (location != href) return '';
+  if (!location.includes(href)) return '';
   return styles.is__active__location;
 };

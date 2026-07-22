@@ -1,0 +1,52 @@
+.container {
+  gap: 20px;
+  display: flex;
+  margin-left: 10px;
+  flex-direction: column;
+  border-left: var(--border);
+}
+
+.step {
+  gap: 10px;
+  display: flex;
+}
+
+.title {
+  font-weight: 500;
+  color: var(--foreground-3);
+}
+
+.badge {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: -13px;
+  border-radius: 50%;
+  align-items: center;
+  border: var(--border);
+  justify-content: center;
+  color: var(--foreground-3);
+  background-color: var(--background-1);
+}
+
+.badge.is__active {
+  background-color: var(--foreground-1);
+  color: var(--background-1);
+}
+
+.content {
+  height: 0;
+  width: 300px;
+  overflow: hidden;
+  margin-left: 40px;
+  border-radius: 10px;
+  transition: height 0.3s ease;
+  box-shadow: var(--box-shadow);
+  background-color: var(--background-3);
+}
+
+.content.expand {
+  height: 300px;
+}

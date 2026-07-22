@@ -2,18 +2,18 @@
 
 import clsx from 'clsx';
 import styles from './modal.module.css';
-import { handleKeyDown } from './utils';
 import { createPortal } from 'react-dom';
 import { ModalProps } from './interface';
 import { IoClose } from 'react-icons/io5';
 import { useEffect, useState } from 'react';
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import { handleKeyDown, modalActionType } from './utils';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
 import { Cursor, EventListeners, IconButtonBackground, Overflow } from '@/constants/enums';
 
 const ANIMATION_DURATION = 250;
 
-export default function Modal({ isOpen, onClose, onConfirm, title, description, primaryBtn, secondaryBtn, closeOnBackdrop = true }: ModalProps) {
+export default function Modal({ isOpen, onClose, onConfirm, title, type, primaryBtn, secondaryBtn, closeOnBackdrop = true }: ModalProps) {
   const { UNDEFINED } = PLACEHOLDERS;
 
   const [mounted, setMounted] = useState(isOpen);
@@ -94,7 +94,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, description, 
 
         <hr className={styles.fading__line} />
 
-        <p className={styles.description}>{description}</p>
+        {modalActionType('delete')}
 
         <div className={styles.footer}>
           <button className={styles.secondary__btn} onClick={close}>

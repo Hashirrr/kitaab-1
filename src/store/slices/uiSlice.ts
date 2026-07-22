@@ -19,9 +19,9 @@ const uiSlice = createSlice({
     },
     openModal(state, action: PayloadAction<ModalPayload>) {
       state.modal.isOpen = true;
+      state.modal.type = action.payload.type;
       state.modal.title = action.payload.title;
       state.modal.deedId = action.payload.deedId;
-      state.modal.description = action.payload.description;
       state.modal.cancelText = action.payload.cancelText || ModalCTA.cancel;
       state.modal.confirmText = action.payload.confirmText || ModalCTA.confirm;
     },

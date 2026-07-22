@@ -39,7 +39,7 @@
   background-image: var(--hr-image);
 }
 
-.description {
+.content {
   padding: 20px;
   font-size: 14px;
   text-align: justify;
