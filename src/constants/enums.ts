@@ -40,3 +40,4 @@ export enum Overflow {
 export enum ModalTypes {
   delete_deed = 'delete_deed'
 }
+
