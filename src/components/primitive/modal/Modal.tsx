@@ -94,7 +94,7 @@ export default function Modal({ isOpen, onClose, onConfirm, title, type, primary
 
         <hr className={styles.fading__line} />
 
-        {modalActionType('delete')}
+        {modalActionType(type)}
 
         <div className={styles.footer}>
           <button className={styles.secondary__btn} onClick={close}>

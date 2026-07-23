@@ -1,5 +1,6 @@
-import { Keys } from '@/constants/enums';
+import styles from './modal.module.css';
 import { Dispatch, SetStateAction } from 'react';
+import { Keys, ModalTypes } from '@/constants/enums';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 
 const { MODAL_DELETE_DEED_DESCRIPTION } = PLACEHOLDERS;
@@ -19,10 +20,10 @@ export const handleKeyDown = (e: KeyboardEvent, close: () => void) => {
 
 export const modalActionType = (type: string) => {
   switch (type) {
-    case 'delete':
+    case ModalTypes.delete_deed:
     default: 
       return (
-        <p>{MODAL_DELETE_DEED_DESCRIPTION}</p>
+        <p className={styles.content}>{MODAL_DELETE_DEED_DESCRIPTION}</p>
       );
   }
 }

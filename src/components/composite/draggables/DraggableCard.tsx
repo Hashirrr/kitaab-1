@@ -11,7 +11,7 @@ import { openModal } from '@/store/slices/uiSlice';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
 import { deeds, getDeedById, getSubDeedsById } from '@/app/deeds/utils';
-import { Cursor, IconButtonBackground, ModalCTA } from '@/constants/enums';
+import { Cursor, IconButtonBackground, ModalCTA, ModalTypes } from '@/constants/enums';
 
 export default function DraggableCard({ deed }: DraggableCardProps) {
   const {
@@ -63,10 +63,10 @@ export default function DraggableCard({ deed }: DraggableCardProps) {
             variant={IconButtonBackground.primary}
             onClick={() =>
               dispatch(openModal({
-                type: 'delete',
                 deedId: Number(id),
+                type: ModalTypes.delete_deed,
                 confirmText: ModalCTA.delete,
-                title: MODAL_DELETE_DEED_TITLE,
+                title: MODAL_DELETE_DEED_TITLE
               }))
             }
           />

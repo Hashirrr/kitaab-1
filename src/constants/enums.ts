@@ -36,3 +36,7 @@ export enum Overflow {
   empty = 'empty',
   hidden = 'hidden'
 }
+
+export enum ModalTypes {
+  delete_deed = 'delete_deed'
+}
