@@ -1,6 +1,6 @@
 import { initialState } from './initialState';
-import { DeedCategory, ModalCTA } from '@/constants/enums';
-import { ModalPayload, ViewportPayload } from './interface';
+import { ViewportPayload } from './interface';
+import { DeedCategory } from '@/constants/enums';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const uiSlice = createSlice({
@@ -13,17 +13,23 @@ const uiSlice = createSlice({
     setViewport(state, action: PayloadAction<ViewportPayload>) {
       const { width, height } = action.payload;
 
-      state.sidebarExpanded = false;
       state.viewport.width = width;
+      state.sidebarExpanded = false;
       state.viewport.height = height;
     },
-    openModal(state, action: PayloadAction<ModalPayload>) {
+    openModal(state, action: PayloadAction<string>) {
       state.modal.isOpen = true;
-      state.modal.title = action.payload.title;
-      state.modal.deedId = action.payload.deedId;
-      state.modal.description = action.payload.description;
-      state.modal.cancelText = action.payload.cancelText || ModalCTA.cancel;
-      state.modal.confirmText = action.payload.confirmText || ModalCTA.confirm;
+      state.modal.type = action.payload;
+    },
+    setModalError(state, action: PayloadAction<string>) {
+      state.modal.error = action.payload;
+      state.modal.disabled = !!action.payload;
+    },
+    incementOpenModalStep(state) {
+      state.openModalStep++;
+    },
+    resetOpenModalStep(state) {
+      state.openModalStep = 1;
     },
     closeModal(state) {
       state.modal.isOpen = false;
@@ -35,4 +41,14 @@ const uiSlice = createSlice({
 });
 
 export default uiSlice.reducer;
-export const { setSidebarExpanded, setViewport, openModal, closeModal, setDeedCategory } = uiSlice.actions;
+
+export const {
+  openModal,
+  closeModal,
+  setViewport,
+  setModalError,
+  setDeedCategory,
+  setSidebarExpanded,
+  resetOpenModalStep,
+  incementOpenModalStep
+} = uiSlice.actions;

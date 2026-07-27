@@ -1,4 +1,8 @@
+import type { AppDispatch } from '@/store';
+import { openModal } from '@/store/slices/uiSlice';
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import { ModalTypes, Routes } from '@/constants/enums';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const { NONE } = PLACEHOLDERS;
 
@@ -60,3 +64,8 @@ export const getSubDeedsById = (id: number) => deeds.find((deed) => deed.id === 
 export const getDeedIds = () => deeds.map((deed) => ({ id: String(deed.id) }));
 
 export const deleteDeedByID = (id: number) => deeds = deeds.filter((deed) => deed.id !== id);
+
+export const handleAddNewDeed = (router: AppRouterInstance, dispatch: AppDispatch) => {
+  router.push(Routes.new_deeds);
+  dispatch(openModal(ModalTypes.add_deed));
+};

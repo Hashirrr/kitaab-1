@@ -1,0 +1,82 @@
+.container {
+  flex: 1;
+  gap: 6px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.label__wrapper {
+  display: flex;
+  padding: 0 5px;
+  font-size: 14px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground-2);
+}
+
+.helper__text {
+  font-size: 12px;
+  color: var(--foreground-3);
+}
+
+.input__wrapper {
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  resize: none;
+  font-size: 14px;
+  min-height: 30px;
+  max-height: 90px;
+  overflow: hidden;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: var(--foreground-2);
+  background: var(--background-2);
+  border: 1px solid var(--background-1);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.padding__left {
+  padding-left: 35px;
+}
+
+.padding__right {
+  padding-right: 35px;
+}
+
+.input:hover {
+  background: var(--background-3);
+  border-color: var(--foreground-2);
+}
+
+.input:focus {
+  outline: none;
+  background: var(--background-3);
+  border-color: var(--foreground-2);
+  box-shadow: 0 0 0 1px var(--foreground-2);
+}
+
+.left__icon,
+.right__icon {
+  top: 15px;
+  position: absolute;
+  pointer-events: none;
+  color: var(--foreground-2);
+  transform: translateY(-50%);
+}
+
+.left__icon {
+  left: 10px;
+}
+
+.right__icon {
+  right: 10px;
+}

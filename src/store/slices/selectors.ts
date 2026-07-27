@@ -11,3 +11,6 @@ export const selectModal = (state: RootState) =>
 
 export const selectDeedCategory = (state: RootState) =>
   state.ui.deedCategory;
+
+export const selectOpenModalStep = (state: RootState) =>
+  state.ui.openModalStep;

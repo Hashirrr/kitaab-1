@@ -24,9 +24,11 @@ export const useOnConfirm = () => {
 };
 
 export const toggleTheme = (setMode: React.Dispatch<React.SetStateAction<Mode>>) => {
-  document.documentElement.classList.toggle('dark');
+  document.documentElement.classList.toggle(Mode.dark);
   setMode(prev => (prev === Mode.light ? Mode.dark : Mode.light));
 };
+
+export const toSnakeCase = (text: string) => text.trim().toLowerCase().replace(/\s+/g, '_');
 
 dayjs.extend(relativeTime);
 export const fromNow = (date: string | Date) => dayjs(date).fromNow();

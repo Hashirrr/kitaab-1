@@ -14,6 +14,10 @@ export enum Mode {
 }
 
 export enum ModalCTA {
+  no = 'No',
+  add = 'Add',
+  yes = 'Yes',
+  back = 'Back',
   cancel = 'Cancel',
   delete = 'Delete',
   confirm = 'Confirm'
@@ -29,10 +33,28 @@ export enum Keys {
 }
 
 export enum EventListeners {
+  resize = 'resize',
   keydown = 'keydown'
 }
 
 export enum Overflow {
+  auto = 'auto',
   empty = 'empty',
   hidden = 'hidden'
+}
+
+export enum ModalTypes {
+  add_deed = 'add_deed',
+  delete_deed = 'delete_deed',
+  add_sub_deed_question = 'add_sub_deed_question',
+}
+
+export enum ButtonType {
+  button = 'button',
+  submit = 'submit'
+}
+
+export enum Routes {
+  deeds = '/deeds',
+  new_deeds = '/deeds/new',
 }

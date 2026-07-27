@@ -22,7 +22,18 @@ export const PLACEHOLDERS = {
   DRAGGABLE_CARD_BTN_VIEW_DETAILS: 'View Details',
   PAGE_NAME_DEEDS: 'Deeds',
   MODAL_DELETE_DEED_TITLE: 'Delete Deed',
-  MODAL_DELETE_DEED_DESCRIPTION: 'Deleting this deed will permanently delete all associated sub-deeds and records. Are you sure you want to continue?',
+  MODAL_DELETE_DEED_DESCRIPTION: 'Deleting this deed will permanently delete all associated sub deeds and records. Are you sure you want to continue?',
   NONE: 'None',
-  UNDEFINED: 'undefined'
+  UNDEFINED: 'undefined',
+  MODAL_ADD_DEED_TITLE: 'Add Deed',
+  MODAL_ADD_SUB_DEED_TITLE: 'Add Sub Deed',
+  DEED_NAME_LABEL: 'Name',
+  DEED_NAME_PLACEHOLDER: 'e.g. Salah',
+  DEED_NAME_REQUIRED_HELPER: 'Name is required',
+  DEED_DESCRIPTION_LABEL: 'Description',
+  DEED_DESCRIPTION_PLACEHOLDER: 'Briefly describe this deed...',
+  ADD_NEW_DEED_BTN: 'Add New Deed',
+  MODAL_ADD_SUB_DEED_QUESTION_TITLE: 'Add Sub Deed ?',
+  MODAL_ADD_SUB_DEED_QUESTION_DESCRIPTION: 'For example, Salah can include Fajr, Dhuhr, Asr, Maghrib, and Isha as sub deeds.',
+  MODAL_ADD_SUB_DEED_ANOTHER_QUESTION_TITLE: 'Add Another Sub Deed ?'
 };

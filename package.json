@@ -13,13 +13,18 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@floating-ui/react": "^0.27.20",
     "@reduxjs/toolkit": "^2.12.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.21",
+    "formik": "^2.4.9",
+    "framer-motion": "^12.42.2",
     "next": "16.2.10",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "react-redux": "^9.3.0"
+    "react-icons": "^5.7.0",
+    "react-redux": "^9.3.0",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@types/node": "^20",

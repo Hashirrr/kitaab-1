@@ -8,10 +8,9 @@ import { DeedIdsInterface } from './interface';
 import { getDeedIds } from '@/app/deeds/utils';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
-import { DndContext, PointerSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 
 export default function Draggables() {
-    
   const [mounted, setMounted] = useState(false);
   const [deeds, setDeeds] = useState<DeedIdsInterface[]>(getDeedIds());
 
@@ -20,7 +19,13 @@ export default function Draggables() {
   }, []);
 
   const sensors = useSensors(
-    useSensor(PointerSensor)
+    useSensor(MouseSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 150,
+        tolerance: 5
+      }
+    })
   );
 
   if (!mounted) return null;
@@ -28,8 +33,8 @@ export default function Draggables() {
   return (
     <div className={styles.container}>
       <DndContext
-        modifiers={[restrictToWindowEdges]}
         sensors={sensors}
+        modifiers={[restrictToWindowEdges]}
         collisionDetection={closestCenter}
         onDragEnd={(event) => handleDragEnd({ event, setDeeds })}
       >

@@ -8,12 +8,12 @@ export const initialState: UIState = {
     height: 0,
   },
   modal: {
-    title: '',
+    type: '',
+    deedId: 0,
+    error: '',
     isOpen: false,
-    cancelText: '',
-    description: '',
-    confirmText: '',
-    deedId: 0
+    disabled: true
   },
-  deedCategory: DeedCategory.hasanaat,
+  openModalStep: 1,
+  deedCategory: DeedCategory.hasanaat
 };

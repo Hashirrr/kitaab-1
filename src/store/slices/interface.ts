@@ -8,13 +8,13 @@ export interface UIState {
     height: number
   },
   modal: {
-    title: string,
+    type: string,
+    error: string,
     deedId: number,
     isOpen: boolean,
-    cancelText: string,
-    confirmText: string,
-    description: string
+    disabled: boolean
   },
+  openModalStep: number,
   deedCategory: DeedCategory
 };
 
@@ -22,14 +22,6 @@ export interface ViewportPayload {
   width: number;
   height: number;
 };
-
-export interface ModalPayload {
-  title: string;
-  deedId: number;
-  description: string;
-  cancelText?: string;
-  confirmText?: string;
-}
 
 export interface ChildrenProps {
   children: ReactNode;

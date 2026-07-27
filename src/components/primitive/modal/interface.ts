@@ -1,11 +1,10 @@
 export interface ModalProps {
+  type: string;
   title: string;
+  error?: string;
   width?: string;
   isOpen: boolean;
-  onClose: () => void;
-  description: string;
+  disabled?: boolean;
   primaryBtn?: string;
   secondaryBtn?: string;
-  onConfirm: () => void;
-  closeOnBackdrop?: boolean;
 }
