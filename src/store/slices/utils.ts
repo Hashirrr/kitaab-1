@@ -13,6 +13,11 @@ export const useIsMobile = () => {
   return width <= 768;
 }
 
+export const useIsTablet = () => {
+  const width = useAppSelector(selectViewportWidth);
+  return width <= 1024;
+}
+
 export const useOnConfirm = () => {
   const dispatch = useAppDispatch();
   const modal = useAppSelector(selectModal);

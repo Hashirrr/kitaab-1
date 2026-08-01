@@ -18,3 +18,13 @@ export const handleDragEnd = ({ event, setDeeds }: HandleDragEndProps) => {
     return arrayMove(items, oldIndex, newIndex);
   });
 };
+
+export const getSkeletonCardsNumber = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) {
+    return 1;
+  } else if (isTablet) {
+    return 2;
+  } else {
+    return 3;
+  }
+};

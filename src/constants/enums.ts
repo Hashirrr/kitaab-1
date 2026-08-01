@@ -45,8 +45,7 @@ export enum Overflow {
 
 export enum ModalTypes {
   add_deed = 'add_deed',
-  delete_deed = 'delete_deed',
-  add_sub_deed_question = 'add_sub_deed_question',
+  delete_deed = 'delete_deed'
 }
 
 export enum ButtonType {
@@ -57,4 +56,18 @@ export enum ButtonType {
 export enum Routes {
   deeds = '/deeds',
   new_deeds = '/deeds/new',
+}
+
+export enum LocalStorage {
+  access_token = 'access_token'
+}
+
+export enum DeedHideTypes {
+  none = 'none',
+  hide_from_graphs = 'hide_from_graphs'
+}
+
+export enum DeedTypes {
+  scale = 'Scale',
+  count = 'Count'
 }

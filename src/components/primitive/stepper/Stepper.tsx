@@ -3,9 +3,11 @@
 import clsx from 'clsx';
 import { useState } from 'react';
 import styles from './stepper.module.css';
+import { useLogin } from '@/hooks/auth/hook';
 
 export default function Stepper() {
-  const [active, setActive] = useState(true)
+  const { mutate: login } = useLogin();
+  const [active, setActive] = useState(true);
   return (
     <>
       <div className={styles.container}>
@@ -33,6 +35,11 @@ export default function Stepper() {
         </div>
       </div>
       <button style={{ width: '30px', margin: '50px' }} onClick={() => setActive(prev => !prev)}>A</button>
+      <button style={{ width: '30px', margin: '50px' }} onClick={() => login({
+        password: '11e3*!RQ$V11',
+        email: 'hashir.dev12@gmail.com',
+        anonymous_id: '62854e4b7a0475e2',
+      })}>B</button>
     </>
   );
 };

@@ -1,0 +1,26 @@
+.skeleton {
+  overflow: hidden;
+  position: relative;
+  background-color: var(--background-1);
+}
+
+.skeleton::after {
+  inset: 0;
+  content: "";
+  position: absolute;
+  transform: translateX(-100%);
+  animation: shimmer 1.4s ease-in-out infinite;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}

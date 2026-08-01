@@ -10,23 +10,21 @@ import { DraggableCardProps } from './interface';
 import { openModal } from '@/store/slices/uiSlice';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { deeds, getDeedById, getSubDeedsById } from '@/app/deeds/utils';
-import { Cursor, IconButtonBackground, ModalTypes } from '@/constants/enums';
+import { Cursor, DeedTypes, IconButtonBackground, ModalTypes } from '@/constants/enums';
 
-export default function DraggableCard({ deed }: DraggableCardProps) {
+export default function DraggableCard({ id, deed, disabled }: DraggableCardProps) {
   const {
+    NONE,
     DRAGGABLE_CARD_KEY_TYPE,
     DRAGGABLE_CARD_KEY_ADDED,
     DRAGGABLE_CARD_KEY_SUB_DEEDS,
     DRAGGABLE_CARD_BTN_VIEW_DETAILS,
     DRAGGABLE_CARD_KEY_LAST_RECORDED
   } = PLACEHOLDERS;
-  const { id } = deed;
   const dispatch = useAppDispatch();
-  const isMoveDisabled = deeds.length === 1;
-  const { name, scale_type, created_at, last_recorded } = getDeedById(Number(id))!;
-  const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({ id, disabled: isMoveDisabled });
-
+  const { name, created_at } = deed;
+  const subDeedsLength = deed.children?.length || NONE;
+  const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({ id, disabled });
   return (
     <div
       ref={setNodeRef}
@@ -37,29 +35,30 @@ export default function DraggableCard({ deed }: DraggableCardProps) {
       <hr className={styles.fading__line} />
       <dl className={styles.key__values}>
         <dt>{DRAGGABLE_CARD_KEY_TYPE}</dt>
-        <dd>{scale_type}</dd>
+        <dd>{DeedTypes.scale}</dd>
         <dt>{DRAGGABLE_CARD_KEY_ADDED}</dt>
         <dd>{fromNow(created_at)}</dd>
         <dt>{DRAGGABLE_CARD_KEY_SUB_DEEDS}</dt>
-        <dd>{getSubDeedsById(Number(id))}</dd>
+        <dd>{subDeedsLength}</dd>
         <dt>{DRAGGABLE_CARD_KEY_LAST_RECORDED}</dt>
-        <dd>{fromNow(last_recorded)}</dd>
+        <dd>{fromNow(new Date())}</dd>
       </dl>
+
       <div className={styles.btn__container}>
         <button className={styles.details}>{DRAGGABLE_CARD_BTN_VIEW_DETAILS}</button>
         <IconButton
           cursor={Cursor.grab}
           icon={<IoMdMove size={20}/>}
           variant={IconButtonBackground.primary}
-          {...(!isMoveDisabled ? listeners : {})}
-          {...(!isMoveDisabled ? attributes : {})}
-          disabled={isMoveDisabled}
+          {...(!disabled ? listeners : {})}
+          {...(!disabled ? attributes : {})}
+          disabled={disabled}
         />
         <IconButton
           cursor={Cursor.pointer}
           icon={<MdDelete size={20}/>}
           variant={IconButtonBackground.primary}
-          onClick={() => dispatch(openModal(ModalTypes.add_deed))}
+          onClick={() => dispatch(openModal(ModalTypes.delete_deed))}
         />
       </div>
     </div>

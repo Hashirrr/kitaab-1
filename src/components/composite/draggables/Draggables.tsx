@@ -1,22 +1,34 @@
 'use client';
 
-import { handleDragEnd } from './utils';
+import SkeletonCard from './SkeletonCard';
 import { useEffect, useState } from 'react';
 import DraggableCard from './DraggableCard';
 import styles from './draggables.module.css';
 import { DeedIdsInterface } from './interface';
 import { getDeedIds } from '@/app/deeds/utils';
+import { useGetHasanaatItems } from '@/hooks/deeds/hook';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
+import { getSkeletonCardsNumber, handleDragEnd } from './utils';
+import { useIsMobile, useIsTablet } from '@/store/slices/utils';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 
 export default function Draggables() {
+  const isMobile = useIsMobile();
+  const isTablet = useIsTablet();
   const [mounted, setMounted] = useState(false);
-  const [deeds, setDeeds] = useState<DeedIdsInterface[]>(getDeedIds());
+  const { data: getHasanaatItemsData, isLoading: isGetHasanaatItemsLoading } = useGetHasanaatItems();
+  const [deeds, setDeeds] = useState<DeedIdsInterface[]>(getDeedIds(getHasanaatItemsData));
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (getHasanaatItemsData) {
+      setDeeds(getDeedIds(getHasanaatItemsData));
+    }
+  }, [getHasanaatItemsData]);
 
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -38,17 +50,22 @@ export default function Draggables() {
         collisionDetection={closestCenter}
         onDragEnd={(event) => handleDragEnd({ event, setDeeds })}
       >
-        <SortableContext
-          items={deeds.map((d) => d.id)}
-          strategy={rectSortingStrategy}
-        >
-          <div className={styles.grid}>
-            {deeds.map((deed) => (
-              <DraggableCard key={deed.id} deed={deed} />
-            ))}
-          </div>
+        <SortableContext items={deeds.map((d) => d.id)} strategy={rectSortingStrategy}>
+          {!isGetHasanaatItemsLoading ? <div className={styles.grid}>
+              {getHasanaatItemsData && deeds.map(({ id }) => {
+                  const deed = getHasanaatItemsData.find((item) => String(item.deed_item_id) === id);
+                  if (!deed) return null;
+                  return <DraggableCard key={id} id={id} deed={deed} disabled={getHasanaatItemsData.length === 1} /> 
+                }
+              )}
+            </div>:
+            <div className={styles.grid}>
+              {Array.from({
+                length: getSkeletonCardsNumber(isMobile, isTablet)
+              }).map((_, i) => (<SkeletonCard key={i} /> ))}
+            </div>}
         </SortableContext>
       </DndContext>
     </div>
   );
-}
+};

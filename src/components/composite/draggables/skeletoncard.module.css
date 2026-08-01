@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  padding: 16px;
+  border-radius: 8px;
+  flex-direction: column;
+  box-shadow: var(--box-shadow);
+  justify-content: space-between;
+  background: var(--background-3);
+  transition: box-shadow 250ms ease;
+}
+
+.card:hover {
+  box-shadow: var(--box-shadow-hover);
+}
+
+.title {
+  padding: 5px;
+  display: flex;
+  font-size: 16px;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground-2);
+}
+
+.fading__line {
+  height: 1px;
+  border: none;
+  background-image: var(--hr-image);
+}
+
+.btn__container {
+  gap: 5px;
+  display: flex;
+}
+
+.key__values {
+  gap: 5px;
+  display: grid;
+  font-size: 14px;
+  padding: 20px 0;
+  color: var(--foreground-3);
+  grid-template-columns: repeat(2, 1fr);
+}

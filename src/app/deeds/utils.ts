@@ -1,7 +1,6 @@
-import type { AppDispatch } from '@/store';
-import { openModal } from '@/store/slices/uiSlice';
+import { Routes } from '@/constants/enums';
+import { DeedItem } from '@/hooks/deeds/interface';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { ModalTypes, Routes } from '@/constants/enums';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const { NONE } = PLACEHOLDERS;
@@ -61,11 +60,10 @@ export const getDeedById = (id: number) => deeds?.find((deed) => id === deed.id)
 
 export const getSubDeedsById = (id: number) => deeds.find((deed) => deed.id === id)?.children?.length || NONE;
 
-export const getDeedIds = () => deeds.map((deed) => ({ id: String(deed.id) }));
+export const getDeedIds = (deeds: DeedItem[] | undefined) => (deeds || []).map((deed: DeedItem) => ({ id: deed?.deed_item_id || '' }));
 
 export const deleteDeedByID = (id: number) => deeds = deeds.filter((deed) => deed.id !== id);
 
-export const handleAddNewDeed = (router: AppRouterInstance, dispatch: AppDispatch) => {
+export const handleAddNewDeed = (router: AppRouterInstance) => {
   router.push(Routes.new_deeds);
-  dispatch(openModal(ModalTypes.add_deed));
 };
