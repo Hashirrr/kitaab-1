@@ -1,29 +1,35 @@
 import clsx from 'clsx';
+import { handleViewDeed } from './utils';
 import { CSS } from '@dnd-kit/utilities';
 import { IoMdMove } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
+import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
 import { fromNow } from '@/store/slices/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import styles from './draggablecard.module.css';
 import { DraggableCardProps } from './interface';
 import { openModal } from '@/store/slices/uiSlice';
+import { BsFillInfoCircleFill } from "react-icons/bs";
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { Cursor, DeedTypes, IconButtonBackground, ModalTypes } from '@/constants/enums';
+import { Cursor, DeedTypes, DraggableCardVariants, IconButtonBackground, ModalTypes } from '@/constants/enums';
 
-export default function DraggableCard({ id, deed, disabled }: DraggableCardProps) {
+export default function DraggableCard({ id, deed, variant, disabled }: DraggableCardProps) {
   const {
     NONE,
     DRAGGABLE_CARD_KEY_TYPE,
     DRAGGABLE_CARD_KEY_ADDED,
+    DRAGGABLE_CARD_ADD_SUB_DEED,
     DRAGGABLE_CARD_KEY_SUB_DEEDS,
     DRAGGABLE_CARD_BTN_VIEW_DETAILS,
     DRAGGABLE_CARD_KEY_LAST_RECORDED
   } = PLACEHOLDERS;
+  const router = useRouter();
   const dispatch = useAppDispatch();
-  const { name, created_at } = deed;
-  const subDeedsLength = deed.children?.length || NONE;
+  const { name, description, children, deed_item_id, created_at } = deed;
+  const subDeedsLength = children?.length || NONE;
   const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({ id, disabled });
   return (
     <div
@@ -31,7 +37,12 @@ export default function DraggableCard({ id, deed, disabled }: DraggableCardProps
       className={clsx(styles.card, { [styles.dragging]: isDragging })}
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
-      <h3 className={styles.title}>{name}</h3>
+      <h3 className={styles.title}>
+        {name}
+        {description && <Tooltip content={`${description}`}>
+          <BsFillInfoCircleFill />
+        </Tooltip>}
+      </h3>
       <hr className={styles.fading__line} />
       <dl className={styles.key__values}>
         <dt>{DRAGGABLE_CARD_KEY_TYPE}</dt>
@@ -45,7 +56,18 @@ export default function DraggableCard({ id, deed, disabled }: DraggableCardProps
       </dl>
 
       <div className={styles.btn__container}>
-        <button className={styles.details}>{DRAGGABLE_CARD_BTN_VIEW_DETAILS}</button>
+        {!variant && <button
+          className={styles.details}
+          onClick={() => handleViewDeed(router, deed_item_id)}
+        >
+          {DRAGGABLE_CARD_BTN_VIEW_DETAILS}
+        </button>}
+        {variant === DraggableCardVariants.parent && <button
+          className={styles.details}
+          onClick={() => {}}
+        >
+          {DRAGGABLE_CARD_ADD_SUB_DEED}
+        </button>}
         <IconButton
           cursor={Cursor.grab}
           icon={<IoMdMove size={20}/>}
@@ -63,4 +85,4 @@ export default function DraggableCard({ id, deed, disabled }: DraggableCardProps
       </div>
     </div>
   );
-}
+};

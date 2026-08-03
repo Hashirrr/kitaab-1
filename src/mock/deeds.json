@@ -4,7 +4,7 @@
         "deed_id": "3",
         "parent_deed_item_id": null,
         "name": "Namaaz",
-        "description": null,
+        "description": "This deed will be recorded 5 times a day",
         "display_order": 1,
         "hide_type": "none",
         "created_at": "2026-06-28T17:20:18.810Z",

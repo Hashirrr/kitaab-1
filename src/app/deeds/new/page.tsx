@@ -15,6 +15,6 @@ export default function New() {
   }, []);
 
   return (
-    <div className={styles.container}><Stepper /></div>
+    <div className={styles.container}><Stepper id={"102"} /></div>
   );
 };

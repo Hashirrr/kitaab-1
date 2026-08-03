@@ -1,9 +1,8 @@
 .container {
-  gap: 20px;
+  gap: 16px;
   display: flex;
-  margin-left: 10px;
   flex-direction: column;
-  margin: 30px 0 30px 10px;
+  margin: 0px 0 16px 11px;
   border-left: var(--border);
 }
 
@@ -33,21 +32,83 @@
 }
 
 .badge.is__active {
-  background-color: var(--foreground-1);
   color: var(--background-1);
+  background-color: var(--foreground-1);
 }
 
 .content {
-  height: 0;
-  width: 300px;
   overflow: hidden;
-  margin-left: 40px;
-  border-radius: 10px;
-  transition: height 0.3s ease;
-  box-shadow: var(--box-shadow);
-  background-color: var(--background-3);
+  transition: max-height 300ms ease-out, padding 300ms ease-out;
 }
 
-.content.expand {
-  height: 300px;
+.deeds {
+  gap: 16px;
+  display: flex;
+  margin-left: 16px;
+  flex-direction: column;
+}
+
+.deeds__children {
+  border-left: var(--border);
+  padding: 16px 0px 16px 16px;
+}
+
+.btn {
+  width: 100px;
+  border: none;
+  height: 40px;
+  display: flex;
+  outline: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 5px;
+  touch-action: none;
+  align-items: center;
+  letter-spacing: 0.75;
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+  transition: transform 250ms ease, background-color 250ms ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: var(--not-allowed-cursor);
+}
+
+.next {
+  color: var(--background-2);
+  background: var(--foreground-3);
+}
+
+.next:hover {
+  color: var(--background-3);
+  background: var(--foreground-2);
+}
+
+.back {
+  color: var(--foreground-3);
+  background: var(--background-2);
+}
+
+.back:hover {
+  color: var(--foreground-2);
+  background: var(--background-1);
+}
+
+.back {
+  color: var(--foreground-1);
+  background: var(--background-3);
+}
+
+.back:hover {
+  color: var(--foreground-3);
+  background: var(--background-1);
+}
+
+.btns {
+  gap: 16px;
+  margin: 16px;
+  display: flex;
+  justify-content: center;
 }
