@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { FaPen } from "react-icons/fa6";
 import { handleViewDeed } from './utils';
 import { CSS } from '@dnd-kit/utilities';
 import { IoMdMove } from 'react-icons/io';
@@ -9,11 +10,11 @@ import { fromNow } from '@/store/slices/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import styles from './draggablecard.module.css';
 import { DraggableCardProps } from './interface';
-import { openModal } from '@/store/slices/uiSlice';
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
+import { incementOpenModalStep, openModal } from '@/store/slices/uiSlice';
 import { Cursor, DeedTypes, DraggableCardVariants, IconButtonBackground, ModalTypes } from '@/constants/enums';
 
 export default function DraggableCard({ id, deed, variant, disabled }: DraggableCardProps) {
@@ -23,6 +24,7 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
     DRAGGABLE_CARD_KEY_ADDED,
     DRAGGABLE_CARD_ADD_SUB_DEED,
     DRAGGABLE_CARD_KEY_SUB_DEEDS,
+    DRAGGABLE_CARD_VIEW_EDIT_DEED,
     DRAGGABLE_CARD_BTN_VIEW_DETAILS,
     DRAGGABLE_CARD_KEY_LAST_RECORDED
   } = PLACEHOLDERS;
@@ -68,6 +70,12 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         >
           {DRAGGABLE_CARD_ADD_SUB_DEED}
         </button>}
+        {variant === DraggableCardVariants.children && <button
+          className={styles.details}
+          onClick={() => {}}
+        >
+          {DRAGGABLE_CARD_VIEW_EDIT_DEED}
+        </button>}
         <IconButton
           cursor={Cursor.grab}
           icon={<IoMdMove size={20}/>}
@@ -76,12 +84,24 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
           {...(!disabled ? attributes : {})}
           disabled={disabled}
         />
-        <IconButton
+        {variant !== DraggableCardVariants.parent && <IconButton
           cursor={Cursor.pointer}
           icon={<MdDelete size={20}/>}
           variant={IconButtonBackground.primary}
           onClick={() => dispatch(openModal(ModalTypes.delete_deed))}
-        />
+        />}
+        {variant === DraggableCardVariants.parent && <IconButton
+          cursor={Cursor.pointer}
+          icon={<FaPen size={14} />}
+          variant={IconButtonBackground.primary}
+          onClick={() => {
+            dispatch(incementOpenModalStep());
+            dispatch(incementOpenModalStep());
+            setTimeout(()=>{
+              dispatch(openModal(ModalTypes.add_deed));
+            }, 5000)
+          }}
+        />}
       </div>
     </div>
   );

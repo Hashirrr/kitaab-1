@@ -28,6 +28,9 @@ const uiSlice = createSlice({
     incementOpenModalStep(state) {
       state.openModalStep++;
     },
+    incementMoreOpenModalStep(state, action: PayloadAction<number>) {
+      state.openModalStep = action.payload;
+    },
     resetOpenModalStep(state) {
       state.openModalStep = 1;
     },
@@ -50,5 +53,6 @@ export const {
   setDeedCategory,
   setSidebarExpanded,
   resetOpenModalStep,
-  incementOpenModalStep
+  incementOpenModalStep,
+  incementMoreOpenModalStep
 } = uiSlice.actions;

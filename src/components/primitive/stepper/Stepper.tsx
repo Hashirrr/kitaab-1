@@ -47,7 +47,7 @@ export default function Stepper({ id }: StepperProps) {
           <div className={styles.deeds}>
             <Draggables deedsData={deed ? [deed] : []} variant={DraggableCardVariants.parent}/>
             {deed?.children && <div className={styles.deeds__children}>
-              <Draggables deedsData={deed?.children} />
+              <Draggables deedsData={deed?.children} variant={DraggableCardVariants.children}/>
             </div>}
           </div>
           <div className={styles.btns}>

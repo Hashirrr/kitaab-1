@@ -36,5 +36,6 @@ export const PLACEHOLDERS = {
   ADD_NEW_DEED_BTN: 'Add New Deed',
   MODAL_ADD_SUB_DEED_QUESTION_TITLE: 'Add Sub Deed ?',
   MODAL_ADD_SUB_DEED_QUESTION_DESCRIPTION: 'For example, Salah can include Fajr, Dhuhr, Asr, Maghrib, and Isha as sub deeds.',
-  MODAL_ADD_SUB_DEED_ANOTHER_QUESTION_TITLE: 'Add Another Sub Deed ?'
+  MODAL_ADD_SUB_DEED_ANOTHER_QUESTION_TITLE: 'Add Another Sub Deed ?',
+  DRAGGABLE_CARD_VIEW_EDIT_DEED: 'View & Edit'
 };
