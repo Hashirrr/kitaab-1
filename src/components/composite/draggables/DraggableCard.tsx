@@ -97,9 +97,7 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
           onClick={() => {
             dispatch(incementOpenModalStep());
             dispatch(incementOpenModalStep());
-            setTimeout(()=>{
-              dispatch(openModal(ModalTypes.add_deed));
-            }, 5000)
+            dispatch(openModal(ModalTypes.add_deed));
           }}
         />}
       </div>

@@ -35,7 +35,7 @@ export default function Modal() {
 
   useEffect(() => {
     if (isOpen) {
-      dispatch(resetOpenModalStep());
+      // dispatch(resetOpenModalStep());
       setMounted(true);
       setClosing(false);
     } else if (mounted) {
@@ -58,6 +58,12 @@ export default function Modal() {
       window.removeEventListener(EventListeners.keydown, keyDown);
     };
   }, [mounted, close]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetOpenModalStep());
+    };
+  }, [dispatch]);
 
   if (!mounted || typeof window === UNDEFINED) {
     return null;
