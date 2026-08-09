@@ -36,6 +36,9 @@ const uiSlice = createSlice({
     },
     setDeedCategory(state, action: PayloadAction<DeedCategory>) {
       state.deedCategory = action.payload;
+    },
+    setCurrentDeedId(state, action: PayloadAction<string>) {
+      state.currentDeedId = action.payload;
     }
   }
 });
@@ -48,6 +51,7 @@ export const {
   setViewport,
   setModalError,
   setDeedCategory,
+  setCurrentDeedId,
   setSidebarExpanded,
   resetOpenModalStep,
   incementOpenModalStep

@@ -9,11 +9,11 @@ export const initialState: UIState = {
   },
   modal: {
     type: '',
-    deedId: 0,
     error: '',
     isOpen: false,
     disabled: true
   },
   openModalStep: 1,
+  currentDeedId: '',
   deedCategory: DeedCategory.hasanaat
 };

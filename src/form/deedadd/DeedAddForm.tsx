@@ -6,11 +6,13 @@ import { FormikHelpers } from 'formik';
 import styles from './deedadd.module.css';
 import useDeedAddForm from './useDeedAddForm';
 import { useAppDispatch } from '@/store/hooks';
-import { ModalTypes } from '@/constants/enums';
 import { DeedAddFormValues } from './interface';
 import { toSnakeCase } from '@/store/slices/utils';
+import { Form, ModalTypes } from '@/constants/enums';
+import { useFormContext } from '@/store/FormProvider';
 import Input from '@/components/primitive/input/Input';
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import { useCreateHasanaatItem } from '@/hooks/deeds/hook';
 import Textarea from '@/components/primitive/textarea/TextArea';
 import { incementOpenModalStep, setModalError } from '@/store/slices/uiSlice';
 
@@ -23,10 +25,21 @@ export default function DeedAddForm() {
   } = PLACEHOLDERS;
 
   const dispatch = useAppDispatch();
+  const { mutateAsync: createHasanaatItem } = useCreateHasanaatItem();
   const formik = useDeedAddForm({
     onSubmit: (values: DeedAddFormValues, helpers: FormikHelpers<DeedAddFormValues>) =>
-      onSubmit(values, helpers.resetForm, dispatch, incementOpenModalStep)
+      onSubmit(values, helpers.resetForm, dispatch, incementOpenModalStep, createHasanaatItem)
   });
+
+  const { registerForm, unregisterForm } = useFormContext();
+
+  useEffect(() => {
+    registerForm(Form.deed_add, formik);
+
+    return () => {
+      unregisterForm(Form.deed_add);
+    };
+  }, [registerForm, unregisterForm]);
 
   useEffect(() => {
     dispatch(setModalError(Object.values(formik.errors)[0]));

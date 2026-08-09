@@ -2,6 +2,7 @@
 
 import { store } from './index';
 import { Provider } from 'react-redux';
+import { FormProvider } from './FormProvider';
 import { ChildrenProps } from './slices/interface';
 import Modal from '@/components/primitive/modal/Modal';
 import { ViewportWatcher } from './slices/ViewportWatcher';
@@ -13,9 +14,11 @@ export default function StoreProvider({ children }: ChildrenProps) {
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <ViewportWatcher />
-        {children}
-        <Modal />
+        <FormProvider>
+          <ViewportWatcher />
+          {children}
+          <Modal />
+        </FormProvider>
       </QueryClientProvider>
     </Provider>
   );

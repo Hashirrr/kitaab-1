@@ -1,11 +1,8 @@
 import { AppDispatch } from '@/store';
 import styles from './modal.module.css';
-import { useAppSelector } from '@/store/hooks';
 import { Dispatch, SetStateAction } from 'react';
-import { deleteDeedByID } from '@/app/deeds/utils';
 import { closeModal } from '@/store/slices/uiSlice';
 import DeedAddForm from '@/form/deedadd/DeedAddForm';
-import { selectModal } from '@/store/slices/selectors';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { Keys, ModalCTA, ModalTypes } from '@/constants/enums';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
@@ -82,19 +79,19 @@ export const modalActionType = (type: string, step: number) => {
   }
 };
 
-export const getModalPrimaryBtn = (type: string, step: number) => {
+export const getModalPrimaryBtn = (type: string, step: number, createHasanaatItemLoading?: boolean, deleteHasanaatItemLoading?: boolean) => {
   switch (type) {
     case ModalTypes.add_deed:
       switch (step % 2) {
         case 1:
-          return ModalCTA.add;
+          return createHasanaatItemLoading? ModalCTA.adding: ModalCTA.add;
         case 0:
           return ModalCTA.yes;
         default:
           return;
       }
     case ModalTypes.delete_deed:
-      return ModalCTA.delete;
+      return deleteHasanaatItemLoading ? ModalCTA.deleting: ModalCTA.delete;
     default:
       return;
   }
@@ -146,19 +143,11 @@ export const onClose = (type: string, step: number, dispatch: AppDispatch, route
   }
 };
 
-export const useOnConfirmDeleteDeed = (dispatch: AppDispatch) => {
-  const modal = useAppSelector(selectModal);
-
-  return () => {
-    deleteDeedByID(modal.deedId);
-    dispatch(closeModal());
-  };
-};
-
-export const onConfirm = (type: string, onConfirmDeleteDeed: () => void, dispatch: AppDispatch, action: () => { type: string }) => {
+export const onConfirm = async (type: string, deleteHasanaatItem: (id: string) => void, dispatch: AppDispatch, action: () => { type: string }, deedId: string) => {
   switch (type) {
     case ModalTypes.delete_deed:
-      onConfirmDeleteDeed();
+      await deleteHasanaatItem(deedId);
+      dispatch(closeModal());
       return;
     case ModalTypes.add_deed:
       dispatch(action());

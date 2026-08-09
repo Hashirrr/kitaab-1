@@ -19,6 +19,7 @@ export const PLACEHOLDERS = {
   DRAGGABLE_CARD_KEY_ADDED: 'Added',
   DRAGGABLE_CARD_KEY_SUB_DEEDS: 'Sub Deeds',
   DRAGGABLE_CARD_KEY_LAST_RECORDED: 'Last Recorded',
+  DRAGGABLE_CARD_ADD_SUB_DEED: 'Add Sub Deed',
   DRAGGABLE_CARD_BTN_VIEW_DETAILS: 'View Details',
   PAGE_NAME_DEEDS: 'Deeds',
   MODAL_DELETE_DEED_TITLE: 'Delete Deed',
@@ -35,5 +36,7 @@ export const PLACEHOLDERS = {
   ADD_NEW_DEED_BTN: 'Add New Deed',
   MODAL_ADD_SUB_DEED_QUESTION_TITLE: 'Add Sub Deed ?',
   MODAL_ADD_SUB_DEED_QUESTION_DESCRIPTION: 'For example, Salah can include Fajr, Dhuhr, Asr, Maghrib, and Isha as sub deeds.',
-  MODAL_ADD_SUB_DEED_ANOTHER_QUESTION_TITLE: 'Add Another Sub Deed ?'
+  MODAL_ADD_SUB_DEED_ANOTHER_QUESTION_TITLE: 'Add Another Sub Deed ?',
+  DRAGGABLE_CARD_VIEW_EDIT_DEED: 'View & Edit',
+  USE_FORM_CONTEXT_ERROR: 'useFormContext must be used inside FormProvider'
 };

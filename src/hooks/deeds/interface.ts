@@ -10,6 +10,13 @@ export interface DeedItem {
   hide_type: DeedHideTypes;
   description: string | null;
   parent_deed_item_id: string | null;
-}
+};
 
 export type GetHasanaatItemsResponse = DeedItem[];
+
+export interface CreateHasanaatItemPayload {
+  name: string;
+  display_order?: number;
+  children?: CreateHasanaatItemPayload[];
+  hide_type?: 'none' | 'hide' | 'children';
+};

@@ -20,7 +20,9 @@ export enum ModalCTA {
   back = 'Back',
   cancel = 'Cancel',
   delete = 'Delete',
-  confirm = 'Confirm'
+  confirm = 'Confirm',
+  adding = 'Adding...',
+  deleting = 'Deleting...'
 }
 
 export enum DeedCategory {
@@ -56,6 +58,7 @@ export enum ButtonType {
 export enum Routes {
   deeds = '/deeds',
   new_deeds = '/deeds/new',
+  view_deeds = '/deeds/view'
 }
 
 export enum LocalStorage {
@@ -70,4 +73,13 @@ export enum DeedHideTypes {
 export enum DeedTypes {
   scale = 'Scale',
   count = 'Count'
+}
+
+export enum DraggableCardVariants {
+  parent = 'parent',
+  children = 'children'
+}
+
+export enum Form {
+  deed_add = 'deed_add'
 }

@@ -10,10 +10,10 @@ export interface UIState {
   modal: {
     type: string,
     error: string,
-    deedId: number,
     isOpen: boolean,
     disabled: boolean
   },
+  currentDeedId: string,
   openModalStep: number,
   deedCategory: DeedCategory
 };

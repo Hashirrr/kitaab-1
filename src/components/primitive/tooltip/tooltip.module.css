@@ -1,12 +1,13 @@
 .tooltip {
   z-index: 1000;
-  color: white;
-  font-size: 13px;
-  max-width: 250px;
-  line-height: 1.4;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background: #222;
+  font-size: 12px;
+  font-weight: 500;
+  max-width: 350px;
+  padding: 8px;
+  border-radius: 5px;
   pointer-events: none;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+  text-align: justify;
+  color: var(--background-1);
+  box-shadow: var(--box-shadow);
+  background: var(--foreground-1);
 }

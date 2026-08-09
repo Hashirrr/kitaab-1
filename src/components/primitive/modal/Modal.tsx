@@ -5,16 +5,19 @@ import { motion } from "framer-motion";
 import styles from './modal.module.css';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
+import { QUERY } from '@/constants/query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import { useIsMutating } from '@tanstack/react-query';
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import { useDeleteHasanaatItem } from '@/hooks/deeds/hook';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { selectModal, selectOpenModalStep } from '@/store/slices/selectors';
 import { incementOpenModalStep, resetOpenModalStep } from '@/store/slices/uiSlice';
+import { selectCurrentDeedId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
 import { ButtonType, Cursor, EventListeners, IconButtonBackground, Overflow } from '@/constants/enums';
-import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isForm, modalActionType, onClose, onConfirm, useOnConfirmDeleteDeed } from './utils';
+import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isForm, modalActionType, onClose, onConfirm } from './utils';
 
 const ANIMATION_DURATION = 250;
 
@@ -22,12 +25,17 @@ export default function Modal() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { UNDEFINED } = PLACEHOLDERS;
+  const { deeds_hasanaat, create } = QUERY;
   const modal = useAppSelector(selectModal);
   const [closing, setClosing] = useState(false);
   const { isOpen, type, error, disabled } = modal;
   const [mounted, setMounted] = useState(isOpen);
   const step = useAppSelector(selectOpenModalStep);
-  const onConfirmDeleteDeed = useOnConfirmDeleteDeed(dispatch);
+  const deedId = useAppSelector(selectCurrentDeedId);
+  const { mutateAsync: deleteHasanaatItem, isPending: deleteHasanaatItemLoading } = useDeleteHasanaatItem();
+  const createHasanaatItemLoading = useIsMutating({
+    mutationKey: [deeds_hasanaat, create]
+  }) > 0;
   const close = useMemo(
     () => createCloseHandler(ANIMATION_DURATION, closing, setClosing, setMounted, () => onClose(type, step, dispatch, router)),
     [closing, type, dispatch, router, step]
@@ -41,7 +49,7 @@ export default function Modal() {
     } else if (mounted) {
       close();
     }
-  }, [isOpen]);
+  }, [isOpen, dispatch]);
 
   useEffect(() => {
     if (!mounted) {
@@ -103,11 +111,11 @@ export default function Modal() {
 
           <Tooltip content={error}>
             {isForm(type, step) ?
-              <button type={ButtonType.submit} form={type} className={styles.primary__btn} disabled={disabled}>
-                {getModalPrimaryBtn(type, step)}
+              <button type={ButtonType.submit} form={type} className={styles.primary__btn} disabled={disabled || createHasanaatItemLoading || deleteHasanaatItemLoading}>
+                {getModalPrimaryBtn(type, step, createHasanaatItemLoading)}
               </button>:
-              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, onConfirmDeleteDeed, dispatch, incementOpenModalStep)}>
-                {getModalPrimaryBtn(type, step)}
+              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, deleteHasanaatItem, dispatch, incementOpenModalStep, deedId)} disabled={deleteHasanaatItemLoading}>
+                {getModalPrimaryBtn(type, step, undefined, deleteHasanaatItemLoading)}
               </button>
             }
           </Tooltip>
