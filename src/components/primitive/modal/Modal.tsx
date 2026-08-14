@@ -9,15 +9,15 @@ import { QUERY } from '@/constants/query';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useIsMutating } from '@tanstack/react-query';
+import { useFormContext } from '@/store/FormProvider';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { useDeleteHasanaatItem } from '@/hooks/deeds/hook';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { incementOpenModalStep, resetOpenModalStep } from '@/store/slices/uiSlice';
+import { useDeleteHasanaatItem, useGetHasanaatItems } from '@/hooks/deeds/hook';
 import { selectCurrentDeedId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
-import { ButtonType, Cursor, EventListeners, IconButtonBackground, Overflow } from '@/constants/enums';
-import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isForm, modalActionType, onClose, onConfirm } from './utils';
+import { ButtonType, Cursor, EventListeners, Form, IconButtonBackground, ModalTypes, Overflow } from '@/constants/enums';
+import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isDeedUpdateFormChanged, isDeedUpdateFormChangedTooltip, isForm, modalActionType, onClose, onConfirm } from './utils';
 
 const ANIMATION_DURATION = 250;
 
@@ -25,25 +25,34 @@ export default function Modal() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { UNDEFINED } = PLACEHOLDERS;
-  const { deeds_hasanaat, create } = QUERY;
+  const { forms } = useFormContext();
+  const deedForm = forms[Form.deed_add];
   const modal = useAppSelector(selectModal);
   const [closing, setClosing] = useState(false);
   const { isOpen, type, error, disabled } = modal;
   const [mounted, setMounted] = useState(isOpen);
+  const { deeds_hasanaat, create, update } = QUERY;
   const step = useAppSelector(selectOpenModalStep);
   const deedId = useAppSelector(selectCurrentDeedId);
+  const { data: getHasanaatItems } = useGetHasanaatItems();
+  const currentDeedId = useAppSelector(selectCurrentDeedId);
+  const createHasanaatItemLoading = useIsMutating({ mutationKey: [deeds_hasanaat, create] }) > 0;
+  const isUpdateHasanaatItemLoading = useIsMutating({ mutationKey: [deeds_hasanaat, update] }) > 0;
   const { mutateAsync: deleteHasanaatItem, isPending: deleteHasanaatItemLoading } = useDeleteHasanaatItem();
-  const createHasanaatItemLoading = useIsMutating({
-    mutationKey: [deeds_hasanaat, create]
-  }) > 0;
+  const currentDeed = getHasanaatItems?.flatMap(deed => [deed, ...(deed.children ?? [])]).find(deed => deed.deed_item_id === currentDeedId);
   const close = useMemo(
-    () => createCloseHandler(ANIMATION_DURATION, closing, setClosing, setMounted, () => onClose(type, step, dispatch, router)),
+    () => createCloseHandler(
+      ANIMATION_DURATION,
+      closing,
+      setClosing,
+      setMounted,
+      () => onClose(type, step, dispatch, router)
+    ),
     [closing, type, dispatch, router, step]
   );
-
+  const deedUpdateFormChanged = isDeedUpdateFormChanged(currentDeed, deedForm?.values);
   useEffect(() => {
     if (isOpen) {
-      dispatch(resetOpenModalStep());
       setMounted(true);
       setClosing(false);
     } else if (mounted) {
@@ -57,7 +66,7 @@ export default function Modal() {
       return;
     }
 
-    const keyDown = (e: KeyboardEvent) => handleKeyDown(e, close);
+    const keyDown: (e: KeyboardEvent) => void = (e) => handleKeyDown(e, close);
 
     window.addEventListener(EventListeners.keydown, keyDown);
 
@@ -109,12 +118,12 @@ export default function Modal() {
             {getModalSecondaryBtn(type, step)}
           </button>
 
-          <Tooltip content={error}>
+          <Tooltip content={error || isDeedUpdateFormChangedTooltip(!deedUpdateFormChanged, isUpdateHasanaatItemLoading)}>
             {isForm(type, step) ?
-              <button type={ButtonType.submit} form={type} className={styles.primary__btn} disabled={disabled || createHasanaatItemLoading || deleteHasanaatItemLoading}>
-                {getModalPrimaryBtn(type, step, createHasanaatItemLoading)}
+              <button type={ButtonType.submit} form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed: type} className={styles.primary__btn} disabled={disabled || createHasanaatItemLoading || deleteHasanaatItemLoading || isUpdateHasanaatItemLoading || !deedUpdateFormChanged}>
+                {getModalPrimaryBtn(type, step, createHasanaatItemLoading, undefined, isUpdateHasanaatItemLoading)}
               </button>:
-              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, deleteHasanaatItem, dispatch, incementOpenModalStep, deedId)} disabled={deleteHasanaatItemLoading}>
+              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, deleteHasanaatItem, dispatch, deedId)} disabled={deleteHasanaatItemLoading}>
                 {getModalPrimaryBtn(type, step, undefined, deleteHasanaatItemLoading)}
               </button>
             }

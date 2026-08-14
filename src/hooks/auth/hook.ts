@@ -6,8 +6,6 @@ import { LoginRequest, LoginResponse } from './interface';
 export const useLogin = () => {
   return useMutation<LoginResponse, Error, LoginRequest>({
     mutationFn: login,
-    onSuccess: (data) => {
-      localStorage.setItem(LocalStorage.access_token, data.access_token);
-    }
+    onSuccess: (data) => localStorage.setItem(LocalStorage.access_token, data.access_token)
   });
 };

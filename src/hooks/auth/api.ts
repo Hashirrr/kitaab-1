@@ -1,5 +1,5 @@
-import { ENDPOINTS } from '@/constants/endpoints';
 import api from '../axios';
+import { ENDPOINTS } from '@/constants/endpoints';
 import { LoginRequest, LoginResponse } from './interface';
 
 export const login = async (data: LoginRequest): Promise<LoginResponse> => {

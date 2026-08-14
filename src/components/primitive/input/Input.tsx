@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import styles from './input.module.css';
 import { InputProps } from './interface';
+import Skeleton from '../skeleton/Skeleton';
 import { toSnakeCase } from '@/store/slices/utils';
 
-export default function Input({ label, helper, left, right, className, required, ...props }: InputProps) {
+export default function Input({ label, helper, left, right, className, required, skeleton, ...props }: InputProps) {
 
   return (
     <div className={styles.container}>
@@ -19,7 +20,7 @@ export default function Input({ label, helper, left, right, className, required,
       <div className={styles.input__wrapper}>
         {left && <span className={styles.left__icon}>{left}</span>}
 
-        <input
+        {skeleton? <Skeleton height={32} width='100%' borderRadius={5}/>:<input
           {...props}
           id={toSnakeCase(label)}
           className={clsx(
@@ -30,7 +31,7 @@ export default function Input({ label, helper, left, right, className, required,
               [styles.padding__right]: !!right,
             }
           )}
-        />
+        />}
 
         {right && <span className={styles.right__icon}>{right}</span>}
       </div>

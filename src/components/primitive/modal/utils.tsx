@@ -1,16 +1,20 @@
 import { AppDispatch } from '@/store';
 import styles from './modal.module.css';
 import { Dispatch, SetStateAction } from 'react';
-import { closeModal } from '@/store/slices/uiSlice';
+import { DeedItem } from '@/hooks/deeds/interface';
 import DeedAddForm from '@/form/deedadd/DeedAddForm';
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import { DeedAddFormValues } from '@/form/deedadd/interface';
 import { Keys, ModalCTA, ModalTypes } from '@/constants/enums';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { closeModal, incementOpenModalStep } from '@/store/slices/uiSlice';
 
 const {
   MODAL_ADD_DEED_TITLE,
   MODAL_DELETE_DEED_TITLE,
   MODAL_ADD_SUB_DEED_TITLE,
+  DEED_UPDATE_FORM_TOOLTIP,
+  MODAL_VIEW_EDIT_DEED_TITLE,
   MODAL_DELETE_DEED_DESCRIPTION,
   MODAL_ADD_SUB_DEED_QUESTION_TITLE,
   MODAL_ADD_SUB_DEED_QUESTION_DESCRIPTION,
@@ -56,6 +60,8 @@ export const getModalTitle = (type: string, step: number) => {
       }
     case ModalTypes.delete_deed:
       return MODAL_DELETE_DEED_TITLE;
+    case ModalTypes.edit_deed:
+      return MODAL_VIEW_EDIT_DEED_TITLE;
     default:
       return;
   }
@@ -72,6 +78,8 @@ export const modalActionType = (type: string, step: number) => {
         default:
           return;
       }
+    case ModalTypes.edit_deed:
+      return <DeedAddForm />;
     case ModalTypes.delete_deed:
       return <p className={styles.content}>{MODAL_DELETE_DEED_DESCRIPTION}</p>;
     default:
@@ -79,7 +87,7 @@ export const modalActionType = (type: string, step: number) => {
   }
 };
 
-export const getModalPrimaryBtn = (type: string, step: number, createHasanaatItemLoading?: boolean, deleteHasanaatItemLoading?: boolean) => {
+export const getModalPrimaryBtn = (type: string, step: number, createHasanaatItemLoading?: boolean, deleteHasanaatItemLoading?: boolean, updateHasanaatItemLoading?: boolean) => {
   switch (type) {
     case ModalTypes.add_deed:
       switch (step % 2) {
@@ -92,6 +100,8 @@ export const getModalPrimaryBtn = (type: string, step: number, createHasanaatIte
       }
     case ModalTypes.delete_deed:
       return deleteHasanaatItemLoading ? ModalCTA.deleting: ModalCTA.delete;
+    case ModalTypes.edit_deed:
+      return updateHasanaatItemLoading? ModalCTA.updating: ModalCTA.update;
     default:
       return;
   }
@@ -112,6 +122,8 @@ export const getModalSecondaryBtn = (type: string, step: number) => {
       }
     case ModalTypes.delete_deed:
       return ModalCTA.cancel;
+    case ModalTypes.edit_deed:
+      return ModalCTA.back;
     default:
       return;
   }
@@ -121,6 +133,8 @@ export const isForm = (type: string, step: number) => {
   switch (type) {
     case ModalTypes.add_deed:
       return step % 2 === 1;
+    case ModalTypes.edit_deed:
+      return true;
     default:
     case ModalTypes.delete_deed:
       return false;
@@ -129,6 +143,7 @@ export const isForm = (type: string, step: number) => {
 
 export const onClose = (type: string, step: number, dispatch: AppDispatch, router: AppRouterInstance) => {
   switch (type) {
+    case ModalTypes.edit_deed:
     case ModalTypes.delete_deed:
       dispatch(closeModal());
       return;
@@ -143,14 +158,14 @@ export const onClose = (type: string, step: number, dispatch: AppDispatch, route
   }
 };
 
-export const onConfirm = async (type: string, deleteHasanaatItem: (id: string) => void, dispatch: AppDispatch, action: () => { type: string }, deedId: string) => {
+export const onConfirm = async (type: string, deleteHasanaatItem: (id: string) => void, dispatch: AppDispatch, deedId: string) => {
   switch (type) {
     case ModalTypes.delete_deed:
       await deleteHasanaatItem(deedId);
       dispatch(closeModal());
       return;
     case ModalTypes.add_deed:
-      dispatch(action());
+      dispatch(incementOpenModalStep());
       return;
     default:
       return;
@@ -158,3 +173,13 @@ export const onConfirm = async (type: string, deleteHasanaatItem: (id: string) =
 };
 
 export const backdropCondition = (type: string, step: number) => !(type === ModalTypes.add_deed && step === 1);
+
+export const isDeedUpdateFormChanged = (currentDeed: DeedItem | undefined, values: DeedAddFormValues) => {
+  if (currentDeed?.name != values?.name || (currentDeed?.description || '') != (values?.description || ''))
+    return true;
+  return false;
+};
+
+export const isDeedUpdateFormChangedTooltip = (deedUpdateFormChanged: boolean, isUpdateHasanaatItemLoading?: boolean) => {
+  return deedUpdateFormChanged && !isUpdateHasanaatItemLoading? DEED_UPDATE_FORM_TOOLTIP: ''
+};

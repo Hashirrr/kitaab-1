@@ -38,5 +38,16 @@ export const PLACEHOLDERS = {
   MODAL_ADD_SUB_DEED_QUESTION_DESCRIPTION: 'For example, Salah can include Fajr, Dhuhr, Asr, Maghrib, and Isha as sub deeds.',
   MODAL_ADD_SUB_DEED_ANOTHER_QUESTION_TITLE: 'Add Another Sub Deed ?',
   DRAGGABLE_CARD_VIEW_EDIT_DEED: 'View & Edit',
-  USE_FORM_CONTEXT_ERROR: 'useFormContext must be used inside FormProvider'
+  USE_FORM_CONTEXT_ERROR: 'useFormContext must be used inside FormProvider',
+  MODAL_VIEW_EDIT_DEED_TITLE: 'View & Edit Deed',
+  ADD_DEED_CTA: 'Add New Deed',
+  DEEDS_REORDER_TOOLTIP: 'Reordering items…',
+  DEED_UPDATE_FORM_TOOLTIP: 'Make a change to enable the update button',
+  STEPPER_STEP_1: '1',
+  STEPPER_STEP_2: '2',
+  STEPPER_DEEDS_MANAGEMENT: 'Deed(s) Management',
+  STEPPER_SCALES_MANAGEMENT: 'Scale(s) Management',
+  STEPPER_NO_DEEDS: 'Nothing to show yet. Add a deed to get started and see it here.',
+  STEPPER_BACK: 'Back',
+  STEPPER_NEXT: 'Next'
 };

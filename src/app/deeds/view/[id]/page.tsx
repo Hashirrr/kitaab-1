@@ -12,4 +12,4 @@ export default function View() {
       <Stepper id={id} visible={true}/>
     </div>
   );
-}
+};

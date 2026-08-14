@@ -1,12 +1,10 @@
 'use client';
 
 import dayjs from 'dayjs';
-import { closeModal } from './uiSlice';
 import { Mode } from '@/constants/enums';
-import { deleteDeedByID } from '@/app/deeds/utils';
+import { useAppSelector } from '@/store/hooks';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectModal, selectViewportWidth } from '@/store/slices/selectors';
+import { selectViewportWidth } from '@/store/slices/selectors';
 
 export const useIsMobile = () => {
   const width = useAppSelector(selectViewportWidth);

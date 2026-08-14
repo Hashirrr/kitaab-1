@@ -5,4 +5,5 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   helper?: string;
   left?: ReactNode;
   right?: ReactNode;
+  skeleton?: boolean;
 }

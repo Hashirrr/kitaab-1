@@ -5,9 +5,10 @@ import { useRef } from 'react';
 import { handleInput } from './utils';
 import styles from './textarea.module.css';
 import { TextareaProps } from './interface';
+import Skeleton from '../skeleton/Skeleton';
 import { toSnakeCase } from '@/store/slices/utils';
 
-export default function Textarea({ label, helper, left, right, className, onInput, ...props }: TextareaProps) {
+export default function Textarea({ label, helper, left, right, className, skeleton, onInput, ...props }: TextareaProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   return (
@@ -23,7 +24,7 @@ export default function Textarea({ label, helper, left, right, className, onInpu
       <div className={styles.input__wrapper}>
         {left && <span className={styles.left__icon}>{left}</span>}
 
-        <textarea
+        {skeleton? <Skeleton height={32} width='100%' borderRadius={5}/>:<textarea
           rows={1}
           {...props}
           ref={textareaRef}
@@ -37,7 +38,7 @@ export default function Textarea({ label, helper, left, right, className, onInpu
             }
           )}
           onInput={(e) => { handleInput(e); onInput?.(e); }}
-        />
+        />}
 
         {right && <span className={styles.right__icon}>{right}</span>}
       </div>

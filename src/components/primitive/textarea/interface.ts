@@ -5,4 +5,5 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   helper?: string;
   left?: ReactNode;
   right?: ReactNode;
+  skeleton?: boolean;
 }

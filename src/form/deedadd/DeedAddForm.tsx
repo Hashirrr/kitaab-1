@@ -5,16 +5,17 @@ import { onSubmit } from './utils';
 import { FormikHelpers } from 'formik';
 import styles from './deedadd.module.css';
 import useDeedAddForm from './useDeedAddForm';
-import { useAppDispatch } from '@/store/hooks';
 import { DeedAddFormValues } from './interface';
 import { toSnakeCase } from '@/store/slices/utils';
 import { Form, ModalTypes } from '@/constants/enums';
 import { useFormContext } from '@/store/FormProvider';
 import Input from '@/components/primitive/input/Input';
+import { setModalError } from '@/store/slices/uiSlice';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { useCreateHasanaatItem } from '@/hooks/deeds/hook';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import Textarea from '@/components/primitive/textarea/TextArea';
-import { incementOpenModalStep, setModalError } from '@/store/slices/uiSlice';
+import { selectCurrentDeedId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
+import { useCreateHasanaatItem, useGetHasanaatItems, useUpdateHasanaatItem } from '@/hooks/deeds/hook';
 
 export default function DeedAddForm() {
   const {
@@ -23,12 +24,19 @@ export default function DeedAddForm() {
     DEED_DESCRIPTION_LABEL,
     DEED_DESCRIPTION_PLACEHOLDER
   } = PLACEHOLDERS;
-
   const dispatch = useAppDispatch();
+  const step = useAppSelector(selectOpenModalStep);
+  const modalType = useAppSelector(selectModal).type;
+  const { data: getHasanaatItems } = useGetHasanaatItems();
+  const currentDeedID = useAppSelector(selectCurrentDeedId);
   const { mutateAsync: createHasanaatItem } = useCreateHasanaatItem();
+  const { mutateAsync: updateHasanaatItem, isPending: isUpdateHasanaatItemLoading } = useUpdateHasanaatItem();
+  const currentDeed = getHasanaatItems?.flatMap(deed => [deed, ...(deed.children ?? [])]).find(deed => deed.deed_item_id === currentDeedID);
   const formik = useDeedAddForm({
     onSubmit: (values: DeedAddFormValues, helpers: FormikHelpers<DeedAddFormValues>) =>
-      onSubmit(values, helpers.resetForm, dispatch, incementOpenModalStep, createHasanaatItem)
+      onSubmit(step, modalType, helpers.resetForm, dispatch, currentDeedID, values, getHasanaatItems!, createHasanaatItem, updateHasanaatItem),
+    modalType,
+    currentDeed
   });
 
   const { registerForm, unregisterForm } = useFormContext();
@@ -39,7 +47,7 @@ export default function DeedAddForm() {
     return () => {
       unregisterForm(Form.deed_add);
     };
-  }, [registerForm, unregisterForm]);
+  }, [registerForm, unregisterForm, formik.values]);
 
   useEffect(() => {
     dispatch(setModalError(Object.values(formik.errors)[0]));
@@ -54,7 +62,7 @@ export default function DeedAddForm() {
   return (
     <form id={ModalTypes.add_deed} className={styles.container} onSubmit={formik.handleSubmit} >
 
-      <Input
+      {<Input
         required
         label={DEED_NAME_LABEL}
         value={formik.values.name}
@@ -62,14 +70,16 @@ export default function DeedAddForm() {
         onChange={formik.handleChange}
         name={toSnakeCase(DEED_NAME_LABEL)}
         placeholder={DEED_NAME_PLACEHOLDER}
+        skeleton={isUpdateHasanaatItemLoading}
         helper={formik.touched.name ? formik.errors.name : undefined}
-      />
+      />}
 
       <Textarea
         onBlur={formik.handleBlur}
         label={DEED_DESCRIPTION_LABEL}
         onChange={formik.handleChange}
         value={formik.values.description}
+        skeleton={isUpdateHasanaatItemLoading}
         name={toSnakeCase(DEED_DESCRIPTION_LABEL)}
         placeholder={DEED_DESCRIPTION_PLACEHOLDER}
         helper={formik.touched.description ? formik.errors.description : undefined}

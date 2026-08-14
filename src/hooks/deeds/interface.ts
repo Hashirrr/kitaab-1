@@ -16,7 +16,22 @@ export type GetHasanaatItemsResponse = DeedItem[];
 
 export interface CreateHasanaatItemPayload {
   name: string;
+  description?: string;
   display_order?: number;
+  parent_deed_item_id: string | null;
   children?: CreateHasanaatItemPayload[];
   hide_type?: 'none' | 'hide' | 'children';
+};
+
+export interface UpdateHasanaatItemPayload {
+  id: string;
+  payload: {
+    name?: string;
+    description?: string;
+  };
+};
+
+export interface UpdateHasanaatItemDisplayOrderPayload {
+  display_order: number[];
+  parent_deed_item_id: number | null;
 };

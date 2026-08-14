@@ -20,9 +20,11 @@ export enum ModalCTA {
   back = 'Back',
   cancel = 'Cancel',
   delete = 'Delete',
+  update = 'Update',
   confirm = 'Confirm',
   adding = 'Adding...',
-  deleting = 'Deleting...'
+  deleting = 'Deleting...',
+  updating = 'Updating...'
 }
 
 export enum DeedCategory {
@@ -47,6 +49,7 @@ export enum Overflow {
 
 export enum ModalTypes {
   add_deed = 'add_deed',
+  edit_deed = 'edit_deed',
   delete_deed = 'delete_deed'
 }
 

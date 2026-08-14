@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { useState } from 'react';
+import { isNestedRoute } from './utils';
 import styles from './header.module.css';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { toggleTheme } from '@/store/slices/utils';
@@ -13,7 +14,6 @@ import { selectDeedCategory } from '@/store/slices/selectors';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
 import { Cursor, DeedCategory, IconButtonBackground, Mode } from '@/constants/enums';
-import { isNestedRoute } from './utils';
 
 export default function Header() {
   const router = useRouter();
@@ -33,9 +33,8 @@ export default function Header() {
         icon={<FaArrowLeftLong size={12}/>}
       />}
       <h2 className={styles.page__name}>{PAGE_NAME_DEEDS}</h2>
-      <button className={clsx(
-        styles.hasanaat__saiyyiaat, {
-        [styles.flipped]: !isHasanaat
+      <button className={clsx(styles.hasanaat__saiyyiaat, {
+          [styles.flipped]: !isHasanaat
         })}
         onClick={() => dispatch(setDeedCategory(isHasanaat ? DeedCategory.sayyiaat: DeedCategory.hasanaat))}
       >

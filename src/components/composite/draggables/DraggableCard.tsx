@@ -1,20 +1,22 @@
 import clsx from 'clsx';
 import { FaPen } from "react-icons/fa6";
-import { handleViewDeed } from './utils';
 import { CSS } from '@dnd-kit/utilities';
 import { IoMdMove } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
+import { QUERY } from '@/constants/query';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
 import { fromNow } from '@/store/slices/utils';
 import { useSortable } from '@dnd-kit/sortable';
 import styles from './draggablecard.module.css';
 import { DraggableCardProps } from './interface';
+import { useIsMutating } from '@tanstack/react-query';
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import { getMoveTooltip, handleViewDeed } from './utils';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { incementOpenModalStep, openModal, setCurrentDeedId } from '@/store/slices/uiSlice';
+import { openModal, setCurrentDeedId, setOpenModalStep } from '@/store/slices/uiSlice';
 import { Cursor, DeedTypes, DraggableCardVariants, IconButtonBackground, ModalTypes } from '@/constants/enums';
 
 export default function DraggableCard({ id, deed, variant, disabled }: DraggableCardProps) {
@@ -32,7 +34,10 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
   const dispatch = useAppDispatch();
   const { name, description, children, deed_item_id, created_at } = deed;
   const subDeedsLength = children?.length || NONE;
+  const { deeds_hasanaat, display_order } = QUERY;
   const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({ id, disabled });
+  const isUpdateHasanaatItemDisplayOrderPending = useIsMutating({ mutationKey: [deeds_hasanaat, display_order] }) > 0;
+  
   return (
     <div
       ref={setNodeRef}
@@ -66,24 +71,33 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         </button>}
         {variant === DraggableCardVariants.parent && <button
           className={styles.details}
-          onClick={() => {}}
+          onClick={() => {
+            dispatch(setOpenModalStep(5));
+            dispatch(setCurrentDeedId(deed_item_id));
+            dispatch(openModal(ModalTypes.add_deed));
+          }}
         >
           {DRAGGABLE_CARD_ADD_SUB_DEED}
         </button>}
         {variant === DraggableCardVariants.children && <button
           className={styles.details}
-          onClick={() => {}}
+          onClick={() => {
+            dispatch(setCurrentDeedId(deed_item_id));
+            dispatch(openModal(ModalTypes.edit_deed));
+          }}
         >
           {DRAGGABLE_CARD_VIEW_EDIT_DEED}
         </button>}
-        <IconButton
-          disabled={disabled}
-          cursor={Cursor.grab}
-          icon={<IoMdMove size={20}/>}
-          {...(!disabled ? listeners : {})}
-          {...(!disabled ? attributes : {})}
-          variant={IconButtonBackground.primary}
-        />
+        <Tooltip content={getMoveTooltip(isUpdateHasanaatItemDisplayOrderPending)}>
+          <IconButton
+            cursor={Cursor.grab}
+            icon={<IoMdMove size={20}/>}
+            {...(!disabled ? listeners : {})}
+            {...(!disabled ? attributes : {})}
+            variant={IconButtonBackground.primary}
+            disabled={disabled || isUpdateHasanaatItemDisplayOrderPending}
+          />
+        </Tooltip>
         {variant !== DraggableCardVariants.parent && <IconButton
           cursor={Cursor.pointer}
           icon={<MdDelete size={20}/>}
@@ -98,9 +112,8 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
           icon={<FaPen size={14} />}
           variant={IconButtonBackground.primary}
           onClick={() => {
-            dispatch(incementOpenModalStep());
-            dispatch(incementOpenModalStep());
-            dispatch(openModal(ModalTypes.add_deed));
+            dispatch(setCurrentDeedId(deed_item_id));
+            dispatch(openModal(ModalTypes.edit_deed));
           }}
         />}
       </div>

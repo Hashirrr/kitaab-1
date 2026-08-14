@@ -18,4 +18,4 @@ export function ViewportWatcher() {
   }, [dispatch]);
 
   return null;
-}
+};
