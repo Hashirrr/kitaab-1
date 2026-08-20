@@ -4,30 +4,30 @@ import SkeletonCard from './SkeletonCard';
 import { useEffect, useState } from 'react';
 import DraggableCard from './DraggableCard';
 import styles from './draggables.module.css';
-import { getDeedIds } from '@/app/deeds/utils';
+import { getScaleIds } from '@/app/deeds/utils';
+import { ScaleIdsInterface } from './interface';
+import { useGetScales } from '@/hooks/scales/hook';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-import { DeedIdsInterface, DraggablesProps } from './interface';
 import { getSkeletonCardsNumber, handleDragEnd } from './utils';
 import { useIsMobile, useIsTablet } from '@/store/slices/utils';
+import { useUpdateDeedsDisplayOrder } from '@/hooks/deeds/hook';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
-import { useGetDeeds, useUpdateDeedsDisplayOrder } from '@/hooks/deeds/hook';
 import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 
-export default function Draggables({ deedsData, variant }: DraggablesProps) {
+export default function DraggableScales() {
   const isMobile = useIsMobile();
   const isTablet = useIsTablet();
   const { STEPPER_NO_DEEDS } = PLACEHOLDERS;
+  const { data: getScales } = useGetScales();
   const [mounted, setMounted] = useState(false);
-  const { isPending: isGetDeedsPending } = useGetDeeds();
-  const [deeds, setDeeds] = useState<DeedIdsInterface[]>(getDeedIds(deedsData));
+  const { isPending: isGetScalesPending } = useGetScales();
   const { mutate: updateDeedsDisplayOrder } = useUpdateDeedsDisplayOrder();
+  const [scales, setScales] = useState<ScaleIdsInterface[]>(getScaleIds(getScales));
 
   useEffect(() => setMounted(true), []);
-
-  useEffect(() => {
-    setDeeds(getDeedIds(deedsData));
-  }, [deedsData]);
+  
+  useEffect(() => setScales(getScaleIds(getScales)), [getScales]);
 
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -40,22 +40,21 @@ export default function Draggables({ deedsData, variant }: DraggablesProps) {
   );
 
   if (!mounted) return null;
-
   return (
     <div className={styles.container}>
       <DndContext
         sensors={sensors}
         modifiers={[restrictToWindowEdges]}
         collisionDetection={closestCenter}
-        onDragEnd={(event) => handleDragEnd({ event, setDeeds, updateDeedsDisplayOrder })}
+        onDragEnd={(event) => handleDragEnd({ event, setScales, updateDeedsDisplayOrder })}
       >
-        <SortableContext items={deeds.map((d) => d.id)} strategy={rectSortingStrategy}>
-          {!isGetDeedsPending ? <div className={styles.grid}>
-            {deedsData?.length ? deeds.map(({ id }) => {
-                const deed = deedsData.find((item) => String(item.deed_item_id) === id);
+        <SortableContext items={scales.map((d) => d.id)} strategy={rectSortingStrategy}>
+          {!isGetScalesPending ? <div className={styles.grid}>
+            {getScales?.length ? scales.map(({ id }) => {
+                const scale = getScales.find((item) => String(item.scale_items_id) === id);
                 
-                if (!deed) return null;
-                return <DraggableCard key={id} id={id} deed={deed} variant={variant} disabled={deedsData.length === 1} /> 
+                if (!scale) return null;
+                return <DraggableCard key={id} id={id} scale={scale} disabled={getScales.length === 1} /> 
               }
             ): <p className={styles.no__data}>{STEPPER_NO_DEEDS}</p>}
           </div>:

@@ -3,19 +3,23 @@
 import clsx from 'clsx';
 import styles from './stepper.module.css';
 import { StepperProps } from './interface';
+import { useGetDeeds } from '@/hooks/deeds/hook';
+import { useGetScales } from '@/hooks/scales/hook';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { useGetHasanaatItems } from '@/hooks/deeds/hook';
-import { useLayoutEffect, useRef, useState } from 'react';
 import { DraggableCardVariants } from '@/constants/enums';
+import { useLayoutEffect, useRef, useState } from 'react';
 import Draggables from '@/components/composite/draggables/Draggables';
+import ScaleCardsContainer from '@/components/composite/scalecards/ScaleCardsContainer';
 
 export default function Stepper({ id, visible }: StepperProps) {
   const [active, setActive] = useState(0);
+  const { data: getDeeds } = useGetDeeds();
   const deedRef = useRef<HTMLDivElement>(null);
   const scaleRef = useRef<HTMLDivElement>(null);
   const [deedHeight, setDeedHeight] = useState(0);
-  const { data: getHasanaatItemsData } = useGetHasanaatItems();
-  const deed = id ? getHasanaatItemsData?.find((item) => item.deed_item_id === id): getHasanaatItemsData?.at(-1);
+  const { isPending: isGetScalesPending } = useGetScales();
+  const deed = id ? getDeeds?.find(item => item.deed_item_id === id): getDeeds?.at(-1);
+
   const {
     STEPPER_NEXT,
     STEPPER_BACK,
@@ -65,7 +69,7 @@ export default function Stepper({ id, visible }: StepperProps) {
         </div>
         <div className={styles.btns}>
           <button className={clsx(styles.btn, styles.back)} disabled>{STEPPER_BACK}</button>
-          <button className={clsx(styles.btn, styles.next)} onClick={() => setActive(1) }>{STEPPER_NEXT}</button>
+          <button className={clsx(styles.btn, styles.next)} onClick={() => setActive(1) } disabled={isGetScalesPending}>{STEPPER_NEXT}</button>
         </div>
       </div>:
       <p className={styles.text}>{STEPPER_NO_DEEDS}</p>}
@@ -82,6 +86,7 @@ export default function Stepper({ id, visible }: StepperProps) {
         })}
         style={{ maxHeight: active === 1 ? `${scaleRef.current?.scrollHeight}px`: '0px' }}
       >
+        <ScaleCardsContainer/>
         <div className={styles.btns}>
           <button className={clsx(styles.btn, styles.back)} onClick={() => setActive(0)}>{STEPPER_BACK}</button>
           <button className={clsx(styles.btn, styles.next)} onClick={() => setActive(2)} disabled>{STEPPER_NEXT}</button>

@@ -1,19 +1,19 @@
 import axios from '../axios';
 import { ENDPOINTS } from '@/constants/endpoints';
 import deeds from '@/mock/deeds.json' with { type: 'json' };
-import { GetHasanaatItemsResponse, CreateHasanaatItemPayload, DeedItem, UpdateHasanaatItemPayload, UpdateHasanaatItemDisplayOrderPayload } from './interface';
+import { GetHasanaatItemsResponse, CreateHasanaatItemPayload, DeedItem, UpdateDeedPayload, UpdateDeedsDisplayOrderPayload } from './interface';
 
 const {
-  get_deeds_hasanaat_items,
-  post_deeds_hasanaat_items,
-  patch_deeds_hasanaat_items,
-  delete_deeds_hasanaat_items,
-  patch_deeds_hasanaat_items_display_order
+  get_deeds,
+  update_deed,
+  delete_deed,
+  create_deeds,
+  update_deeds_display_order
 } = ENDPOINTS;
 
-export const getHasanaatItems = async (): Promise<GetHasanaatItemsResponse> => {
+export const getDeeds = async (type: string): Promise<GetHasanaatItemsResponse> => {
   try {
-    const { data } = await axios.get<GetHasanaatItemsResponse>(get_deeds_hasanaat_items);
+    const { data } = await axios.get<GetHasanaatItemsResponse>(get_deeds(type));
     data.sort((a, b) => Number(a.display_order) - Number(b.display_order));
     return data;
   } catch {
@@ -21,21 +21,21 @@ export const getHasanaatItems = async (): Promise<GetHasanaatItemsResponse> => {
   }
 };
 
-export const createHasanaatItem = async (payload: CreateHasanaatItemPayload): Promise<GetHasanaatItemsResponse> => {
-  const { data } = await axios.post<GetHasanaatItemsResponse>(post_deeds_hasanaat_items, payload);
+export const createDeed = async (type: string, payload: CreateHasanaatItemPayload): Promise<GetHasanaatItemsResponse> => {
+  const { data } = await axios.post<GetHasanaatItemsResponse>(create_deeds(type), payload);
   return data;
 };
 
-export const updateHasanaatItem = async ({ id, payload }: UpdateHasanaatItemPayload): Promise<DeedItem> => {
-  const { data } = await axios.patch<DeedItem>(`${patch_deeds_hasanaat_items}/${id}`, payload);
+export const updateDeed = async ( id: string, type: string, payload : UpdateDeedPayload): Promise<DeedItem> => {
+  const { data } = await axios.patch<DeedItem>(update_deed(id, type), payload);
   return data;
 };
 
-export const deleteHasanaatItem = async (id: string): Promise<void> => {
-  await axios.delete(`${delete_deeds_hasanaat_items}/${id}`);
+export const deleteDeed = async (id: string, type: string): Promise<void> => {
+  await axios.delete(delete_deed(id, type));
 };
 
 
-export const updateHasanaatItemDisplayOrder = async (payload: UpdateHasanaatItemDisplayOrderPayload): Promise<void> => {
-  await axios.patch(patch_deeds_hasanaat_items_display_order, payload);
+export const updateDeedsDisplayOrder = async (type: string, payload: UpdateDeedsDisplayOrderPayload): Promise<void> => {
+  await axios.patch(update_deeds_display_order(type), payload);
 };

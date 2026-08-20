@@ -9,7 +9,7 @@ export default function SidebarItem({ text, logo, href }: sidebarItemProps) {
 
   const location = usePathname();
   return (
-    <a href={href} className={`${styles.container} ${isActiveLocation(location, href, styles)}`}>
+    <a href={href} className={`${styles.container} ${isActiveLocation(location, href)}`}>
       {logo}
       <p className={styles.text}>{text}</p>
     </a>

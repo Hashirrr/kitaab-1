@@ -23,15 +23,12 @@ export interface CreateHasanaatItemPayload {
   hide_type?: 'none' | 'hide' | 'children';
 };
 
-export interface UpdateHasanaatItemPayload {
-  id: string;
-  payload: {
-    name?: string;
-    description?: string;
-  };
+export interface UpdateDeedPayload {
+  name?: string;
+  description?: string;
 };
 
-export interface UpdateHasanaatItemDisplayOrderPayload {
+export interface UpdateDeedsDisplayOrderPayload {
   display_order: number[];
   parent_deed_item_id: number | null;
 };

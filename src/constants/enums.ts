@@ -86,3 +86,8 @@ export enum DraggableCardVariants {
 export enum Form {
   deed_add = 'deed_add'
 }
+
+export const DeedCategoryApi = {
+  [DeedCategory.hasanaat]: 'hasanaat',
+  [DeedCategory.sayyiaat]: 'saiyyiaat'
+} as const;

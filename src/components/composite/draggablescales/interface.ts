@@ -1,27 +1,21 @@
 import { DragEndEvent } from '@dnd-kit/core';
 import { Dispatch, SetStateAction } from 'react';
+import { ScaleItem } from '@/hooks/scales/interface';
 import type { UseMutateFunction } from '@tanstack/react-query';
 import { DeedItem, UpdateDeedsDisplayOrderPayload } from '@/hooks/deeds/interface';
 
-export interface DraggablesProps {
-  variant?: string;
-  deedsData?: DeedItem[];
-}
-
-export interface DeedIdsInterface {
+export interface ScaleIdsInterface {
   id: string;
-  parent_deed_item_id: string | null;
 };
 
 export interface DraggableCardProps {
   id: string;
-  deed: DeedItem;
-  variant?: string;
+  scale: ScaleItem;
   disabled: boolean;
 };
 
 export interface HandleDragEndProps {
   event: DragEndEvent;
-  setDeeds: Dispatch<SetStateAction<DeedIdsInterface[]>>;
+  setScales: Dispatch<SetStateAction<ScaleIdsInterface[]>>;
   updateDeedsDisplayOrder: UseMutateFunction<unknown, Error, UpdateDeedsDisplayOrderPayload, unknown>;
-}
+};

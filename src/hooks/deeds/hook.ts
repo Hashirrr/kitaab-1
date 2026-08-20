@@ -1,45 +1,64 @@
 import { QUERY } from '@/constants/query';
+import { useAppSelector } from '@/store/hooks';
+import { DeedCategoryApi } from '@/constants/enums';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createHasanaatItem, deleteHasanaatItem, getHasanaatItems, updateHasanaatItem, updateHasanaatItemDisplayOrder } from './api';
+import { selectCurrentDeedId, selectDeedCategory } from '@/store/slices/selectors';
+import { createDeed, deleteDeed, updateDeed, updateDeedsDisplayOrder, getDeeds } from './api';
+import { CreateHasanaatItemPayload, UpdateDeedPayload, UpdateDeedsDisplayOrderPayload } from './interface';
 
-const { deeds_hasanaat, create, update, display_order } = QUERY;
+const { deeds, create, update, display_order } = QUERY;
 
-export const useGetHasanaatItems = () => {
-  return useQuery({ queryKey: [deeds_hasanaat], queryFn: getHasanaatItems });
+export const useGetDeeds = () => {
+  const deedCategory = useAppSelector(selectDeedCategory);
+  const type = DeedCategoryApi[deedCategory];
+  return useQuery({ queryKey: [deeds, type], queryFn: () => getDeeds(type) });
 };
 
-export const useCreateHasanaatItem = () => {
+export const useCreateDeed = () => {
   const queryClient = useQueryClient();
+  const deedCategory = useAppSelector(selectDeedCategory);
+  const type = DeedCategoryApi[deedCategory];
+
   return useMutation({
-    mutationFn: createHasanaatItem,
-    mutationKey: [deeds_hasanaat, create],
-    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds_hasanaat] })
+    mutationKey: [deeds, create],
+    mutationFn: (payload: CreateHasanaatItemPayload) => createDeed(type, payload),
+    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds, type] })
   });
 };
 
-export const useUpdateHasanaatItem = () => {
+export const useUpdateDeed = () => {
   const queryClient = useQueryClient();
+  const id = useAppSelector(selectCurrentDeedId);
+  const deedCategory = useAppSelector(selectDeedCategory);
+  const type = DeedCategoryApi[deedCategory];
+
   return useMutation({
-    mutationFn: updateHasanaatItem,
-    mutationKey: [deeds_hasanaat, update],
-    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds_hasanaat] })
+    mutationKey: [deeds, update],
+    mutationFn: (payload: UpdateDeedPayload) => updateDeed(id, type, payload),
+    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds, type] })
   });
 };
 
-export const useDeleteHasanaatItem = () => {
+export const useDeleteDeed = () => {
   const queryClient = useQueryClient();
+  const id = useAppSelector(selectCurrentDeedId);
+  const deedCategory = useAppSelector(selectDeedCategory);
+  const type = DeedCategoryApi[deedCategory];
+
   return useMutation({
-    mutationFn: deleteHasanaatItem,
-    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds_hasanaat] })
+    mutationFn: () => deleteDeed(id, type),
+    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds, type] })
   });
 };
 
-export const useUpdateHasanaatItemDisplayOrder = () => {
+export const useUpdateDeedsDisplayOrder = () => {
   const queryClient = useQueryClient();
+  const deedCategory = useAppSelector(selectDeedCategory);
+  const type = DeedCategoryApi[deedCategory];
 
   return useMutation({
-    mutationFn: updateHasanaatItemDisplayOrder,
-    mutationKey: [deeds_hasanaat, display_order],
-    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds_hasanaat] })
+    mutationKey: [deeds, display_order],
+    onSuccess: async () => await queryClient.invalidateQueries({ queryKey: [deeds, type] }),
+    mutationFn: (payload: UpdateDeedsDisplayOrderPayload) => updateDeedsDisplayOrder(type, payload)
   });
 };

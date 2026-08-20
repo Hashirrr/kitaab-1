@@ -6,8 +6,8 @@ import DeedAddForm from '@/form/deedadd/DeedAddForm';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { DeedAddFormValues } from '@/form/deedadd/interface';
 import { Keys, ModalCTA, ModalTypes } from '@/constants/enums';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { closeModal, incementOpenModalStep } from '@/store/slices/uiSlice';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const {
   MODAL_ADD_DEED_TITLE,
@@ -87,21 +87,21 @@ export const modalActionType = (type: string, step: number) => {
   }
 };
 
-export const getModalPrimaryBtn = (type: string, step: number, createHasanaatItemLoading?: boolean, deleteHasanaatItemLoading?: boolean, updateHasanaatItemLoading?: boolean) => {
+export const getModalPrimaryBtn = (type: string, step: number, isCreateDeedPending?: boolean, isDeleteDeedPending?: boolean, isUpdateDeedPending?: boolean) => {
   switch (type) {
     case ModalTypes.add_deed:
       switch (step % 2) {
         case 1:
-          return createHasanaatItemLoading? ModalCTA.adding: ModalCTA.add;
+          return isCreateDeedPending ? ModalCTA.adding: ModalCTA.add;
         case 0:
           return ModalCTA.yes;
         default:
           return;
       }
     case ModalTypes.delete_deed:
-      return deleteHasanaatItemLoading ? ModalCTA.deleting: ModalCTA.delete;
+      return isDeleteDeedPending ? ModalCTA.deleting: ModalCTA.delete;
     case ModalTypes.edit_deed:
-      return updateHasanaatItemLoading? ModalCTA.updating: ModalCTA.update;
+      return isUpdateDeedPending ? ModalCTA.updating: ModalCTA.update;
     default:
       return;
   }
@@ -158,10 +158,10 @@ export const onClose = (type: string, step: number, dispatch: AppDispatch, route
   }
 };
 
-export const onConfirm = async (type: string, deleteHasanaatItem: (id: string) => void, dispatch: AppDispatch, deedId: string) => {
+export const onConfirm = async (type: string, deleteDeed: () => void, dispatch: AppDispatch) => {
   switch (type) {
     case ModalTypes.delete_deed:
-      await deleteHasanaatItem(deedId);
+      await deleteDeed();
       dispatch(closeModal());
       return;
     case ModalTypes.add_deed:
@@ -180,6 +180,6 @@ export const isDeedUpdateFormChanged = (currentDeed: DeedItem | undefined, value
   return false;
 };
 
-export const isDeedUpdateFormChangedTooltip = (deedUpdateFormChanged: boolean, isUpdateHasanaatItemLoading?: boolean) => {
-  return deedUpdateFormChanged && !isUpdateHasanaatItemLoading? DEED_UPDATE_FORM_TOOLTIP: ''
+export const isDeedUpdateFormChangedTooltip = (deedUpdateFormChanged: boolean, isUpdateDeedPending?: boolean) => {
+  return deedUpdateFormChanged && !isUpdateDeedPending ? DEED_UPDATE_FORM_TOOLTIP: ''
 };

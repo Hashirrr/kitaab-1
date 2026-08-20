@@ -94,16 +94,6 @@
 }
 
 .back {
-  color: var(--foreground-3);
-  background: var(--background-2);
-}
-
-.back:hover {
-  color: var(--foreground-2);
-  background: var(--background-1);
-}
-
-.back {
   color: var(--foreground-1);
   background: var(--background-3);
 }

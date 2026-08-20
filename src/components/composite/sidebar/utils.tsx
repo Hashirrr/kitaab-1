@@ -1,4 +1,5 @@
 import { BiSupport } from 'react-icons/bi';
+import styles from './sidebaritem.module.css';
 import { FaNoteSticky } from 'react-icons/fa6';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { PLACEHOLDERS } from '@/constants/placeholders';
@@ -45,7 +46,7 @@ export const sidebarItems = [
   }
 ];
 
-export const isActiveLocation = (location: string, href: string, styles: any) => {
+export const isActiveLocation = (location: string, href: string) => {
   if (!location.includes(href)) return '';
   return styles.is__active__location;
 };

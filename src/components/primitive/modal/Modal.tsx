@@ -13,8 +13,8 @@ import { useFormContext } from '@/store/FormProvider';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { useDeleteDeed, useGetDeeds } from '@/hooks/deeds/hook';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { useDeleteHasanaatItem, useGetHasanaatItems } from '@/hooks/deeds/hook';
 import { selectCurrentDeedId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
 import { ButtonType, Cursor, EventListeners, Form, IconButtonBackground, ModalTypes, Overflow } from '@/constants/enums';
 import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isDeedUpdateFormChanged, isDeedUpdateFormChangedTooltip, isForm, modalActionType, onClose, onConfirm } from './utils';
@@ -27,19 +27,19 @@ export default function Modal() {
   const { UNDEFINED } = PLACEHOLDERS;
   const { forms } = useFormContext();
   const deedForm = forms[Form.deed_add];
+  const { deeds, create, update } = QUERY;
+  const { data: getDeeds } = useGetDeeds();
   const modal = useAppSelector(selectModal);
   const [closing, setClosing] = useState(false);
   const { isOpen, type, error, disabled } = modal;
   const [mounted, setMounted] = useState(isOpen);
-  const { deeds_hasanaat, create, update } = QUERY;
   const step = useAppSelector(selectOpenModalStep);
   const deedId = useAppSelector(selectCurrentDeedId);
-  const { data: getHasanaatItems } = useGetHasanaatItems();
   const currentDeedId = useAppSelector(selectCurrentDeedId);
-  const createHasanaatItemLoading = useIsMutating({ mutationKey: [deeds_hasanaat, create] }) > 0;
-  const isUpdateHasanaatItemLoading = useIsMutating({ mutationKey: [deeds_hasanaat, update] }) > 0;
-  const { mutateAsync: deleteHasanaatItem, isPending: deleteHasanaatItemLoading } = useDeleteHasanaatItem();
-  const currentDeed = getHasanaatItems?.flatMap(deed => [deed, ...(deed.children ?? [])]).find(deed => deed.deed_item_id === currentDeedId);
+  const isCreateDeedPending = useIsMutating({ mutationKey: [deeds, create] }) > 0;
+  const isUpdateDeedPending = useIsMutating({ mutationKey: [deeds, update] }) > 0;
+  const { mutateAsync: deleteDeed, isPending: isDeleteDeedPending } = useDeleteDeed();
+  const currentDeed = getDeeds?.flatMap(deed => [deed, ...(deed.children ?? [])]).find(deed => deed.deed_item_id === currentDeedId);
   const close = useMemo(
     () => createCloseHandler(
       ANIMATION_DURATION,
@@ -118,13 +118,13 @@ export default function Modal() {
             {getModalSecondaryBtn(type, step)}
           </button>
 
-          <Tooltip content={error || isDeedUpdateFormChangedTooltip(!deedUpdateFormChanged, isUpdateHasanaatItemLoading)}>
+          <Tooltip content={error || isDeedUpdateFormChangedTooltip(!deedUpdateFormChanged, isUpdateDeedPending)}>
             {isForm(type, step) ?
-              <button type={ButtonType.submit} form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed: type} className={styles.primary__btn} disabled={disabled || createHasanaatItemLoading || deleteHasanaatItemLoading || isUpdateHasanaatItemLoading || !deedUpdateFormChanged}>
-                {getModalPrimaryBtn(type, step, createHasanaatItemLoading, undefined, isUpdateHasanaatItemLoading)}
+              <button type={ButtonType.submit} form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed: type} className={styles.primary__btn} disabled={disabled || isCreateDeedPending || isDeleteDeedPending || isUpdateDeedPending || !deedUpdateFormChanged}>
+                {getModalPrimaryBtn(type, step, isCreateDeedPending, undefined, isUpdateDeedPending)}
               </button>:
-              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, deleteHasanaatItem, dispatch, deedId)} disabled={deleteHasanaatItemLoading}>
-                {getModalPrimaryBtn(type, step, undefined, deleteHasanaatItemLoading)}
+              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, deleteDeed, dispatch)} disabled={isDeleteDeedPending}>
+                {getModalPrimaryBtn(type, step, undefined, isDeleteDeedPending)}
               </button>
             }
           </Tooltip>

@@ -1,24 +1,20 @@
 import { Routes } from '@/constants/enums';
 import { arrayMove } from '@dnd-kit/sortable';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { DeedIdsInterface, HandleDragEndProps } from './interface';
+import { ScaleIdsInterface, HandleDragEndProps } from './interface';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 const { DEEDS_REORDER_TOOLTIP } = PLACEHOLDERS;
 
-export const handleDragEnd = ({ event, setDeeds, updateDeedsDisplayOrder }: HandleDragEndProps) => {
+export const handleDragEnd = ({ event, setScales, updateDeedsDisplayOrder }: HandleDragEndProps) => {
   const { active, over } = event;
 
   if (!over || active.id === over.id) return;
 
-  const result: { reordered?: DeedIdsInterface[] } = {};
+  const result: { reordered?: ScaleIdsInterface[] } = {};
   let parentDeedItemId: string | null = null;
 
-  setDeeds(items => {
-    const activeItem = items.find(item => item.id === active.id);
-
-    parentDeedItemId = activeItem?.parent_deed_item_id ?? null;
-
+  setScales(items => {
     const newIndex = items.findIndex(item => item.id === over.id);
     const oldIndex = items.findIndex(item => item.id === active.id);
 
