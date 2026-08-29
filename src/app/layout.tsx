@@ -2,6 +2,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import styles from './layout.module.css';
 import StoreProvider from '@/store/Provider';
+import { themeScript } from '@/store/slices/utils';
 import { ChildrenProps } from '@/store/slices/interface';
 import Header from '@/components/composite/header/Header';
 import Sidebar from '@/components/composite/sidebar/Sidebar';
@@ -13,7 +14,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<ChildrenProps>) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         <StoreProvider>
           <Sidebar />

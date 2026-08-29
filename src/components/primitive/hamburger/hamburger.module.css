@@ -6,7 +6,7 @@
   width: 45px;
   height: 45px;
   z-index: 1002;
-  display: flex;
+  display: none;
   position: fixed;
   cursor: pointer;
   border-radius: 5px;
@@ -16,6 +16,12 @@
   transition: left 250ms ease;
   background: var(--background-1);
   border: 2px solid rgba(0, 0, 0, 0.01);
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
 }
 
 .hamburger.open {

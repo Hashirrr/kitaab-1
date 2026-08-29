@@ -1,8 +1,7 @@
 import { ReactNode } from 'react';
-import { DeedCategory } from '@/constants/enums';
+import { DeedCategory, Mode } from '@/constants/enums';
 
 export interface UIState {
-  sidebarExpanded: boolean,
   viewport: {
     width: number,
     height: number
@@ -13,8 +12,11 @@ export interface UIState {
     isOpen: boolean,
     disabled: boolean
   },
+  mode: Mode,
   currentDeedId: string,
   openModalStep: number,
+  currentScaleId: string,
+  sidebarExpanded: boolean,
   deedCategory: DeedCategory
 };
 
@@ -25,4 +27,4 @@ export interface ViewportPayload {
 
 export interface ChildrenProps {
   children: ReactNode;
-}
+};

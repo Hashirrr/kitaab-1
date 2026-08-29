@@ -1,6 +1,5 @@
 import axios from '../axios';
 import { ENDPOINTS } from '@/constants/endpoints';
-import deeds from '@/mock/deeds.json' with { type: 'json' };
 import { GetHasanaatItemsResponse, CreateHasanaatItemPayload, DeedItem, UpdateDeedPayload, UpdateDeedsDisplayOrderPayload } from './interface';
 
 const {
@@ -12,13 +11,9 @@ const {
 } = ENDPOINTS;
 
 export const getDeeds = async (type: string): Promise<GetHasanaatItemsResponse> => {
-  try {
-    const { data } = await axios.get<GetHasanaatItemsResponse>(get_deeds(type));
-    data.sort((a, b) => Number(a.display_order) - Number(b.display_order));
-    return data;
-  } catch {
-    return deeds as GetHasanaatItemsResponse;
-  }
+  const { data } = await axios.get<GetHasanaatItemsResponse>(get_deeds(type));
+  data.sort((a, b) => Number(a.display_order) - Number(b.display_order));
+  return data;
 };
 
 export const createDeed = async (type: string, payload: CreateHasanaatItemPayload): Promise<GetHasanaatItemsResponse> => {

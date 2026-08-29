@@ -23,6 +23,9 @@
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
+}
+
+.inner.animate {
   transition: transform 500ms ease;
 }
 

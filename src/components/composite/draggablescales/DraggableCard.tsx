@@ -13,8 +13,8 @@ import { useIsMutating } from '@tanstack/react-query';
 import { BsFillInfoCircleFill } from "react-icons/bs";
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
-import { openModal, setCurrentDeedId } from '@/store/slices/uiSlice';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
+import { openModal, setCurrentScaleId } from '@/store/slices/uiSlice';
 import { Cursor, IconButtonBackground, ModalTypes } from '@/constants/enums';
 
 export default function DraggableCard({ id, scale, disabled }: DraggableCardProps) {
@@ -23,11 +23,11 @@ export default function DraggableCard({ id, scale, disabled }: DraggableCardProp
     DRAGGABLE_CARD_VIEW_EDIT_DEED
   } = PLACEHOLDERS;
   const dispatch = useAppDispatch();
-  const { deeds, display_order } = QUERY;
+  const { scales, display_order } = QUERY;
   const { name, description, scale_items_id, created_at } = scale;
-  const isUpdateHasanaatItemDisplayOrderPending = useIsMutating({ mutationKey: [deeds, display_order] }) > 0;
+  const isUpdateScaleDisplayOrderPending = useIsMutating({ mutationKey: [scales, display_order] }) > 0;
   const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({ id, disabled });
-  
+
   return (
     <div
       ref={setNodeRef}
@@ -50,29 +50,29 @@ export default function DraggableCard({ id, scale, disabled }: DraggableCardProp
         <button
           className={styles.details}
           onClick={() => {
-            dispatch(setCurrentDeedId(scale_items_id));
-            dispatch(openModal(ModalTypes.edit_deed));
+            dispatch(setCurrentScaleId(scale_items_id));
+            dispatch(openModal(ModalTypes.edit_scale));
           }}
         >
           {DRAGGABLE_CARD_VIEW_EDIT_DEED}
         </button>
-        <Tooltip content={getMoveTooltip(isUpdateHasanaatItemDisplayOrderPending)}>
+        <Tooltip content={getMoveTooltip(isUpdateScaleDisplayOrderPending)}>
           <IconButton
             cursor={Cursor.grab}
-            icon={<IoMdMove size={20}/>}
+            icon={<IoMdMove size={20} />}
             {...(!disabled ? listeners : {})}
             {...(!disabled ? attributes : {})}
             variant={IconButtonBackground.primary}
-            disabled={disabled || isUpdateHasanaatItemDisplayOrderPending}
+            disabled={disabled || isUpdateScaleDisplayOrderPending}
           />
         </Tooltip>
         <IconButton
           cursor={Cursor.pointer}
-          icon={<MdDelete size={20}/>}
+          icon={<MdDelete size={20} />}
           variant={IconButtonBackground.primary}
           onClick={() => {
-            dispatch(setCurrentDeedId(scale_items_id));
-            dispatch(openModal(ModalTypes.delete_deed));
+            dispatch(setCurrentScaleId(scale_items_id));
+            dispatch(openModal(ModalTypes.delete_scale));
           }}
         />
       </div>

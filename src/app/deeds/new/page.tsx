@@ -5,22 +5,23 @@ import styles from './styles.module.css';
 import { ModalTypes } from '@/constants/enums';
 import Stepper from '@/components/primitive/stepper/Stepper';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectOpenModalStep } from '@/store/slices/selectors';
-import { openModal, resetOpenModalStep } from '@/store/slices/uiSlice';
+import { selectCurrentDeedId } from '@/store/slices/selectors';
+import { openModal, resetOpenModalStep, setCurrentDeedId } from '@/store/slices/uiSlice';
 
 export default function New() {
   const dispatch = useAppDispatch();
-  const step = useAppSelector(selectOpenModalStep);
+  const currentDeedId = useAppSelector(selectCurrentDeedId);
   useEffect(() => {
     dispatch(openModal(ModalTypes.add_deed));
     return () => {
-      dispatch(resetOpenModalStep())
+      dispatch(resetOpenModalStep());
+      dispatch(setCurrentDeedId(''));
     };
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className={styles.container}>
-      <Stepper visible={step !== 1}/>
+      <Stepper visible={!!currentDeedId}/>
     </div>
   );
 };

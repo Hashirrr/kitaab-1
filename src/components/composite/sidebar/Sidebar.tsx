@@ -9,7 +9,6 @@ import styles from './sidebar.module.css';
 import { HeaderProps } from './interface';
 import logoNormal from '@/assets/logo.png';
 import logoHover from '@/assets/logo-hover.png';
-import { useIsMobile } from '@/store/slices/utils';
 import logoNormalDark from '@/assets/logo-dark.png';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import logoHoverDark from '@/assets/logo-hover-dark.png';
@@ -59,7 +58,6 @@ const Header = ({ alt }: HeaderProps) => {
 };
 
 export default function Sidebar() {
-  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const sidebarExpanded = useAppSelector(selectSidebarExpanded);
   const {
@@ -74,19 +72,21 @@ export default function Sidebar() {
       {sidebarExpanded && 
         <div className={styles.backdrop} onClick={() => dispatch(setSidebarExpanded(false))} />
       }
-      {isMobile && <Hamburger
+      <Hamburger
         isOpen={sidebarExpanded}
         onToggle={(isOpen) => dispatch(setSidebarExpanded(isOpen))}
-      />}
-      {isMobile && <div className={styles.topbar}>
+      />
+      <div className={styles.topbar}>
         <Header alt={KITAAB_LOGO_ALT}/>
-      </div>}
+      </div>
       
       <aside className={clsx(
         styles.aside, 
         sidebarExpanded ? styles.is__sidebar__expanded: styles.is__sidebar__collapsed
       )}>
-        {!isMobile? <Header alt={KITAAB_LOGO_ALT}/>: <div/>}
+        <div className={styles.sidebar__header}>
+          <Header alt={KITAAB_LOGO_ALT}/>
+        </div>
         <nav aria-label={SIDEBAR_NAV_ARIA_LABEL} className={styles.nav} >
           <ul className={styles.list}>
             {sidebarItems.map((item, index) => (

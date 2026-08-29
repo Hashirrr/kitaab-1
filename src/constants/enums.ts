@@ -49,8 +49,11 @@ export enum Overflow {
 
 export enum ModalTypes {
   add_deed = 'add_deed',
+  add_scale = 'add_scale',
   edit_deed = 'edit_deed',
-  delete_deed = 'delete_deed'
+  edit_scale = 'edit_scale',
+  delete_deed = 'delete_deed',
+  delete_scale = 'delete_scale'
 }
 
 export enum ButtonType {
@@ -65,7 +68,14 @@ export enum Routes {
 }
 
 export enum LocalStorage {
-  access_token = 'access_token'
+  mode = 'mode',
+  access_token = 'access_token',
+  deed_category = 'deed_category'
+}
+
+export enum SessionStorage {
+  mode = 'mode',
+  deed_category = 'deed_category'
 }
 
 export enum DeedHideTypes {
@@ -84,7 +94,8 @@ export enum DraggableCardVariants {
 }
 
 export enum Form {
-  deed_add = 'deed_add'
+  deed_add = 'deed_add',
+  scale_edit = 'scale_edit'
 }
 
 export const DeedCategoryApi = {

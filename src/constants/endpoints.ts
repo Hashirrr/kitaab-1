@@ -6,5 +6,8 @@ export const ENDPOINTS = {
   delete_deed: (id: string, type: string) => `/deeds/${type}/items/${id}`,
   update_deeds_display_order: (type: string) => `/deeds/${type}/items/display-order`,
   get_scales: (id: string) => `/scales/${id}/items`,
-  create_scales: (id: string) => `/scales/${id}/items`
+  create_scales: (id: string) => `/scales/${id}/items`,
+  update_scale: (id: string, itemId: string) => `/scales/${id}/items/${itemId}`,
+  delete_scale: (id: string, itemId: string) => `/scales/${id}/items/${itemId}`,
+  update_scales_display_order: (id: string) => `/scales/${id}/items/display-order`
 };

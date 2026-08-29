@@ -79,7 +79,19 @@
   width: 100%;
 }
 
+.sidebar__header {
+  display: flex;
+}
+
+.topbar {
+  display: none;
+}
+
 @media (max-width: 768px) {
+  .sidebar__header {
+    display: none;
+  }
+
   .aside {
     top: 0;
     margin: 0;

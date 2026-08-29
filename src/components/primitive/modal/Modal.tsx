@@ -15,9 +15,10 @@ import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useDeleteDeed, useGetDeeds } from '@/hooks/deeds/hook';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { selectCurrentDeedId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
+import { useDeleteScaleItem, useGetScales } from '@/hooks/scales/hook';
+import { selectCurrentDeedId, selectCurrentScaleId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
 import { ButtonType, Cursor, EventListeners, Form, IconButtonBackground, ModalTypes, Overflow } from '@/constants/enums';
-import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isDeedUpdateFormChanged, isDeedUpdateFormChangedTooltip, isForm, modalActionType, onClose, onConfirm } from './utils';
+import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isDeedUpdateFormChanged, isDeedUpdateFormChangedTooltip, isForm, isScaleUpdateFormChanged, modalActionType, onClose, onConfirm } from './utils';
 
 const ANIMATION_DURATION = 250;
 
@@ -27,19 +28,25 @@ export default function Modal() {
   const { UNDEFINED } = PLACEHOLDERS;
   const { forms } = useFormContext();
   const deedForm = forms[Form.deed_add];
-  const { deeds, create, update } = QUERY;
+  const scaleForm = forms[Form.scale_edit];
   const { data: getDeeds } = useGetDeeds();
+  const { data: getScales } = useGetScales();
   const modal = useAppSelector(selectModal);
   const [closing, setClosing] = useState(false);
+  const { deeds, scales, create, update } = QUERY;
   const { isOpen, type, error, disabled } = modal;
   const [mounted, setMounted] = useState(isOpen);
   const step = useAppSelector(selectOpenModalStep);
-  const deedId = useAppSelector(selectCurrentDeedId);
   const currentDeedId = useAppSelector(selectCurrentDeedId);
+  const currentScaleItemId = useAppSelector(selectCurrentScaleId);
   const isCreateDeedPending = useIsMutating({ mutationKey: [deeds, create] }) > 0;
   const isUpdateDeedPending = useIsMutating({ mutationKey: [deeds, update] }) > 0;
+  const isCreateScalePending = useIsMutating({ mutationKey: [scales, create] }) > 0;
+  const isUpdateScalePending = useIsMutating({ mutationKey: [scales, update] }) > 0;
   const { mutateAsync: deleteDeed, isPending: isDeleteDeedPending } = useDeleteDeed();
+  const { mutateAsync: deleteScale, isPending: isDeleteScalePending } = useDeleteScaleItem();
   const currentDeed = getDeeds?.flatMap(deed => [deed, ...(deed.children ?? [])]).find(deed => deed.deed_item_id === currentDeedId);
+  const currentScale = getScales?.find(scale => scale.scale_items_id === currentScaleItemId);
   const close = useMemo(
     () => createCloseHandler(
       ANIMATION_DURATION,
@@ -51,6 +58,11 @@ export default function Modal() {
     [closing, type, dispatch, router, step]
   );
   const deedUpdateFormChanged = isDeedUpdateFormChanged(currentDeed, deedForm?.values);
+  const scaleUpdateFormChanged = isScaleUpdateFormChanged(currentScale, scaleForm?.values);
+  const isFormChanged = type === ModalTypes.edit_scale ? scaleUpdateFormChanged : (type === ModalTypes.edit_deed ? deedUpdateFormChanged : true);
+  const isUpdatePending = type === ModalTypes.edit_scale ? isUpdateScalePending : (type === ModalTypes.add_scale ? isCreateScalePending : isUpdateDeedPending);
+  const isDeletePending = type === ModalTypes.delete_scale ? isDeleteScalePending : isDeleteDeedPending;
+
   useEffect(() => {
     if (isOpen) {
       setMounted(true);
@@ -118,13 +130,23 @@ export default function Modal() {
             {getModalSecondaryBtn(type, step)}
           </button>
 
-          <Tooltip content={error || isDeedUpdateFormChangedTooltip(!deedUpdateFormChanged, isUpdateDeedPending)}>
+          <Tooltip content={error || isDeedUpdateFormChangedTooltip(!isFormChanged, isUpdatePending)}>
             {isForm(type, step) ?
-              <button type={ButtonType.submit} form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed: type} className={styles.primary__btn} disabled={disabled || isCreateDeedPending || isDeleteDeedPending || isUpdateDeedPending || !deedUpdateFormChanged}>
-                {getModalPrimaryBtn(type, step, isCreateDeedPending, undefined, isUpdateDeedPending)}
-              </button>:
-              <button type={ButtonType.button} className={styles.primary__btn} onClick={() => onConfirm(type, deleteDeed, dispatch)} disabled={isDeleteDeedPending}>
-                {getModalPrimaryBtn(type, step, undefined, isDeleteDeedPending)}
+              <button
+                type={ButtonType.submit}
+                form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed : ((type === ModalTypes.edit_scale || type === ModalTypes.add_scale) ? ModalTypes.edit_scale : type)}
+                className={styles.primary__btn}
+                disabled={disabled || isCreateDeedPending || isCreateScalePending || isDeleteDeedPending || isUpdateDeedPending || isUpdateScalePending || isDeleteScalePending || !isFormChanged}
+              >
+                {getModalPrimaryBtn(type, step, isCreateDeedPending, isDeleteDeedPending, isUpdateDeedPending, isUpdateScalePending, isDeleteScalePending, isCreateScalePending)}
+              </button> :
+              <button
+                type={ButtonType.button}
+                className={styles.primary__btn}
+                onClick={() => onConfirm(type, deleteDeed, deleteScale, dispatch)}
+                disabled={isDeletePending}
+              >
+                {getModalPrimaryBtn(type, step, undefined, isDeleteDeedPending, undefined, undefined, isDeleteScalePending, undefined)}
               </button>
             }
           </Tooltip>

@@ -17,3 +17,9 @@ export const selectOpenModalStep = (state: RootState) =>
 
 export const selectCurrentDeedId = (state: RootState) =>
   state.ui.currentDeedId;
+
+export const selectCurrentScaleId = (state: RootState) =>
+  state.ui.currentScaleId;
+
+export const selectMode = (state: RootState) =>
+  state.ui.mode;

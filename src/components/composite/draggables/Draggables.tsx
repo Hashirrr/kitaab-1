@@ -39,7 +39,17 @@ export default function Draggables({ deedsData, variant }: DraggablesProps) {
     })
   );
 
-  if (!mounted) return null;
+  if (!mounted || isGetDeedsPending) {
+    return (
+      <div className={styles.container}>
+        <div className={styles.grid}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -50,18 +60,15 @@ export default function Draggables({ deedsData, variant }: DraggablesProps) {
         onDragEnd={(event) => handleDragEnd({ event, setDeeds, updateDeedsDisplayOrder })}
       >
         <SortableContext items={deeds.map((d) => d.id)} strategy={rectSortingStrategy}>
-          {!isGetDeedsPending ? <div className={styles.grid}>
-            {deedsData?.length ? deeds.map(({ id }) => {
-                const deed = deedsData.find((item) => String(item.deed_item_id) === id);
-                
-                if (!deed) return null;
-                return <DraggableCard key={id} id={id} deed={deed} variant={variant} disabled={deedsData.length === 1} /> 
-              }
-            ): <p className={styles.no__data}>{STEPPER_NO_DEEDS}</p>}
-          </div>:
           <div className={styles.grid}>
-            {Array.from({ length: getSkeletonCardsNumber(isMobile, isTablet) }).map((_, i) => (<SkeletonCard key={i} /> ))}
-          </div>}
+            {deedsData?.length ? deeds.map(({ id }) => {
+              const deed = deedsData.find((item) => String(item.deed_item_id) === id);
+
+              if (!deed) return null;
+              return <DraggableCard key={id} id={id} deed={deed} variant={variant} disabled={deedsData.length === 1} />
+            }
+            ) : <p className={styles.no__data}>{STEPPER_NO_DEEDS}</p>}
+          </div>
         </SortableContext>
       </DndContext>
     </div>

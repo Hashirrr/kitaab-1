@@ -7,15 +7,15 @@ import styles from './deedadd.module.css';
 import useDeedAddForm from './useDeedAddForm';
 import { DeedAddFormValues } from './interface';
 import { toSnakeCase } from '@/store/slices/utils';
-import { Form, ModalTypes } from '@/constants/enums';
 import { useFormContext } from '@/store/FormProvider';
 import Input from '@/components/primitive/input/Input';
 import { setModalError } from '@/store/slices/uiSlice';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import Textarea from '@/components/primitive/textarea/TextArea';
+import { DeedCategoryApi, Form, ModalTypes } from '@/constants/enums';
 import { useCreateDeed, useGetDeeds, useUpdateDeed } from '@/hooks/deeds/hook';
-import { selectCurrentDeedId, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
+import { selectCurrentDeedId, selectDeedCategory, selectModal, selectOpenModalStep } from '@/store/slices/selectors';
 
 export default function DeedAddForm() {
   const {
@@ -30,11 +30,13 @@ export default function DeedAddForm() {
   const modalType = useAppSelector(selectModal).type;
   const { mutateAsync: createDeed } = useCreateDeed();
   const currentDeedID = useAppSelector(selectCurrentDeedId);
+  const deedCategory = useAppSelector(selectDeedCategory);
+  const deedCategoryType = DeedCategoryApi[deedCategory];
   const { mutateAsync: updateDeed, isPending: isUpdateDeedPending } = useUpdateDeed();
   const currentDeed = getDeeds?.flatMap(deed => [deed, ...(deed.children ?? [])]).find(deed => deed.deed_item_id === currentDeedID);
   const formik = useDeedAddForm({
     onSubmit: (values: DeedAddFormValues, helpers: FormikHelpers<DeedAddFormValues>) =>
-      onSubmit(step, modalType, helpers.resetForm, dispatch, currentDeedID, values, getDeeds!, createDeed, updateDeed),
+      onSubmit(step, modalType, helpers.resetForm, dispatch, currentDeedID, deedCategoryType, values, getDeeds!, createDeed, updateDeed),
     modalType,
     currentDeed
   });

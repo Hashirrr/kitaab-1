@@ -1,5 +1,5 @@
 import { UIState } from './interface';
-import { DeedCategory } from '@/constants/enums';
+import { DeedCategory, Mode } from '@/constants/enums';
 
 export const initialState: UIState = {
   sidebarExpanded: false,
@@ -14,6 +14,8 @@ export const initialState: UIState = {
     disabled: true
   },
   openModalStep: 1,
+  mode: Mode.light,
   currentDeedId: '',
+  currentScaleId: '',
   deedCategory: DeedCategory.hasanaat
 };

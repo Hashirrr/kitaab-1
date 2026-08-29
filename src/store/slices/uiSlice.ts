@@ -1,7 +1,10 @@
 import { initialState } from './initialState';
 import { ViewportPayload } from './interface';
-import { DeedCategory } from '@/constants/enums';
+import { PLACEHOLDERS } from '@/constants/placeholders';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { DeedCategory, LocalStorage, Mode } from '@/constants/enums';
+
+const { UNDEFINED } = PLACEHOLDERS;
 
 const uiSlice = createSlice({
   name: 'ui',
@@ -39,9 +42,22 @@ const uiSlice = createSlice({
     },
     setDeedCategory(state, action: PayloadAction<DeedCategory>) {
       state.deedCategory = action.payload;
+      if (typeof window !== UNDEFINED) {
+        localStorage.setItem(LocalStorage.deed_category, action.payload);
+      }
+    },
+    setMode(state, action: PayloadAction<Mode>) {
+      state.mode = action.payload;
+      if (typeof window !== UNDEFINED) {
+        localStorage.setItem(LocalStorage.mode, action.payload);
+        document.documentElement.classList.toggle(Mode.dark, action.payload === Mode.dark);
+      }
     },
     setCurrentDeedId(state, action: PayloadAction<string>) {
       state.currentDeedId = action.payload;
+    },
+    setCurrentScaleId(state, action: PayloadAction<string>) {
+      state.currentScaleId = action.payload;
     }
   }
 });
@@ -49,6 +65,7 @@ const uiSlice = createSlice({
 export default uiSlice.reducer;
 
 export const {
+  setMode,
   openModal,
   closeModal,
   setViewport,
@@ -56,6 +73,7 @@ export const {
   setDeedCategory,
   setCurrentDeedId,
   setOpenModalStep,
+  setCurrentScaleId,
   setSidebarExpanded,
   resetOpenModalStep,
   incementOpenModalStep

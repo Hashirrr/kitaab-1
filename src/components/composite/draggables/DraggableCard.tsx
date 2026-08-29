@@ -56,8 +56,8 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         <dd>{DeedTypes.scale}</dd>
         <dt>{DRAGGABLE_CARD_KEY_ADDED}</dt>
         <dd>{fromNow(created_at)}</dd>
-        <dt>{DRAGGABLE_CARD_KEY_SUB_DEEDS}</dt>
-        <dd>{subDeedsLength}</dd>
+        {variant !== DraggableCardVariants.children && <dt>{DRAGGABLE_CARD_KEY_SUB_DEEDS}</dt>}
+        {variant !== DraggableCardVariants.children && <dd>{subDeedsLength}</dd>}
         <dt>{DRAGGABLE_CARD_KEY_LAST_RECORDED}</dt>
         <dd>{fromNow(new Date())}</dd>
       </dl>

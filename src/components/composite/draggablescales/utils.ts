@@ -6,13 +6,12 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.share
 
 const { DEEDS_REORDER_TOOLTIP } = PLACEHOLDERS;
 
-export const handleDragEnd = ({ event, setScales, updateDeedsDisplayOrder }: HandleDragEndProps) => {
+export const handleDragEnd = ({ event, setScales, updateScalesDisplayOrder }: HandleDragEndProps) => {
   const { active, over } = event;
 
   if (!over || active.id === over.id) return;
 
   const result: { reordered?: ScaleIdsInterface[] } = {};
-  let parentDeedItemId: string | null = null;
 
   setScales(items => {
     const newIndex = items.findIndex(item => item.id === over.id);
@@ -24,8 +23,7 @@ export const handleDragEnd = ({ event, setScales, updateDeedsDisplayOrder }: Han
   });
 
   if (result.reordered) {
-    updateDeedsDisplayOrder({
-      parent_deed_item_id: parentDeedItemId,
+    updateScalesDisplayOrder({
       display_order: result.reordered.map(item => Number(item.id))
     });
   }

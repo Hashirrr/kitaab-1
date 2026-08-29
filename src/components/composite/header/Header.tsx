@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { isNestedRoute } from './utils';
 import styles from './header.module.css';
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -10,19 +10,25 @@ import { PLACEHOLDERS } from '@/constants/placeholders';
 import { usePathname, useRouter } from 'next/navigation';
 import { setDeedCategory } from '@/store/slices/uiSlice';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
-import { selectDeedCategory } from '@/store/slices/selectors';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
+import { selectDeedCategory, selectMode } from '@/store/slices/selectors';
 import { Cursor, DeedCategory, IconButtonBackground, Mode } from '@/constants/enums';
 
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const mode = useAppSelector(selectMode);
   const { PAGE_NAME_DEEDS } = PLACEHOLDERS;
-  const [mode, setMode] = useState<Mode>(Mode.light);
+  const [mounted, setMounted] = useState(false);
   const deedCategory = useAppSelector(selectDeedCategory);
   const isHasanaat = deedCategory === DeedCategory.hasanaat;
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className={styles.page__header}>
       {isNestedRoute(pathname) && <IconButton
@@ -30,15 +36,15 @@ export default function Header() {
         cursor={Cursor.pointer}
         onClick={() => router.back()}
         variant={IconButtonBackground.secondary}
-        icon={<FaArrowLeftLong size={12}/>}
+        icon={<FaArrowLeftLong size={12} />}
       />}
       <h2 className={styles.page__name}>{PAGE_NAME_DEEDS}</h2>
       <button className={clsx(styles.hasanaat__saiyyiaat, {
-          [styles.flipped]: !isHasanaat
-        })}
-        onClick={() => dispatch(setDeedCategory(isHasanaat ? DeedCategory.sayyiaat: DeedCategory.hasanaat))}
+        [styles.flipped]: !isHasanaat
+      })}
+        onClick={() => dispatch(setDeedCategory(isHasanaat ? DeedCategory.sayyiaat : DeedCategory.hasanaat))}
       >
-        <div className={styles.inner}>
+        <div className={clsx(styles.inner, { [styles.animate]: mounted })}>
           <p className={styles.front}>{DeedCategory.hasanaat}</p>
           <p className={styles.back}>{DeedCategory.sayyiaat}</p>
         </div>
@@ -46,9 +52,9 @@ export default function Header() {
       <IconButton
         shadow
         cursor={Cursor.pointer}
-        onClick={() => toggleTheme(setMode)}
+        onClick={() => toggleTheme(dispatch, mode)}
         variant={IconButtonBackground.secondary}
-        icon={mode === Mode.light ? <MdDarkMode size={20}/>: <MdLightMode size={20}/>}
+        icon={mode === Mode.light ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
       />
     </div>
   );
