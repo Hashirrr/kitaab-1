@@ -1,0 +1,222 @@
+.container {
+    width: 100%;
+}
+
+.grid {
+    gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.records__card {
+    display: flex;
+    padding: 16px;
+    user-select: none;
+    border-radius: 8px;
+    align-items: center;
+    grid-column: span 2;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--box-shadow);
+    background: var(--foreground-1);
+    ;
+    transition: box-shadow 250ms ease;
+}
+
+.records__card:hover {
+    box-shadow: var(--box-shadow-hover);
+}
+
+.records__date {
+    font-size: max(16px, 2vw);
+    font-weight: 600;
+    color: var(--background-3);
+}
+
+.card {
+    display: flex;
+    padding: 16px;
+    user-select: none;
+    border-radius: 8px;
+    grid-column: span 1;
+    flex-direction: column;
+    box-shadow: var(--box-shadow);
+    background: var(--background-3);
+    transition: box-shadow 250ms ease;
+}
+
+.card:hover {
+    box-shadow: var(--box-shadow-hover);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.month__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--foreground-2);
+}
+
+.nav__buttons {
+    gap: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.nav__btn {
+    width: 26px;
+    height: 26px;
+    border: none;
+    display: flex;
+    cursor: pointer;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground-2);
+    background: var(--background-2);
+    border: 2px solid rgba(0, 0, 0, 0.01);
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.nav__btn:hover {
+    color: var(--foreground-2);
+    background: var(--background-1);
+}
+
+.fading__line {
+    height: 1px;
+    border: none;
+    margin: 12px 0;
+    background-image: var(--hr-image);
+}
+
+.weekdays__grid {
+    gap: 4px;
+    display: grid;
+    padding: 4px 0;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    text-align: center;
+    background: var(--background-2);
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.weekday {
+    padding: 3px 0;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    color: var(--foreground-2);
+}
+
+.days__grid {
+    gap: 4px;
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.day__cell {
+    border: none;
+    display: flex;
+    outline: none;
+    aspect-ratio: 1;
+    cursor: pointer;
+    font-size: 14px;
+    position: relative;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    color: var(--foreground-2);
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.day__cell:hover:not(.selected) {
+    background: var(--background-1);
+}
+
+.other__month {
+    opacity: 0.4;
+    color: var(--foreground-3);
+}
+
+.latest:not(.selected) {
+    font-weight: 700;
+    border: 1.5px solid var(--foreground-3);
+}
+
+.selected {
+    font-weight: 700;
+    color: var(--background-3);
+    background: var(--foreground-2);
+}
+
+.selected:hover {
+    background: var(--foreground-1);
+}
+
+.footer {
+    gap: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.footer__btn {
+    flex: 1;
+    display: flex;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    color: var(--foreground-2);
+    background: var(--background-2);
+    border: 2px solid rgba(0, 0, 0, 0.01);
+    transition: background-color 200ms ease, color 200ms ease;
+}
+
+.footer__btn:hover:not(:disabled) {
+    color: var(--foreground-2);
+    background: var(--background-1);
+}
+
+.footer__btn:disabled {
+    opacity: 0.45;
+    cursor: default;
+}
+
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .records__card {
+        grid-column: span 1;
+    }
+
+    .card {
+        grid-column: span 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .records__card {
+        grid-column: span 1;
+    }
+
+    .card {
+        grid-column: span 1;
+    }
+}

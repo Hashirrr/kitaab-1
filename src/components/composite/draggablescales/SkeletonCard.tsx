@@ -9,8 +9,10 @@ export default function SkeletonCard() {
 
   return (
     <div className={styles.card}>
-      <h3 className={styles.title}>{skeletonTitle}</h3>
-      <hr className={styles.fading__line} />
+      <div className={styles.card__header}>
+        <h3 className={styles.title}>{skeletonTitle}</h3>
+        <hr className={styles.fading__line} />
+      </div>
       <dl className={styles.key__values}>
         <dt>{skeletonValues(96)}</dt>
         <dd>{skeletonValues(84)}</dd>

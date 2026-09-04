@@ -30,14 +30,14 @@
 
 .hamburger span {
   width: 20px;
-  height: 2.4px;
+  height: 2.7px;
   border-radius: 999px;
   background: var(--foreground-2);
   transition: transform 0.3s ease, opacity 0.25s ease, width 0.3s ease;
 }
 
 .hamburger.open span:nth-child(1) {
-  transform: translateY(7.5px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
 
 .hamburger.open span:nth-child(2) {

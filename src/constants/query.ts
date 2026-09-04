@@ -3,5 +3,6 @@ export const QUERY = {
   update: 'update',
   display_order: 'display-order',
   deeds: 'deeds',
-  scales: 'scales'
+  scales: 'scales',
+  records: 'records'
 };

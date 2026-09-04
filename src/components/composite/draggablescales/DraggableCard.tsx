@@ -34,13 +34,15 @@ export default function DraggableCard({ id, scale, disabled }: DraggableCardProp
       className={clsx(styles.card, { [styles.dragging]: isDragging })}
       style={{ transform: CSS.Transform.toString(transform), transition }}
     >
-      <h3 className={styles.title}>
-        {name}
-        {description && <Tooltip content={description}>
-          <BsFillInfoCircleFill />
-        </Tooltip>}
-      </h3>
-      <hr className={styles.fading__line} />
+      <div className={styles.card__header}>
+        <h3 className={styles.title}>
+          {name}
+          {description && <Tooltip content={description}>
+            <BsFillInfoCircleFill />
+          </Tooltip>}
+        </h3>
+        <hr className={styles.fading__line} />
+      </div>
       <dl className={styles.key__values}>
         <dt>{DRAGGABLE_CARD_KEY_ADDED}</dt>
         <dd>{fromNow(created_at)}</dd>

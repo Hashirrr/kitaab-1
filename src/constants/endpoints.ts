@@ -9,5 +9,7 @@ export const ENDPOINTS = {
   create_scales: (id: string) => `/scales/${id}/items`,
   update_scale: (id: string, itemId: string) => `/scales/${id}/items/${itemId}`,
   delete_scale: (id: string, itemId: string) => `/scales/${id}/items/${itemId}`,
-  update_scales_display_order: (id: string) => `/scales/${id}/items/display-order`
+  update_scales_display_order: (id: string) => `/scales/${id}/items/display-order`,
+  create_records: '/records',
+  get_records: (date: string) => `/records/${date}`
 };

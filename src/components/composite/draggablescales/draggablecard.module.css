@@ -43,6 +43,12 @@
   cursor: var(--not-allowed-cursor);
 }
 
+.card__header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .header {
   display: flex;
   flex-direction: row;

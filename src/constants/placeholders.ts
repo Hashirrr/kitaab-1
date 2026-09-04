@@ -86,5 +86,7 @@ export const PLACEHOLDERS = {
   SCALE_NAME_PLACEHOLDER: 'e.g. Yes',
   SCALE_DESCRIPTION_LABEL: 'Description',
   SCALE_DESCRIPTION_PLACEHOLDER: 'Briefly describe this scale...',
-  ADD_SCALE_CTA: 'Add Scale'
+  ADD_SCALE_CTA: 'Add Scale',
+  NO_DEEDS_TO_SHOW: 'No deed was created at the following date.',
+  RECORD_PREVIOUS_DAYS_REQUIRED: 'Kindly fill in the details for the previous days first so that you can complete today\'s details.'
 };

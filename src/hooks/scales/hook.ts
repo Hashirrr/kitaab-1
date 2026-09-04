@@ -7,9 +7,15 @@ import { CreateScaleItemPayload, UpdateScaleItemPayload, UpdateScalesDisplayOrde
 
 const { scales, create, update, display_order } = QUERY;
 
-export const useGetScales = () => {
-  const scaleId = useAppSelector(selectCurrentDeedId);
-  return useQuery({ enabled: !!scaleId, queryKey: [scales, scaleId], queryFn: () => getScales(scaleId) });
+export const useGetScales = (deedId?: string) => {
+  const currentDeedId = useAppSelector(selectCurrentDeedId);
+  const targetId = deedId || currentDeedId;
+
+  return useQuery({
+    enabled: !!targetId,
+    queryKey: [scales, targetId],
+    queryFn: () => getScales(targetId)
+  });
 };
 
 export const useCreateScales = () => {

@@ -1,29 +1,22 @@
 'use client';
 
+import { handleDragEnd } from './utils';
 import AddScaleCard from './AddScaleCard';
 import SkeletonCard from './SkeletonCard';
-import { QUERY } from '@/constants/query';
 import { useEffect, useState } from 'react';
 import DraggableCard from './DraggableCard';
 import styles from './draggables.module.css';
 import { getScaleIds } from '@/app/deeds/utils';
 import { ScaleIdsInterface } from './interface';
-import { useIsMutating } from '@tanstack/react-query';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
-import { getSkeletonCardsNumber, handleDragEnd } from './utils';
-import { useIsMobile, useIsTablet } from '@/store/slices/utils';
 import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { useGetScales, useUpdateScalesDisplayOrder } from '@/hooks/scales/hook';
 import { DndContext, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
 
 export default function DraggableScales() {
-  const isMobile = useIsMobile();
-  const isTablet = useIsTablet();
-  const { scales: scalesQuery, create } = QUERY;
   const [mounted, setMounted] = useState(false);
   const { mutate: updateScalesDisplayOrder } = useUpdateScalesDisplayOrder();
-  const isCreateScalesPending = useIsMutating({ mutationKey: [scalesQuery, create] }) > 0;
-  const { data: getScales, isPending: isGetScalesPending, isFetching: isGetScalesFetching } = useGetScales();
+  const { data: getScales, isPending: isGetScalesPending } = useGetScales();
   const [scales, setScales] = useState<ScaleIdsInterface[]>(getScaleIds(getScales));
 
   useEffect(() => setMounted(true), []);
@@ -40,9 +33,7 @@ export default function DraggableScales() {
     })
   );
 
-  const isInitialLoading = isGetScalesPending || (isCreateScalesPending && !getScales?.length) || (isGetScalesFetching && !getScales?.length);
-
-  if (!mounted || isInitialLoading) {
+  if (!mounted || isGetScalesPending) {
     return (
       <div className={styles.container}>
         <div className={styles.grid}>
