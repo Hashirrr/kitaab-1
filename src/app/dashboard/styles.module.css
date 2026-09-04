@@ -1,0 +1,24 @@
+.card {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  padding: 24px;
+  user-select: none;
+  border-radius: 8px;
+  flex-direction: column;
+  box-shadow: var(--box-shadow);
+  min-height: calc(100vh - 88px);
+  background: var(--background-3);
+  transition: box-shadow 250ms ease;
+}
+
+.card:hover {
+  box-shadow: var(--box-shadow-hover);
+}
+
+@media (max-width: 768px) {
+  .card {
+    padding: 16px;
+    min-height: calc(100dvh - 228px);
+  }
+}
