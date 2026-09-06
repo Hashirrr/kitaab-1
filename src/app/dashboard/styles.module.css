@@ -28,6 +28,7 @@
   width: 160px;
   display: flex;
   min-width: 160px;
+  max-height: calc(100vh - 88px);
   flex-direction: column;
 }
 

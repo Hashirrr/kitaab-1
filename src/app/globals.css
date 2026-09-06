@@ -10,35 +10,46 @@
 }
 
 :root {
-  /* High-Fi Light Mode (Crisp Porcelain / Alabaster) */
-  --background-1: #f1f5f9;
-  --background-2: #f8fafc;
+  /* High-Fi Light Mode (Pure Monochromatic High-Contrast / Apple Pro style) */
+  --background-1: #e2e8f0;
+  --background-2: #f1f5f9;
   --background-3: #ffffff;
 
   --foreground-1: #0f172a;
-  --foreground-2: #475569;
-  --foreground-3: #94a3b8;
+  --foreground-2: #334155;
+  --foreground-3: #64748b;
 
-  --accent-glow: rgba(16, 185, 129, 0.1);
-  --accent-primary: #059669;
+  --accent: #0f172a;
+  --accent-hover: #1e293b;
+  --accent-primary: #0f172a;
+  --accent-foreground: #ffffff;
+  --accent-glow: rgba(15, 23, 42, 0.08);
+  --accent-subtle: rgba(15, 23, 42, 0.05);
 
-  --box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 1px 3px 0 rgba(0, 0, 0, 0.03);
-  --box-shadow-hover: 0 12px 28px -4px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04);
-  --box-shadow-active: 0 2px 6px 0 rgba(0, 0, 0, 0.04);
+  --border: 1px solid rgba(15, 23, 42, 0.08);
+  --border-card: rgba(15, 23, 42, 0.08);
+  --border-subtle: rgba(15, 23, 42, 0.05);
+  --border-glow: rgba(15, 23, 42, 0.22);
+  --border-focus: 1px solid rgba(15, 23, 42, 0.35);
+
+  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+
+  --box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+  --box-shadow-hover: 0 6px 20px -2px rgba(15, 23, 42, 0.09), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  --box-shadow-active: 0 1px 2px 0 rgba(15, 23, 42, 0.06);
 
   --display-dark: none;
   --display-light: block;
 
-  --hr-image: linear-gradient(to right, transparent, rgba(0, 0, 0, 0.1) 50%, transparent);
-  --separator-border: 1px solid rgba(0, 0, 0, 0.06);
-
+  --hr-image: linear-gradient(to right, transparent, rgba(15, 23, 42, 0.08) 50%, transparent);
+  --separator-border: 1px solid rgba(15, 23, 42, 0.06);
   --not-allowed-cursor: not-allowed;
-  --border: 1px solid rgba(0, 0, 0, 0.08);
-  --border-focus: 1px solid rgba(0, 0, 0, 0.22);
 }
 
 html.dark {
-  /* High-Fi Dark Mode (Obsidian / Zinc / Stealth Cyber) */
+  /* High-Fi Dark Mode (Pure Monochromatic High-Contrast / Vercel Obsidian style) */
   --background-1: #1e222b;
   --background-2: #14171f;
   --background-3: #0c0e12;
@@ -47,11 +58,25 @@ html.dark {
   --foreground-2: #94a3b8;
   --foreground-3: #64748b;
 
-  --accent-glow: rgba(16, 185, 129, 0.15);
-  --accent-primary: #10b981;
+  --accent: #ffffff;
+  --accent-hover: #e2e8f0;
+  --accent-primary: #ffffff;
+  --accent-foreground: #0c0e12;
+  --accent-glow: rgba(255, 255, 255, 0.15);
+  --accent-subtle: rgba(255, 255, 255, 0.08);
 
-  --box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.5), 0 2px 6px -1px rgba(0, 0, 0, 0.35);
-  --box-shadow-hover: 0 14px 36px -4px rgba(0, 0, 0, 0.65), 0 4px 12px -2px rgba(0, 0, 0, 0.45);
+  --border: 1px solid rgba(255, 255, 255, 0.08);
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --border-glow: rgba(255, 255, 255, 0.3);
+  --border-focus: 1px solid rgba(255, 255, 255, 0.35);
+
+  --shadow-sm: 0 4px 16px -2px rgba(0, 0, 0, 0.45), 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 16px 40px -6px rgba(0, 0, 0, 0.75), 0 8px 16px -4px rgba(0, 0, 0, 0.5);
+
+  --box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45), 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --box-shadow-hover: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 4px 10px -2px rgba(0, 0, 0, 0.4);
   --box-shadow-active: 0 2px 8px 0 rgba(0, 0, 0, 0.4);
 
   --display-dark: block;
@@ -59,10 +84,7 @@ html.dark {
 
   --hr-image: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.12) 50%, transparent);
   --separator-border: 1px solid rgba(255, 255, 255, 0.08);
-
   --not-allowed-cursor: not-allowed;
-  --border: 1px solid rgba(255, 255, 255, 0.08);
-  --border-focus: 1px solid rgba(255, 255, 255, 0.24);
 }
 
 html {

@@ -8,25 +8,25 @@
 }
 
 .aside {
-  top: 20px;
+  top: 16px;
   margin: 0;
-  width: 96px;
+  width: 100px;
   z-index: 1000;
   display: flex;
   position: fixed;
   overflow: hidden;
-  padding: 20px 8px;
+  padding: 16px 8px;
   border-radius: 16px;
   align-items: center;
   box-sizing: border-box;
   flex-direction: column;
-  height: calc(100dvh - 40px);
-  box-shadow: var(--box-shadow);
+  height: calc(100dvh - 32px);
+  box-shadow: var(--shadow-md);
   border: var(--border);
   justify-content: space-between;
-  max-height: calc(100dvh - 40px);
+  max-height: calc(100dvh - 32px);
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1), background-color 250ms ease;
-  left: max(20px, calc(50% - 570px));
+  left: max(16px, calc(50% - 558px));
   background-color: var(--background-3);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);

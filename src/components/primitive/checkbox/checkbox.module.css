@@ -74,7 +74,7 @@
 }
 
 .native__checkbox:checked ~ .custom__checkbox {
-  color: #ffffff;
+  color: var(--accent-foreground);
   background: var(--accent);
   border-color: var(--accent);
   box-shadow: 0 0 10px var(--accent-glow);

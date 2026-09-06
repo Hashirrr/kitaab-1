@@ -21,9 +21,9 @@
 }
 
 .container.is__active__location {
-  color: var(--foreground-1);
+  color: var(--accent);
   background-color: var(--background-1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
 }
 
 .container.is__active__location::before {
@@ -35,11 +35,11 @@
   width: 3px;
   height: 16px;
   border-radius: 4px;
-  background: var(--accent-primary);
+  background: var(--accent);
 }
 
 .container.is__active__location:hover {
-  color: var(--foreground-1);
+  color: var(--accent);
   background-color: var(--background-1);
 }
 

@@ -132,7 +132,7 @@
 
 .mcq__btn.selected {
   font-weight: 600;
-  color: #ffffff;
+  color: var(--accent-foreground);
   background: var(--accent);
   border-color: var(--accent);
   box-shadow: 0 0 12px var(--accent-glow);
@@ -238,7 +238,7 @@
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
+  color: var(--accent-foreground);
   background: var(--accent);
   box-shadow: 0 4px 14px var(--accent-glow);
   transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;

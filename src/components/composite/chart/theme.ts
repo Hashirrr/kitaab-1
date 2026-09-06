@@ -5,20 +5,30 @@ import { formatChartDataFromObject, getScaleOpacities } from './utils';
 
 export const getChartColors = (mode: Mode = Mode.light, count: number = 4): string[] => {
   const isDark = mode === Mode.dark;
+  if (isDark) {
+    if (count <= 1) return ['rgba(255, 255, 255, 0.95)'];
+    const minOpacity = 0.36;
+    const maxOpacity = 0.95;
+    const step = (maxOpacity - minOpacity) / (count - 1);
+    return Array.from({ length: count }, (_, i) => {
+      const opacity = Number((minOpacity + i * step).toFixed(3));
+      return `rgba(255, 255, 255, ${opacity})`;
+    });
+  }
+
   const opacities = getScaleOpacities(count);
-  const rgb = isDark ? '255, 255, 255' : '0, 0, 0';
-  return opacities.map((opacity) => `rgba(${rgb}, ${opacity})`);
+  return opacities.map((opacity) => `rgba(15, 23, 42, ${opacity})`);
 };
 
 export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataPoint[] = formatChartDataFromObject(), isMobile?: boolean, onToggleScale?: (scaleName: string, isChecked: boolean) => void): Highcharts.Options => {
   const isDark = mode === Mode.dark;
   const borderRadius = isMobile ? 5 : 10;
-  const textColor = 'var(--foreground-1)';
-  const labelColor = 'var(--foreground-2)';
+  const textColor = isDark ? '#f8fafc' : '#0f172a';
+  const labelColor = isDark ? '#f8fafc' : '#0f172a';
   const defaultDataLabelsEnabled = !isMobile;
   const defaultSize = isMobile ? '100%' : '80%';
   const colors = getChartColors(mode, data.length);
-  const borderColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
+  const borderColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(15, 23, 42, 0.12)';
 
   return {
     chart: {
@@ -42,7 +52,7 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
       itemStyle: {
         color: textColor,
         fontSize: '12px',
-        fontWeight: 'normal'
+        fontWeight: '500'
       },
       itemHoverStyle: {
         color: isDark ? '#ffffff' : '#000000'
@@ -59,8 +69,8 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
       borderRadius: 10,
       shadow: false,
       padding: 10,
-      borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
-      backgroundColor: isDark ? 'rgba(20, 23, 31, 0.92)' : 'rgba(255, 255, 255, 0.95)',
+      borderColor: isDark ? 'rgba(255, 255, 255, 0.18)' : 'rgba(15, 23, 42, 0.12)',
+      backgroundColor: isDark ? 'rgba(15, 18, 25, 0.97)' : 'rgba(255, 255, 255, 0.98)',
       style: {
         color: textColor,
         fontSize: '12px',
@@ -78,7 +88,7 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
       variablepie: {
         borderColor,
         borderRadius,
-        borderWidth: 1,
+        borderWidth: 1.5,
         size: defaultSize,
         states: {
           inactive: {
@@ -97,12 +107,12 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
           }
         },
         dataLabels: {
-          padding: 5,
+          padding: 6,
           borderWidth: 1,
-          borderRadius: 6,
+          borderRadius: 7,
           format: '{point.name}',
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
-          backgroundColor: isDark ? 'rgba(20, 23, 31, 0.85)' : 'rgba(255, 255, 255, 0.9)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.18)' : 'rgba(15, 23, 42, 0.12)',
+          backgroundColor: isDark ? 'rgba(20, 23, 31, 0.94)' : 'rgba(255, 255, 255, 0.95)',
           style: {
             color: labelColor,
             fontWeight: '600',

@@ -75,9 +75,9 @@
 }
 
 .primary__btn {
-  color: #ffffff;
+  color: var(--accent-foreground);
   background: var(--accent);
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--border-card);
   box-shadow: 0 2px 10px var(--accent-glow);
 }
 

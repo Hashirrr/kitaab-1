@@ -208,7 +208,7 @@
 
 .selected {
     font-weight: 600;
-    color: #ffffff;
+    color: var(--accent-foreground);
     background: var(--accent);
     box-shadow: 0 0 12px var(--accent-glow);
 }
