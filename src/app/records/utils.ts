@@ -69,10 +69,12 @@ export const getRecordDeeds = (deedsData?: DeedItem[], scalesData?: ScaleItem[],
       if (matchingScale) parentOption = matchingScale.name;
     }
 
+    const parentType = deed.type ? (String(deed.type).toLowerCase() === 'count' ? DeedTypes.count : DeedTypes.scale): DeedTypes.scale;
+
     return {
-      id: deed.deed_item_id,
       name: deed.name,
-      type: DeedTypes.scale,
+      type: parentType,
+      id: deed.deed_item_id,
       options: scaleOptions,
       selectedOption: hasChildren ? undefined : parentOption,
       countValue: parentCount,
@@ -93,10 +95,13 @@ export const getRecordDeeds = (deedsData?: DeedItem[], scalesData?: ScaleItem[],
             if (matchingScale) childOption = matchingScale.name;
           }
 
+          const childRawType = child.type || deed.type;
+          const childType = childRawType ? (String(childRawType).toLowerCase() === 'count' ? DeedTypes.count : DeedTypes.scale): DeedTypes.scale;
+
           return {
-            id: child.deed_item_id,
+            type: childType,
             name: child.name,
-            type: DeedTypes.scale,
+            id: child.deed_item_id,
             options: scaleOptions,
             selectedOption: childOption,
             countValue: childCount,
@@ -203,8 +208,7 @@ export const getLatestDate = (deeds?: DeedItem[]): string => {
   const recordedDates: dayjs.Dayjs[] = [];
 
   const extractRecordedDate = (item: DeedItem) => {
-    const rawDate = (item as unknown as { last_recorded?: string; last_recorded_at?: string }).last_recorded ||
-      (item as unknown as { last_recorded?: string; last_recorded_at?: string }).last_recorded_at;
+    const rawDate = item.last_recorded_at || (item as unknown as { last_recorded?: string }).last_recorded;
     if (rawDate && dayjs(rawDate).isValid()) {
       recordedDates.push(dayjs(rawDate));
     }

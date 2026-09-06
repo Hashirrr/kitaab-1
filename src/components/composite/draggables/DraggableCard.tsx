@@ -17,6 +17,7 @@ import { getMoveTooltip, handleViewDeed } from './utils';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
 import { openModal, setCurrentDeedId, setOpenModalStep } from '@/store/slices/uiSlice';
+import dayjs from 'dayjs';
 import { Cursor, DeedTypes, DraggableCardVariants, IconButtonBackground, ModalTypes } from '@/constants/enums';
 
 export default function DraggableCard({ id, deed, variant, disabled }: DraggableCardProps) {
@@ -33,11 +34,34 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { deeds, display_order } = QUERY;
-  const { name, description, children, deed_item_id, created_at } = deed;
+  const { name, description, children, deed_item_id, created_at, type, last_recorded_at } = deed;
   const subDeedsLength = children?.length || NONE;
   const isUpdateHasanaatItemDisplayOrderPending = useIsMutating({ mutationKey: [deeds, display_order] }) > 0;
   const { setNodeRef, transform, transition, attributes, listeners, isDragging } = useSortable({ id, disabled });
-  
+
+  const deedType = type
+    ? (String(type).toLowerCase() === 'count' ? DeedTypes.count : DeedTypes.scale)
+    : DeedTypes.scale;
+
+  const getLatestRecorded = () => {
+    if (last_recorded_at && dayjs(last_recorded_at).isValid()) {
+      return fromNow(last_recorded_at);
+    }
+    if (children?.length) {
+      const validChildDates = children
+        .map((c) => c.last_recorded_at)
+        .filter((d): d is string => Boolean(d && dayjs(d).isValid()));
+      if (validChildDates.length > 0) {
+        const latest = validChildDates.reduce((max, curr) =>
+          dayjs(curr).isAfter(dayjs(max)) ? curr : max
+        );
+        return fromNow(latest);
+      }
+    }
+    return NONE;
+  };
+  const lastRecorded = getLatestRecorded();
+
   return (
     <div
       ref={setNodeRef}
@@ -55,13 +79,13 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
       </div>
       <dl className={styles.key__values}>
         <dt>{DRAGGABLE_CARD_KEY_TYPE}</dt>
-        <dd>{DeedTypes.scale}</dd>
+        <dd>{deedType}</dd>
         <dt>{DRAGGABLE_CARD_KEY_ADDED}</dt>
         <dd>{fromNow(created_at)}</dd>
         {variant !== DraggableCardVariants.children && <dt>{DRAGGABLE_CARD_KEY_SUB_DEEDS}</dt>}
         {variant !== DraggableCardVariants.children && <dd>{subDeedsLength}</dd>}
         <dt>{DRAGGABLE_CARD_KEY_LAST_RECORDED}</dt>
-        <dd>{fromNow(new Date())}</dd>
+        <dd>{lastRecorded}</dd>
       </dl>
 
       <div className={styles.btn__container}>

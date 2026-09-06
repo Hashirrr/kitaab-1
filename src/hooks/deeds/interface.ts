@@ -1,4 +1,4 @@
-import { DeedHideTypes } from "@/constants/enums";
+import { DeedHideTypes, DeedTypes } from "@/constants/enums";
 
 export interface DeedItem {
   name: string;
@@ -8,7 +8,9 @@ export interface DeedItem {
   display_order: number;
   children?: DeedItem[];
   hide_type: DeedHideTypes;
+  type?: DeedTypes | string;
   description: string | null;
+  last_recorded_at?: string | null;
   parent_deed_item_id: string | null;
 };
 
