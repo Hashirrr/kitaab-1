@@ -49,7 +49,7 @@ export const PLACEHOLDERS = {
   STEPPER_STEP_2: '2',
   STEPPER_DEEDS_MANAGEMENT: 'Deed(s) Management',
   STEPPER_SCALES_MANAGEMENT: 'Scale(s) Management',
-  STEPPER_NO_DEEDS: 'Nothing to show yet. Add a deed to get started and see it here.',
+  STEPPER_NO_DEEDS: 'No deeds created yet. Add your first deed to begin your ledger.',
   STEPPER_BACK: 'Back',
   STEPPER_NEXT: 'Next',
   STEPPER_END: 'End',
@@ -89,7 +89,7 @@ export const PLACEHOLDERS = {
   SCALE_DESCRIPTION_LABEL: 'Description',
   SCALE_DESCRIPTION_PLACEHOLDER: 'Briefly describe this scale...',
   ADD_SCALE_CTA: 'Add Scale',
-  NO_DEEDS_TO_SHOW: 'No deed was created at the following date.',
-  RECORD_PREVIOUS_DAYS_REQUIRED: 'Kindly fill in the details for the previous days first so that you can complete today\'s details.',
+  NO_DEEDS_TO_SHOW: 'No deeds recorded for this date yet.',
+  RECORD_PREVIOUS_DAYS_REQUIRED: 'Please complete the records for prior dates before logging today.',
   FAILED_TO_LOAD_HIGHCHARTS: 'Failed to load Highcharts:'
 };

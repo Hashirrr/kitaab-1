@@ -49,35 +49,40 @@
   width: 18px;
   height: 18px;
   display: flex;
-  border-radius: 4px;
+  border-radius: 5px;
   align-items: center;
   justify-content: center;
-  color: var(--background-3);
-  box-shadow: var(--box-shadow);
+  color: #ffffff;
+  box-shadow: var(--shadow-sm);
   background: var(--background-2);
-  border: 1.5px solid var(--foreground-3);
-  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  border: 1.5px solid var(--border-subtle);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
 }
 
 .container:hover .custom__checkbox {
-  background: var(--background-1);
-  border-color: var(--foreground-1);
+  background: var(--background-3);
+  border-color: var(--border-glow);
+}
+
+.container:active .custom__checkbox {
+  transform: scale(0.92);
 }
 
 .native__checkbox:focus-visible ~ .custom__checkbox {
   outline-offset: 2px;
-  outline: 2px solid var(--foreground-2);
+  outline: 2px solid var(--accent);
 }
 
 .native__checkbox:checked ~ .custom__checkbox {
-  color: var(--background-3);
-  background: var(--foreground-1);
-  border-color: var(--foreground-1);
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
 }
 
 .container:hover .native__checkbox:checked ~ .custom__checkbox {
-  background: var(--foreground-2);
-  border-color: var(--foreground-2);
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
 }
 
 .checkmark {

@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import Image from 'next/image';
 import { sidebarItems } from './utils';
 import SidebarItem from './SidebarItem';
-import { FaGear } from 'react-icons/fa6';
+import { LuSlidersHorizontal } from 'react-icons/lu';
 import styles from './sidebar.module.css';
 import { HeaderProps } from './interface';
 import logoNormal from '@/assets/logo.png';
@@ -85,7 +85,7 @@ export default function Sidebar() {
 
         <footer className={styles.footer}>
           <SidebarItem
-            logo={<FaGear size={24} />}
+            logo={<LuSlidersHorizontal size={20} />}
             text={SIDEBAR_BTN_SETTINGS}
             href={SIDEBAR_BTN_HREF_SETTINGS}
           />

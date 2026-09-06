@@ -52,13 +52,19 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
     tooltip: {
       headerFormat: '',
       pointFormat:
-        '<span style="color:{point.color}">\u25CF</span> <b>{point.name}</b><br/>' +
-        'Value: <b>{point.y:.0f}</b><br/>' +
-        'Weight: <b>{point.z}</b><br/>',
-        borderColor: 'var(--background-2)',
-      backgroundColor: 'var(--background-3)',
+        '<span style="color:{point.color}">\u25CF</span> <b style="letter-spacing:-0.01em">{point.name}</b><br/>' +
+        '<span style="opacity:0.75">Records:</span> <b>{point.y:.0f}</b><br/>' +
+        '<span style="opacity:0.75">Weight:</span> <b>{point.z}</b><br/>',
+      borderWidth: 1,
+      borderRadius: 10,
+      shadow: false,
+      padding: 10,
+      borderColor: isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.08)',
+      backgroundColor: isDark ? 'rgba(20, 23, 31, 0.92)' : 'rgba(255, 255, 255, 0.95)',
       style: {
-        color: textColor
+        color: textColor,
+        fontSize: '12px',
+        fontFamily: 'var(--font-sans)'
       }
     },
     plotOptions: {
@@ -91,17 +97,18 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
           }
         },
         dataLabels: {
-          padding: 4,
+          padding: 5,
           borderWidth: 1,
-          borderRadius: 4,
+          borderRadius: 6,
           format: '{point.name}',
-          borderColor: 'var(--background-1)',
-          backgroundColor: 'var(--background-3)',
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
+          backgroundColor: isDark ? 'rgba(20, 23, 31, 0.85)' : 'rgba(255, 255, 255, 0.9)',
           style: {
             color: labelColor,
-            fontWeight: 'bold',
-            fontStyle: 'italic',
-            textOutline: 'none'
+            fontWeight: '600',
+            fontFamily: 'var(--font-sans)',
+            textOutline: 'none',
+            fontSize: '11px'
           },
           enabled: defaultDataLabelsEnabled
         }

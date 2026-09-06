@@ -2,14 +2,12 @@
 
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { isNestedRoute } from './utils';
+import { getPageTitle, isNestedRoute } from './utils';
 import styles from './header.module.css';
-import { FaArrowLeftLong } from "react-icons/fa6";
+import { LuArrowLeft, LuMoon, LuSun } from 'react-icons/lu';
 import { toggleTheme } from '@/store/slices/utils';
-import { PLACEHOLDERS } from '@/constants/placeholders';
 import { usePathname, useRouter } from 'next/navigation';
 import { setDeedCategory } from '@/store/slices/uiSlice';
-import { MdDarkMode, MdLightMode } from 'react-icons/md';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
 import { selectDeedCategory, selectMode } from '@/store/slices/selectors';
@@ -20,10 +18,10 @@ export default function Header() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const mode = useAppSelector(selectMode);
-  const { PAGE_NAME_DEEDS } = PLACEHOLDERS;
   const [mounted, setMounted] = useState(false);
   const deedCategory = useAppSelector(selectDeedCategory);
   const isHasanaat = deedCategory === DeedCategory.hasanaat;
+  const pageMeta = getPageTitle(pathname);
 
   useEffect(() => {
     setMounted(true);
@@ -31,22 +29,33 @@ export default function Header() {
 
   return (
     <div className={styles.page__header}>
-      {isNestedRoute(pathname) && <IconButton
-        shadow
-        cursor={Cursor.pointer}
-        onClick={() => router.back()}
-        variant={IconButtonBackground.secondary}
-        icon={<FaArrowLeftLong size={12} />}
-      />}
-      <h2 className={styles.page__name}>{PAGE_NAME_DEEDS}</h2>
-      <button className={clsx(styles.hasanaat__saiyyiaat, {
-        [styles.flipped]: !isHasanaat
-      })}
+      {isNestedRoute(pathname) && (
+        <IconButton
+          shadow
+          cursor={Cursor.pointer}
+          onClick={() => router.back()}
+          variant={IconButtonBackground.secondary}
+          icon={<LuArrowLeft size={16} />}
+        />
+      )}
+      <div className={styles.title__container}>
+        <h1 className={styles.page__name}>{pageMeta.title}</h1>
+        <span className={styles.arabic__badge}>{pageMeta.arabic}</span>
+      </div>
+      <button
+        aria-label="Toggle Hasanaat and Sayyi'aat"
+        className={clsx(styles.hasanaat__saiyyiaat, {
+          [styles.flipped]: !isHasanaat
+        })}
         onClick={() => dispatch(setDeedCategory(isHasanaat ? DeedCategory.sayyiaat : DeedCategory.hasanaat))}
       >
         <div className={clsx(styles.inner, { [styles.animate]: mounted })}>
-          <p className={styles.front}>{DeedCategory.hasanaat}</p>
-          <p className={styles.back}>{DeedCategory.sayyiaat}</p>
+          <p className={styles.front}>
+            <span className={styles.coin__dot} /> {DeedCategory.hasanaat}
+          </p>
+          <p className={styles.back}>
+            <span className={clsx(styles.coin__dot, styles.sayyiaat__dot)} /> {DeedCategory.sayyiaat}
+          </p>
         </div>
       </button>
       <IconButton
@@ -54,7 +63,7 @@ export default function Header() {
         cursor={Cursor.pointer}
         onClick={() => toggleTheme(dispatch, mode)}
         variant={IconButtonBackground.secondary}
-        icon={mode === Mode.light ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
+        icon={mode === Mode.light ? <LuMoon size={18} /> : <LuSun size={18} />}
       />
     </div>
   );

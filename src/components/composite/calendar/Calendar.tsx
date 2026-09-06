@@ -2,11 +2,11 @@
 
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './calendar.module.css';
 import { CalendarProps } from './interface';
 import { HTMLAttributeType } from '@/constants/enums';
-import { FaAnglesLeft, FaAnglesRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
+import { LuChevronLeft, LuChevronRight, LuChevronsLeft, LuChevronsRight } from 'react-icons/lu';
 import { DAYS_OF_WEEK, handleNextMonth, handleNextYear, handlePrevMonth, handlePrevYear, handleSelectDate, handleJumpToLatest, handleJumpToSelected, generateCalendarMatrix } from './utils';
 
 export default function Calendar({ value, latestRecordedDate, onChange }: CalendarProps) {
@@ -15,13 +15,48 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
 
     const days = generateCalendarMatrix(currentMonth, selectedDate, latestRecordedDate);
 
+    const hijriDateEnglish = useMemo(() => {
+        try {
+            return new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(selectedDate.toDate());
+        } catch {
+            return '';
+        }
+    }, [selectedDate]);
+
+    const hijriDateArabic = useMemo(() => {
+        try {
+            return new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            }).format(selectedDate.toDate());
+        } catch {
+            return '';
+        }
+    }, [selectedDate]);
+
     return (
         <div className={styles.container}>
             <div className={styles.grid}>
                 <div className={styles.records__card}>
+                    <div className={styles.records__meta}>
+                        <span className={styles.records__badge}>Daily Ledger • سجل اليوم</span>
+                        {hijriDateArabic && (
+                            <span className={styles.records__hijri_ar}>{hijriDateArabic}</span>
+                        )}
+                    </div>
                     <span className={styles.records__date}>
-                        {selectedDate.format('MMMM D, YYYY')}
+                        {selectedDate.format('dddd, MMMM D, YYYY')}
                     </span>
+                    {hijriDateEnglish && (
+                        <span className={styles.records__hijri_en}>
+                            {hijriDateEnglish}
+                        </span>
+                    )}
                 </div>
 
                 <div className={styles.card}>
@@ -37,7 +72,7 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                                 type={HTMLAttributeType.button}
                                 onClick={() => handlePrevYear(setCurrentMonth)}
                             >
-                                <FaAnglesLeft size={10} />
+                                <LuChevronsLeft size={14} />
                             </button>
                             <button
                                 title='Previous Month'
@@ -46,7 +81,7 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                                 type={HTMLAttributeType.button}
                                 onClick={() => handlePrevMonth(setCurrentMonth)}
                             >
-                                <FaChevronLeft size={10} />
+                                <LuChevronLeft size={14} />
                             </button>
                             <button
                                 type={HTMLAttributeType.button}
@@ -55,7 +90,7 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                                 aria-label='Next Month'
                                 className={styles.nav__btn}
                             >
-                                <FaChevronRight size={10} />
+                                <LuChevronRight size={14} />
                             </button>
                             <button
                                 title='Next Year'
@@ -64,7 +99,7 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                                 type={HTMLAttributeType.button}
                                 onClick={() => handleNextYear(setCurrentMonth)}
                             >
-                                <FaAnglesRight size={10} />
+                                <LuChevronsRight size={14} />
                             </button>
                         </div>
                     </div>

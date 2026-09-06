@@ -1,6 +1,6 @@
 'use client';
 
-import { FaPlus } from 'react-icons/fa6';
+import { LuPlus } from 'react-icons/lu';
 import styles from './styles.module.css';
 import { handleAddNewDeed } from './utils';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ export default function Deeds() {
     <>
       <Draggables deedsData={getDeeds} />
       <button className={styles.add__btn__cta} onClick={() => handleAddNewDeed(router)}>
-        <FaPlus size={16} />
+        <LuPlus size={18} />
         <p>{ADD_DEED_CTA}</p>
       </button>
     </>

@@ -1,9 +1,6 @@
-import { BiSupport } from 'react-icons/bi';
+import { LuLayoutDashboard, LuCalendarCheck2, LuSparkles, LuBell, LuCompass } from 'react-icons/lu';
 import styles from './sidebaritem.module.css';
-import { FaNoteSticky } from 'react-icons/fa6';
-import { BsFillGrid3X3GapFill } from 'react-icons/bs';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { FaFolderOpen, FaComment } from 'react-icons/fa';
 
 const {
   SIDEBAR_LI_DEEDS,
@@ -22,26 +19,26 @@ export const sidebarItems = [
   {
     text: SIDEBAR_LI_DASHBOARD,
     href: SIDEBAR_LI_HREF_DASHBOARD,
-    logo: <BsFillGrid3X3GapFill size={22} />
+    logo: <LuLayoutDashboard size={20} />
   },
   {
     text: SIDEBAR_LI_RECORDS,
     href: SIDEBAR_LI_HREF_RECORDS,
-    logo: <FaNoteSticky size={22}/>
+    logo: <LuCalendarCheck2 size={20} />
   },
   {
     text: SIDEBAR_LI_DEEDS,
     href: SIDEBAR_LI_HREF_DEEDS,
-    logo: <FaFolderOpen size={24}/>
+    logo: <LuSparkles size={20} />
   },
   {
-    logo: <FaComment size={20}/>,
+    logo: <LuBell size={20} />,
     text: SIDEBAR_LI_NOTIFICATIONS,
     href: SIDEBAR_LI_HREF_NOTIFICATIONS
   },
   {
     text: SIDEBAR_LI_SUPPORT,
-    logo: <BiSupport size={24}/>,
+    logo: <LuCompass size={20} />,
     href: SIDEBAR_LI_HREF_SUPPORT
   }
 ];

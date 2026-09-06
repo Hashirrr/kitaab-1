@@ -1,8 +1,6 @@
 import clsx from 'clsx';
-import { FaPen } from "react-icons/fa6";
 import { CSS } from '@dnd-kit/utilities';
-import { IoMdMove } from 'react-icons/io';
-import { MdDelete } from 'react-icons/md';
+import { LuGripVertical, LuInfo, LuPen, LuTrash2 } from 'react-icons/lu';
 import { QUERY } from '@/constants/query';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/store/hooks';
@@ -11,7 +9,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import styles from './draggablecard.module.css';
 import { DraggableCardProps } from './interface';
 import { useIsMutating } from '@tanstack/react-query';
-import { BsFillInfoCircleFill } from "react-icons/bs";
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { getMoveTooltip, handleViewDeed } from './utils';
 import Tooltip from '@/components/primitive/tooltip/Tooltip';
@@ -72,7 +69,7 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         <h3 className={styles.title}>
           {name}
           {description && <Tooltip content={`${description}`}>
-            <BsFillInfoCircleFill />
+            <LuInfo size={15} />
           </Tooltip>}
         </h3>
         <hr className={styles.fading__line} />
@@ -120,7 +117,7 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         <Tooltip content={getMoveTooltip(isUpdateHasanaatItemDisplayOrderPending)}>
           <IconButton
             cursor={Cursor.grab}
-            icon={<IoMdMove size={20}/>}
+            icon={<LuGripVertical size={16}/>}
             {...(!disabled ? listeners : {})}
             {...(!disabled ? attributes : {})}
             variant={IconButtonBackground.primary}
@@ -129,7 +126,7 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         </Tooltip>
         {variant !== DraggableCardVariants.parent && <IconButton
           cursor={Cursor.pointer}
-          icon={<MdDelete size={20}/>}
+          icon={<LuTrash2 size={16}/>}
           variant={IconButtonBackground.primary}
           onClick={() => {
             dispatch(setCurrentDeedId(deed_item_id));
@@ -138,7 +135,7 @@ export default function DraggableCard({ id, deed, variant, disabled }: Draggable
         />}
         {variant === DraggableCardVariants.parent && <IconButton
           cursor={Cursor.pointer}
-          icon={<FaPen size={14} />}
+          icon={<LuPen size={14} />}
           variant={IconButtonBackground.primary}
           onClick={() => {
             dispatch(setCurrentDeedId(deed_item_id));

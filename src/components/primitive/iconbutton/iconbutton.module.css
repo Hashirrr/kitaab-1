@@ -1,14 +1,14 @@
 .icon__button {
-  width: 35px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   display: flex;
   outline: none;
   flex-shrink: 0;
-  border-radius: 5px;
+  border-radius: 10px;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(0, 0, 0, 0.01);
-  transition: transform 250ms ease, background-color 250ms ease;
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 .cursor__pointer {
@@ -19,31 +19,37 @@
   cursor: grab;
 }
 
+.icon__button:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
 .icon__button:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: var(--not-allowed-cursor);
 }
 
 .primary__background {
-  color: var(--foreground-3);
+  color: var(--foreground-2);
   background: var(--background-2);
 }
 
-.primary__background:hover {
-  color: var(--foreground-2);
+.primary__background:hover:not(:disabled) {
+  color: var(--foreground-1);
   background: var(--background-1);
+  border-color: var(--border-card);
 }
 
 .secondary__background {
-  color: var(--foreground-1);
+  color: var(--foreground-2);
   background: var(--background-3);
 }
 
-.secondary__background:hover {
-  color: var(--foreground-3);
-  background: var(--background-1);
+.secondary__background:hover:not(:disabled) {
+  color: var(--foreground-1);
+  background: var(--background-2);
+  border-color: var(--border-card);
 }
 
 .shadow {
-  box-shadow: var(--box-shadow);
+  box-shadow: var(--shadow-sm);
 }

@@ -10,43 +10,94 @@
 
 .records__card {
     display: flex;
-    padding: 16px;
+    padding: 24px;
     user-select: none;
-    border-radius: 8px;
-    align-items: center;
+    border-radius: 16px;
     grid-column: span 2;
     flex-direction: column;
     justify-content: center;
-    box-shadow: var(--box-shadow);
-    background: var(--foreground-1);
-    ;
-    transition: box-shadow 250ms ease;
+    gap: 8px;
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-sm);
+    background: var(--background-3);
+    backdrop-filter: blur(16px);
+    transition: box-shadow 250ms ease, border-color 250ms ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.records__card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent 70%);
 }
 
 .records__card:hover {
-    box-shadow: var(--box-shadow-hover);
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-md);
+}
+
+.records__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.records__badge {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--accent-subtle);
+    border: 1px solid var(--accent-glow);
+}
+
+.records__hijri_ar {
+    font-family: var(--font-arabic);
+    font-size: 14px;
+    color: var(--foreground-3);
+    direction: rtl;
 }
 
 .records__date {
-    font-size: max(16px, 2vw);
-    font-weight: 600;
-    color: var(--background-3);
+    font-size: max(18px, 1.8vw);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--foreground-1);
+    line-height: 1.2;
+}
+
+.records__hijri_en {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--foreground-3);
 }
 
 .card {
     display: flex;
-    padding: 16px;
+    padding: 20px;
     user-select: none;
-    border-radius: 8px;
+    border-radius: 16px;
     grid-column: span 1;
     flex-direction: column;
-    box-shadow: var(--box-shadow);
+    border: 1px solid var(--border-card);
+    box-shadow: var(--shadow-sm);
     background: var(--background-3);
-    transition: box-shadow 250ms ease;
+    backdrop-filter: blur(16px);
+    transition: box-shadow 250ms ease, border-color 250ms ease;
 }
 
 .card:hover {
-    box-shadow: var(--box-shadow-hover);
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-md);
 }
 
 .header {
@@ -56,9 +107,10 @@
 }
 
 .month__title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
-    color: var(--foreground-2);
+    letter-spacing: -0.01em;
+    color: var(--foreground-1);
 }
 
 .nav__buttons {
@@ -68,23 +120,23 @@
 }
 
 .nav__btn {
-    width: 26px;
-    height: 26px;
-    border: none;
+    width: 28px;
+    height: 28px;
+    border: 1px solid var(--border-subtle);
     display: flex;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 8px;
     align-items: center;
     justify-content: center;
     color: var(--foreground-2);
     background: var(--background-2);
-    border: 2px solid rgba(0, 0, 0, 0.01);
-    transition: background-color 200ms ease, color 200ms ease;
+    transition: all 180ms ease;
 }
 
 .nav__btn:hover {
-    color: var(--foreground-2);
+    color: var(--foreground-1);
     background: var(--background-1);
+    border-color: var(--border-card);
 }
 
 .fading__line {
@@ -97,20 +149,21 @@
 .weekdays__grid {
     gap: 4px;
     display: grid;
-    padding: 4px 0;
-    border-radius: 6px;
+    padding: 6px 0;
+    border-radius: 8px;
     margin-bottom: 8px;
     text-align: center;
     background: var(--background-2);
+    border: 1px solid var(--border-subtle);
     grid-template-columns: repeat(7, 1fr);
 }
 
 .weekday {
-    padding: 3px 0;
-    font-weight: 700;
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    color: var(--foreground-2);
+    padding: 2px 0;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--foreground-3);
 }
 
 .days__grid {
@@ -126,38 +179,42 @@
     outline: none;
     aspect-ratio: 1;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 500;
     position: relative;
-    border-radius: 6px;
+    border-radius: 8px;
     align-items: center;
     justify-content: center;
     background: transparent;
     color: var(--foreground-2);
-    transition: background-color 200ms ease, color 200ms ease;
+    transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
 }
 
 .day__cell:hover:not(.selected) {
+    color: var(--foreground-1);
     background: var(--background-1);
 }
 
 .other__month {
-    opacity: 0.4;
+    opacity: 0.35;
     color: var(--foreground-3);
 }
 
 .latest:not(.selected) {
-    font-weight: 700;
-    border: 1.5px solid var(--foreground-3);
+    font-weight: 600;
+    color: var(--accent);
+    border: 1px solid var(--accent);
 }
 
 .selected {
-    font-weight: 700;
-    color: var(--background-3);
-    background: var(--foreground-2);
+    font-weight: 600;
+    color: #ffffff;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .selected:hover {
-    background: var(--foreground-1);
+    background: var(--accent-hover);
 }
 
 .footer {
@@ -171,25 +228,26 @@
     flex: 1;
     display: flex;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
-    padding: 6px 8px;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
     align-items: center;
     justify-content: center;
     color: var(--foreground-2);
     background: var(--background-2);
-    border: 2px solid rgba(0, 0, 0, 0.01);
-    transition: background-color 200ms ease, color 200ms ease;
+    border: 1px solid var(--border-subtle);
+    transition: all 180ms ease;
 }
 
 .footer__btn:hover:not(:disabled) {
-    color: var(--foreground-2);
+    color: var(--foreground-1);
     background: var(--background-1);
+    border-color: var(--border-card);
 }
 
 .footer__btn:disabled {
-    opacity: 0.45;
+    opacity: 0.4;
     cursor: default;
 }
 

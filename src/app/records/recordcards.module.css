@@ -10,17 +10,20 @@
 
 .card {
   display: flex;
-  padding: 16px;
+  padding: 20px;
   user-select: none;
-  border-radius: 8px;
+  border-radius: 16px;
   flex-direction: column;
-  box-shadow: var(--box-shadow);
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-sm);
   background: var(--background-3);
-  transition: box-shadow 250ms ease;
+  backdrop-filter: blur(16px);
+  transition: box-shadow 250ms ease, border-color 250ms ease;
 }
 
 .card:hover {
-  box-shadow: var(--box-shadow-hover);
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-md);
 }
 
 .card__header {
@@ -31,12 +34,13 @@
 
 .title {
   display: flex;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
-  padding: 0 0 4px 0;
+  letter-spacing: -0.01em;
+  padding: 0 0 8px 0;
   align-items: center;
   justify-content: center;
-  color: var(--foreground-2);
+  color: var(--foreground-1);
 }
 
 .fading__line {
@@ -48,17 +52,17 @@
 
 .subdeeds__list {
   display: flex;
-  padding-top: 6px;
+  padding-top: 8px;
   flex-direction: column;
 }
 
 .subdeed__row {
   gap: 16px;
   display: flex;
-  padding: 10px 0;
+  padding: 12px 0;
   align-items: center;
   justify-content: space-between;
-  border-bottom: var(--separator-border);
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .subdeed__row:last-child {
@@ -68,8 +72,9 @@
 .subdeed__name {
   min-width: 90px;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--foreground-2);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--foreground-1);
 }
 
 .single__deed__row {
@@ -77,17 +82,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 6px 0;
 }
 
 .single__deed__name {
   min-width: 90px;
   font-size: 14px;
-  font-weight: 600;
-  color: var(--foreground-2);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--foreground-1);
 }
 
 .mcq__group {
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   display: flex;
   flex-wrap: wrap;
@@ -95,38 +102,44 @@
 }
 
 .mcq__btn {
-  width: 102px;
+  min-width: 92px;
   height: 34px;
-  border: none;
-  display: flex;
-  padding: 0 6px;
+  display: inline-flex;
+  padding: 0 12px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 8px;
   text-align: center;
   align-items: center;
   white-space: nowrap;
   justify-content: center;
   color: var(--foreground-2);
   background: var(--background-2);
-  border: 2px solid rgba(0, 0, 0, 0.01);
-  transition: background-color 200ms ease, color 200ms ease;
+  border: 1px solid var(--border-subtle);
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.mcq__btn:active {
+  transform: scale(0.96);
 }
 
 .mcq__btn:hover:not(.selected) {
-  color: var(--foreground-2);
+  color: var(--foreground-1);
   background: var(--background-1);
+  border-color: var(--border-card);
 }
 
 .mcq__btn.selected {
-  font-weight: 700;
-  color: var(--background-3);
-  background: var(--foreground-2);
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
 }
 
 .mcq__btn.selected:hover {
-  background: var(--foreground-1);
+  background: var(--accent-hover);
 }
 
 .count__wrapper {
@@ -137,26 +150,27 @@
 }
 
 .count__controls {
-  gap: 6px;
+  gap: 8px;
   display: flex;
   align-items: center;
 }
 
 .count__input {
-  width: 150px;
-  height: 34px;
+  width: 130px;
+  height: 36px;
   outline: none;
-  padding: 0 8px;
+  padding: 0 10px;
   font-size: 14px;
   font-weight: 600;
-  border-radius: 6px;
+  font-family: var(--font-mono);
+  border-radius: 8px;
   text-align: center;
   appearance: textfield;
-  color: var(--foreground-2);
+  color: var(--foreground-1);
   -moz-appearance: textfield;
   background: var(--background-2);
-  border: 2px solid rgba(0, 0, 0, 0.05);
-  transition: border-color 200ms ease, color 200ms ease;
+  border: 1px solid var(--border-card);
+  transition: border-color 200ms ease, box-shadow 200ms ease;
 }
 
 .count__input::-webkit-outer-spin-button,
@@ -166,66 +180,83 @@
 }
 
 .count__input:focus {
-  color: var(--foreground-1);
-  border-color: var(--foreground-3);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
 }
 
 .count__input::placeholder {
-  opacity: 0.6;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--foreground-2);
+  opacity: 0.4;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground-3);
 }
 
 .stepper__btn {
-  width: 34px;
-  height: 34px;
-  border: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-subtle);
   display: flex;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
   align-items: center;
   justify-content: center;
   color: var(--foreground-2);
   background: var(--background-2);
-  border: 2px solid rgba(0, 0, 0, 0.01);
-  transition: background-color 200ms ease, color 200ms ease;
+  transition: transform 150ms cubic-bezier(0.16, 1, 0.3, 1), background-color 150ms ease, border-color 150ms ease;
+}
+
+.stepper__btn:active {
+  transform: scale(0.94);
+}
+
+.stepper__btn:hover {
+  color: var(--foreground-1);
+  background: var(--background-1);
+  border-color: var(--border-card);
 }
 
 .submit__container {
   width: 100%;
   display: flex;
-  margin-top: 20px;
+  margin-top: 24px;
   justify-content: flex-end;
 }
 
 .submit__btn {
-  width: 140px;
-  height: 38px;
-  border: none;
-  display: flex;
+  min-width: 150px;
+  height: 42px;
+  padding: 0 24px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: inline-flex;
   outline: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  border-radius: 6px;
+  letter-spacing: 0.02em;
+  border-radius: 10px;
   align-items: center;
   justify-content: center;
-  color: var(--background-3);
-  background: var(--foreground-2);
-  border: 2px solid rgba(0, 0, 0, 0.01);
-  transition: background-color 200ms ease, color 200ms ease, opacity 200ms ease;
+  color: #ffffff;
+  background: var(--accent);
+  box-shadow: 0 4px 14px var(--accent-glow);
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), background-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.submit__btn:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .submit__btn:hover:not(:disabled) {
-  background: var(--foreground-1);
+  background: var(--accent-hover);
+  box-shadow: 0 6px 20px var(--accent-glow);
 }
 
 .submit__btn:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: var(--not-allowed-cursor);
+  box-shadow: none;
 }
 
 .no__data {
