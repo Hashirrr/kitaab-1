@@ -10,7 +10,6 @@
 .aside {
   top: 16px;
   margin: 0;
-  left: 16px;
   width: 100px;
   z-index: 1000;
   display: flex;
@@ -26,6 +25,7 @@
   justify-content: space-between;
   max-height: calc(100dvh - 32px);
   transition: transform 250ms ease;
+  left: max(16px, calc(50% - 558px));
   background-color: var(--background-3);
 }
 
@@ -37,26 +37,6 @@
   display: var(--display-dark);
 }
 
-.logo__dark .logo__normal,
-.logo__light .logo__normal {
-  opacity: 1;
-  display: block;
-}
-
-.logo__dark .logo__hover,
-.logo__light .logo__hover {
-  display: none;
-}
-
-.logo__dark:hover .logo__normal,
-.logo__light:hover .logo__normal {
-  display: none;
-}
-
-.logo__dark:hover .logo__hover,
-.logo__light:hover .logo__hover {
-  display: block;
-}
 
 .nav {
   width: 100%;

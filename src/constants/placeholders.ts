@@ -22,6 +22,8 @@ export const PLACEHOLDERS = {
   DRAGGABLE_CARD_ADD_SUB_DEED: 'Add Sub Deed',
   DRAGGABLE_CARD_BTN_VIEW_DETAILS: 'View Details',
   PAGE_NAME_DEEDS: 'Deeds',
+  CARD_HEADING_DEEDS: 'Deed(s)',
+  CARD_HEADING_SCALES: 'Scale(s)',
   MODAL_DELETE_DEED_TITLE: 'Delete Deed',
   MODAL_DELETE_DEED_DESCRIPTION: 'Deleting this deed will permanently delete all associated sub deeds and records. Are you sure you want to continue?',
   NONE: 'None',
@@ -88,5 +90,6 @@ export const PLACEHOLDERS = {
   SCALE_DESCRIPTION_PLACEHOLDER: 'Briefly describe this scale...',
   ADD_SCALE_CTA: 'Add Scale',
   NO_DEEDS_TO_SHOW: 'No deed was created at the following date.',
-  RECORD_PREVIOUS_DAYS_REQUIRED: 'Kindly fill in the details for the previous days first so that you can complete today\'s details.'
+  RECORD_PREVIOUS_DAYS_REQUIRED: 'Kindly fill in the details for the previous days first so that you can complete today\'s details.',
+  FAILED_TO_LOAD_HIGHCHARTS: 'Failed to load Highcharts:'
 };

@@ -98,6 +98,18 @@ export enum Form {
   scale_edit = 'scale_edit'
 }
 
+export enum HTMLAttributeType {
+  text = 'text',
+  radio = 'radio',
+  button = 'button',
+  hidden = 'hidden',
+  submit = 'submit',
+  checkbox = 'checkbox'
+}
+
+export type HtmlAttributeType = HTMLAttributeType;
+export const HtmlAttributeType = HTMLAttributeType;
+
 export const DeedCategoryApi = {
   [DeedCategory.hasanaat]: 'hasanaat',
   [DeedCategory.sayyiaat]: 'saiyyiaat'

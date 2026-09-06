@@ -5,6 +5,7 @@ import RecordCard from './RecordCard';
 import styles from './recordcards.module.css';
 import { useGetDeeds } from '@/hooks/deeds/hook';
 import { useEffect, useMemo, useState } from 'react';
+import { HTMLAttributeType } from '@/constants/enums';
 import RecordCardSkeleton from './RecordCardSkeleton';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { DeedRecordItem, RecordCardsProps } from './interface';
@@ -77,10 +78,10 @@ export default function RecordCards({ selectedDate = new Date(), latestRecordedD
 
           <div className={styles.submit__container}>
             <button
-              type='button'
-              className={styles.submit__btn}
-              disabled={isSaveRecordsDisabled(deeds) || isCreateRecordsPending}
               onClick={handleSave}
+              className={styles.submit__btn}
+              type={HTMLAttributeType.button}
+              disabled={isSaveRecordsDisabled(deeds) || isCreateRecordsPending}
             >
               {isCreateRecordsPending ? 'Saving...' : 'Save'}
             </button>

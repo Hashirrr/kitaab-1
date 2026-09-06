@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import styles from './calendar.module.css';
 import { CalendarProps } from './interface';
+import { HTMLAttributeType } from '@/constants/enums';
 import { FaAnglesLeft, FaAnglesRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 import { DAYS_OF_WEEK, handleNextMonth, handleNextYear, handlePrevMonth, handlePrevYear, handleSelectDate, handleJumpToLatest, handleJumpToSelected, generateCalendarMatrix } from './utils';
 
@@ -30,38 +31,38 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                         </span>
                         <div className={styles.nav__buttons}>
                             <button
-                                type='button'
-                                onClick={() => handlePrevYear(setCurrentMonth)}
-                                aria-label='Previous Year'
                                 title='Previous Year'
+                                aria-label='Previous Year'
                                 className={styles.nav__btn}
+                                type={HTMLAttributeType.button}
+                                onClick={() => handlePrevYear(setCurrentMonth)}
                             >
                                 <FaAnglesLeft size={10} />
                             </button>
                             <button
-                                type='button'
-                                onClick={() => handlePrevMonth(setCurrentMonth)}
-                                aria-label='Previous Month'
                                 title='Previous Month'
+                                aria-label='Previous Month'
                                 className={styles.nav__btn}
+                                type={HTMLAttributeType.button}
+                                onClick={() => handlePrevMonth(setCurrentMonth)}
                             >
                                 <FaChevronLeft size={10} />
                             </button>
                             <button
-                                type='button'
+                                type={HTMLAttributeType.button}
                                 onClick={() => handleNextMonth(setCurrentMonth)}
-                                aria-label='Next Month'
                                 title='Next Month'
+                                aria-label='Next Month'
                                 className={styles.nav__btn}
                             >
                                 <FaChevronRight size={10} />
                             </button>
                             <button
-                                type='button'
-                                onClick={() => handleNextYear(setCurrentMonth)}
-                                aria-label='Next Year'
                                 title='Next Year'
+                                aria-label='Next Year'
                                 className={styles.nav__btn}
+                                type={HTMLAttributeType.button}
+                                onClick={() => handleNextYear(setCurrentMonth)}
                             >
                                 <FaAnglesRight size={10} />
                             </button>
@@ -82,7 +83,7 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                         {days.map((day, index) => (
                             <button
                                 key={index}
-                                type='button'
+                                type={HTMLAttributeType.button}
                                 onClick={() =>
                                     handleSelectDate({
                                         date: day.date,
@@ -106,17 +107,19 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
 
                     <div className={styles.footer}>
                         <button
-                            type='button'
+                            title='Jump to selected date'
+                            className={styles.footer__btn}
+                            type={HTMLAttributeType.button}
                             disabled={currentMonth.isSame(selectedDate, 'month')}
                             onClick={() => handleJumpToSelected(selectedDate, setCurrentMonth)}
-                            className={styles.footer__btn}
-                            title='Jump to selected date'
                         >
                             Selected: {selectedDate.format('D MMM YY')}
                         </button>
                         {latestRecordedDate && (
                             <button
-                                type='button'
+                                className={styles.footer__btn}
+                                type={HTMLAttributeType.button}
+                                title='Jump to latest recorded date'
                                 disabled={selectedDate.isSame(dayjs(latestRecordedDate), 'day')}
                                 onClick={() =>
                                     handleJumpToLatest({
@@ -126,8 +129,6 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                                         setCurrentMonth
                                     })
                                 }
-                                className={styles.footer__btn}
-                                title='Jump to latest recorded date'
                             >
                                 Latest: {dayjs(latestRecordedDate).format('D MMM YY')}
                             </button>

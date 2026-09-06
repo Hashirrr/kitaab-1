@@ -1,16 +1,32 @@
-.container {
+.wrapper {
   gap: 16px;
   width: 100%;
   display: flex;
   margin: 0 auto;
   max-width: 1148px;
-  align-items: flex-end;
-  flex-direction: column;
-  padding: 16px 16px 72px 132px;
+  align-items: flex-start;
+  padding: 16px 16px 72px;
   min-height: calc(100vh - 88px);
 }
 
+.container {
+  flex: 1;
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  padding-left: 116px;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
 @media (max-width: 768px) {
+  .wrapper {
+    padding: 0;
+    display: block;
+    max-width: 100%;
+  }
+
   .container {
     padding: 100px 16px 72px;
   }

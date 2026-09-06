@@ -134,17 +134,17 @@ export default function Modal() {
             {isForm(type, step) ?
               <button
                 type={ButtonType.submit}
-                form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed : ((type === ModalTypes.edit_scale || type === ModalTypes.add_scale) ? ModalTypes.edit_scale : type)}
                 className={styles.primary__btn}
                 disabled={disabled || isCreateDeedPending || isCreateScalePending || isDeleteDeedPending || isUpdateDeedPending || isUpdateScalePending || isDeleteScalePending || !isFormChanged}
+                form={(type === ModalTypes.add_deed || type === ModalTypes.edit_deed) ? ModalTypes.add_deed : ((type === ModalTypes.edit_scale || type === ModalTypes.add_scale) ? ModalTypes.edit_scale : type)}
               >
                 {getModalPrimaryBtn(type, step, isCreateDeedPending, isDeleteDeedPending, isUpdateDeedPending, isUpdateScalePending, isDeleteScalePending, isCreateScalePending)}
               </button> :
               <button
                 type={ButtonType.button}
+                disabled={isDeletePending}
                 className={styles.primary__btn}
                 onClick={() => onConfirm(type, deleteDeed, deleteScale, dispatch)}
-                disabled={isDeletePending}
               >
                 {getModalPrimaryBtn(type, step, undefined, isDeleteDeedPending, undefined, undefined, isDeleteScalePending, undefined)}
               </button>

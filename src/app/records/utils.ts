@@ -10,6 +10,12 @@ export const getScaleItemId = (optionName: string, scales?: ScaleItem[]): string
   return scales?.find((s) => s.name === optionName)?.scale_items_id ?? null;
 };
 
+export const formatCountValue = (val: unknown): number | null => {
+  if (val === null || val === undefined || val === '') return null;
+  const num = typeof val === 'number' ? val : Number(val);
+  return isNaN(num) ? null : Math.round(num);
+};
+
 export const getRecordDeeds = (deedsData?: DeedItem[], scalesData?: ScaleItem[], recordsData?: RecordResponse[], targetDate?: Date): DeedRecordItem[] => {
   if (!deedsData || !deedsData.length) return [];
 
@@ -53,7 +59,7 @@ export const getRecordDeeds = (deedsData?: DeedItem[], scalesData?: ScaleItem[],
       (r) => String(r.deed_item_id) === String(deed.deed_item_id)
     );
 
-    const parentCount = parentRecord?.count_value ?? null;
+    const parentCount = formatCountValue(parentRecord?.count_value);
 
     let parentOption = NOT_SELECTED;
     if (parentRecord?.scale_item_id && scalesData?.length) {
@@ -77,7 +83,7 @@ export const getRecordDeeds = (deedsData?: DeedItem[], scalesData?: ScaleItem[],
             (r) => String(r.deed_item_id) === String(child.deed_item_id)
           );
 
-          const childCount = childRecord?.count_value ?? null;
+          const childCount = formatCountValue(childRecord?.count_value);
 
           let childOption = NOT_SELECTED;
           if (childRecord?.scale_item_id && scalesData?.length) {
@@ -115,11 +121,14 @@ export const buildRecordsPayload = (deeds: DeedRecordItem[], date: string): Reco
     }
 
     if (item.countValue !== null && item.countValue !== undefined) {
-      records.push({
-        deed_item_id: item.id,
-        date,
-        count_value: item.countValue
-      });
+      const formattedCount = formatCountValue(item.countValue);
+      if (formattedCount !== null) {
+        records.push({
+          deed_item_id: item.id,
+          date,
+          count_value: formattedCount
+        });
+      }
     }
   };
 
@@ -149,13 +158,14 @@ export const handleUpdateSubDeedOption = ({ setDeeds, deedId, subDeedId, option,
 };
 
 export const handleUpdateSubDeedCount = ({ setDeeds, deedId, subDeedId, count }: HandleUpdateSubDeedCountProps) => {
+  const formattedCount = formatCountValue(count);
   setDeeds((prev) =>
     prev.map((deed) => {
       if (deed.id !== deedId) return deed;
       return {
         ...deed,
         children: deed.children?.map((sub) =>
-          sub.id === subDeedId ? { ...sub, countValue: count } : sub
+          sub.id === subDeedId ? { ...sub, countValue: formattedCount } : sub
         )
       };
     })
@@ -169,8 +179,9 @@ export const handleUpdateOption = ({ setDeeds, deedId, option, scaleItemId }: Ha
 };
 
 export const handleUpdateCount = ({ setDeeds, deedId, count }: HandleUpdateCountProps) => {
+  const formattedCount = formatCountValue(count);
   setDeeds((prev) =>
-    prev.map((deed) => (deed.id === deedId ? { ...deed, countValue: count } : deed))
+    prev.map((deed) => (deed.id === deedId ? { ...deed, countValue: formattedCount } : deed))
   );
 };
 

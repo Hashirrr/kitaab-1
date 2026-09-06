@@ -2,12 +2,12 @@
 
 import clsx from 'clsx';
 import { getScaleItemId } from './utils';
-import { DeedTypes } from '@/constants/enums';
 import styles from './recordcards.module.css';
 import { useGetScales } from '@/hooks/scales/hook';
 import { NOT_SELECTED, RecordCardProps } from './interface';
 import Skeleton from '@/components/primitive/skeleton/Skeleton';
 import { FaMinus, FaPlus, FaRotateLeft } from 'react-icons/fa6';
+import { DeedTypes, HTMLAttributeType } from '@/constants/enums';
 
 export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpdateSubDeedCount, onUpdateSubDeedOption }: RecordCardProps) {
   const { id, name, type, children, options, selectedOption, countValue, scale_item_id } = deed;
@@ -52,7 +52,7 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
                     {currentOptions.map((option) => (
                       <button
                         key={option}
-                        type='button'
+                        type={HTMLAttributeType.button}
                         onClick={() => onUpdateSubDeedOption?.(id, subDeed.id, option, getScaleItemId(option, getScales))}
                         className={clsx(styles.mcq__btn, {
                           [styles.selected]: activeOption === option
@@ -66,11 +66,11 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
                   <div className={styles.count__wrapper}>
                     <div className={styles.count__controls}>
                       <button
-                        type='button'
                         aria-label='Decrease count'
+                        type={HTMLAttributeType.button}
                         className={styles.stepper__btn}
                         onClick={() => {
-                          const current = subDeed.countValue ?? 0;
+                          const current = subDeed.countValue != null ? Math.round(Number(subDeed.countValue)) : 0;
                           onUpdateSubDeedCount?.(id, subDeed.id, Math.max(0, current - 1));
                         }}
                       >
@@ -78,24 +78,24 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
                       </button>
 
                       <input
-                        type='text'
-                        inputMode='numeric'
-                        pattern='[0-9]*'
                         placeholder='—'
-                        value={subDeed.countValue === null || subDeed.countValue === undefined ? '' : subDeed.countValue}
+                        pattern='[0-9]*'
+                        inputMode='numeric'
+                        type={HTMLAttributeType.text}
+                        className={styles.count__input}
+                        value={subDeed.countValue === null || subDeed.countValue === undefined ? '' : Math.round(Number(subDeed.countValue))}
                         onChange={(e) => {
                           const cleaned = e.target.value.replace(/\D/g, '');
                           onUpdateSubDeedCount?.(id, subDeed.id, cleaned === '' ? null : parseInt(cleaned, 10));
                         }}
-                        className={styles.count__input}
                       />
 
                       <button
-                        type='button'
                         aria-label='Increase count'
                         className={styles.stepper__btn}
+                        type={HTMLAttributeType.button}
                         onClick={() => {
-                          const current = subDeed.countValue ?? 0;
+                          const current = subDeed.countValue != null ? Math.round(Number(subDeed.countValue)) : 0;
                           onUpdateSubDeedCount?.(id, subDeed.id, current + 1);
                         }}
                       >
@@ -103,8 +103,8 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
                       </button>
 
                       <button
-                        type='button'
                         aria-label='Reset count'
+                        type={HTMLAttributeType.button}
                         className={styles.stepper__btn}
                         onClick={() => onUpdateSubDeedCount?.(id, subDeed.id, null)}
                       >
@@ -147,7 +147,7 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
             {currentOptions.map((option) => (
               <button
                 key={option}
-                type='button'
+                type={HTMLAttributeType.button}
                 onClick={() => onUpdateOption?.(id, option, getScaleItemId(option, getScales))}
                 className={clsx(styles.mcq__btn, {
                   [styles.selected]: activeParentOption === option
@@ -161,11 +161,11 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
           <div className={styles.count__wrapper}>
             <div className={styles.count__controls}>
               <button
-                type='button'
                 aria-label='Decrease count'
+                type={HTMLAttributeType.button}
                 className={styles.stepper__btn}
                 onClick={() => {
-                  const current = countValue ?? 0;
+                  const current = countValue != null ? Math.round(Number(countValue)) : 0;
                   onUpdateCount?.(id, Math.max(0, current - 1));
                 }}
               >
@@ -173,24 +173,24 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
               </button>
 
               <input
-                type='text'
-                inputMode='numeric'
-                pattern='[0-9]*'
                 placeholder='—'
-                value={countValue === null || countValue === undefined ? '' : countValue}
+                pattern='[0-9]*'
+                inputMode='numeric'
+                type={HTMLAttributeType.text}
+                className={styles.count__input}
+                value={countValue === null || countValue === undefined ? '' : Math.round(Number(countValue))}
                 onChange={(e) => {
                   const cleaned = e.target.value.replace(/\D/g, '');
                   onUpdateCount?.(id, cleaned === '' ? null : parseInt(cleaned, 10));
                 }}
-                className={styles.count__input}
               />
 
               <button
-                type='button'
                 aria-label='Increase count'
+                type={HTMLAttributeType.button}
                 className={styles.stepper__btn}
                 onClick={() => {
-                  const current = countValue ?? 0;
+                  const current = countValue != null ? Math.round(Number(countValue)) : 0;
                   onUpdateCount?.(id, current + 1);
                 }}
               >
@@ -198,8 +198,8 @@ export default function RecordCard({ deed, onUpdateCount, onUpdateOption, onUpda
               </button>
 
               <button
-                type='button'
                 aria-label='Reset count'
+                type={HTMLAttributeType.button}
                 className={styles.stepper__btn}
                 onClick={() => onUpdateCount?.(id, null)}
               >

@@ -8,10 +8,8 @@ import { FaGear } from 'react-icons/fa6';
 import styles from './sidebar.module.css';
 import { HeaderProps } from './interface';
 import logoNormal from '@/assets/logo.png';
-import logoHover from '@/assets/logo-hover.png';
 import logoNormalDark from '@/assets/logo-dark.png';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import logoHoverDark from '@/assets/logo-hover-dark.png';
 import { setSidebarExpanded } from '@/store/slices/uiSlice';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { selectSidebarExpanded } from '@/store/slices/selectors';
@@ -26,14 +24,6 @@ const Header = ({ alt }: HeaderProps) => {
           alt={alt}
           width={60}
           src={logoNormal}
-          className={styles.logo__normal}
-        />
-        <Image
-          priority
-          alt={alt}
-          width={60}
-          src={logoHover}
-          className={styles.logo__hover}
         />
       </div>
 
@@ -43,18 +33,10 @@ const Header = ({ alt }: HeaderProps) => {
           alt={alt}
           width={60}
           src={logoNormalDark}
-          className={styles.logo__normal}
-        />
-        <Image
-          priority
-          alt={alt}
-          width={60}
-          src={logoHoverDark}
-          className={styles.logo__hover}
         />
       </div>
     </header>
-  )
+  );
 };
 
 export default function Sidebar() {
