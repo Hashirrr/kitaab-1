@@ -1,6 +1,9 @@
 import type * as Highcharts from 'highcharts';
+import type { DeedItem } from '@/hooks/deeds/interface';
 import { PLACEHOLDERS } from '@/constants/placeholders';
+import type { ScaleItem } from '@/hooks/scales/interface';
 import type { ChartDataPoint, ScaleCountsObject } from './interface';
+import type { DeedRangeChild, DeedRangeItem } from '@/hooks/records/interface';
 
 const { UNDEFINED } = PLACEHOLDERS;
 let highchartsPromise: Promise<typeof Highcharts> | null = null;
@@ -73,6 +76,87 @@ export const DEFAULT_SCALE_COUNTS: ScaleCountsObject = {
   'In Time': 13,
   'Late': 27,
   'Missed': 11,
+};
+
+export const getScalesRecordData = (scales?: ScaleItem[], records?: DeedRangeItem[], currentDeedId?: string, checkedSubDeeds?: Record<string, boolean>): ScaleCountsObject => {
+  if (!records || records.length === 0 || !currentDeedId)
+    return getScalesObject(scales);
+
+  const currentRecord = records.find((r) => String(r.deed_item_id) === String(currentDeedId));
+
+  if (!currentRecord)
+    return getScalesObject(scales);
+
+  const scaleNames: string[] = [];
+  if (scales && scales.length > 0) {
+    scales.forEach((s) => {
+      if (!scaleNames.includes(s.name)) scaleNames.push(s.name);
+    });
+  } else if (currentRecord.scales && currentRecord.scales.length > 0) {
+    currentRecord.scales.forEach((s) => {
+      if (!scaleNames.includes(s.name)) scaleNames.push(s.name);
+    });
+  } else if (currentRecord.children && currentRecord.children.length > 0) {
+    currentRecord.children.forEach((child) => {
+      child.scales?.forEach((s) => {
+        if (!scaleNames.includes(s.name)) scaleNames.push(s.name);
+      });
+    });
+  }
+
+  if (scaleNames.length === 0) {
+    return getScalesObject(scales);
+  }
+
+  const counts: ScaleCountsObject = {};
+  scaleNames.forEach((name) => {
+    counts[name] = 0;
+  });
+
+  const children = currentRecord.children;
+  const hasChildren = Boolean(children && children.length > 0);
+
+  if (hasChildren && children) {
+    const isSubDeedChecked = (child: DeedRangeChild): boolean => {
+      if (!checkedSubDeeds) return true;
+      const id = String(child.deed_item_id);
+      if (checkedSubDeeds[id] !== undefined) return checkedSubDeeds[id];
+      if (child.name && checkedSubDeeds[child.name] !== undefined) return checkedSubDeeds[child.name];
+      return true;
+    };
+
+    const activeChildren = children.filter(isSubDeedChecked);
+
+    if (activeChildren.length === 0) return counts;
+
+    let hasAnyScaleCounts = false;
+    activeChildren.forEach((child) => {
+      if (child.scales && Array.isArray(child.scales)) {
+        child.scales.forEach((scale) => {
+          counts[scale.name] = (counts[scale.name] || 0) + (scale.count || 0);
+          if (scale.count > 0) hasAnyScaleCounts = true;
+        });
+      }
+    });
+
+    if (!hasAnyScaleCounts && currentRecord.total === 0) return getScalesObject(scales);
+
+    return counts;
+  }
+
+  if (currentRecord.scales && Array.isArray(currentRecord.scales)) {
+    let hasAnyScaleCounts = false;
+    currentRecord.scales.forEach((scale) => {
+      counts[scale.name] = (counts[scale.name] || 0) + (scale.count || 0);
+      if (scale.count > 0) hasAnyScaleCounts = true;
+    });
+
+    if (!hasAnyScaleCounts && currentRecord.total === 0) return getScalesObject(scales);
+
+    return counts;
+  }
+
+  return getScalesObject(scales);
 };
 
 export const getScalesObject = (scales?: Array<{ name: string }>, fallback: ScaleCountsObject = DEFAULT_SCALE_COUNTS): ScaleCountsObject => {

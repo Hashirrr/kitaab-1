@@ -21,3 +21,15 @@ export interface UpdateScaleItemPayload {
 export interface UpdateScalesDisplayOrderPayload {
   display_order: number[];
 };
+
+export interface UpdateScaleTypePayload {
+  type: string;
+};
+
+export interface ScaleDetailResponse {
+  type?: string;
+  scale_id: string;
+  items?: ScaleItem[];
+  deed_item_id?: string;
+  [key: string]: unknown;
+};

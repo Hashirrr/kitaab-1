@@ -13,6 +13,8 @@ export const initialState: UIState = {
     isOpen: false,
     disabled: true
   },
+  endDate: '',
+  startDate: '',
   openModalStep: 1,
   mode: Mode.light,
   currentDeedId: '',

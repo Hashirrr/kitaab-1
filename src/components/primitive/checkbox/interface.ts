@@ -4,4 +4,5 @@ export interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement
   helper?: string;
   label?: ReactNode;
   skeleton?: boolean;
+  skeletonWidth?: number | string;
 };

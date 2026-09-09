@@ -2,10 +2,37 @@ import { QUERY } from "@/constants/query";
 import { useAppSelector } from "@/store/hooks";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { selectCurrentDeedId, selectCurrentScaleId } from "@/store/slices/selectors";
-import { createScales, deleteScale, getScales, updateScale, updateScalesDisplayOrder } from "./api";
-import { CreateScaleItemPayload, UpdateScaleItemPayload, UpdateScalesDisplayOrderPayload } from "./interface";
+import { createScales, deleteScale, getScale, getScales, updateScale, updateScalesDisplayOrder, updateScaleType } from "./api";
+import { CreateScaleItemPayload, UpdateScaleItemPayload, UpdateScalesDisplayOrderPayload, UpdateScaleTypePayload } from "./interface";
 
-const { scales, create, update, display_order } = QUERY;
+const { scales, create, update, display_order, type, detail, deeds } = QUERY;
+
+export const useGetScale = () => {
+  const currentDeedId = useAppSelector(selectCurrentDeedId);
+
+  return useQuery({
+    enabled: !!currentDeedId,
+    queryFn: () => getScale(currentDeedId),
+    queryKey: [scales, detail, currentDeedId]
+  });
+};
+
+export const useUpdateScaleType = () => {
+  const queryClient = useQueryClient();
+  const scaleId = useAppSelector(selectCurrentDeedId);
+
+  return useMutation({
+    mutationKey: [scales, type],
+    mutationFn: (payload: UpdateScaleTypePayload) => updateScaleType(scaleId, payload),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [deeds] }),
+        queryClient.invalidateQueries({ queryKey: [scales, scaleId] }),
+        queryClient.invalidateQueries({ queryKey: [scales, detail, scaleId] })
+      ]);
+    }
+  });
+};
 
 export const useGetScales = (deedId?: string) => {
   const currentDeedId = useAppSelector(selectCurrentDeedId);

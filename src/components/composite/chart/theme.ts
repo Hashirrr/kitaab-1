@@ -10,13 +10,13 @@ export const getChartColors = (mode: Mode = Mode.light, count: number = 4): stri
   return opacities.map((opacity) => `rgba(${rgb}, ${opacity})`);
 };
 
-export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataPoint[] = formatChartDataFromObject(), isMobile?: boolean, onToggleScale?: (scaleName: string, isChecked: boolean) => void): Highcharts.Options => {
+export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataPoint[] = formatChartDataFromObject(), isMobile?: boolean, isTablet?: boolean, onToggleScale?: (scaleName: string, isChecked: boolean) => void): Highcharts.Options => {
   const isDark = mode === Mode.dark;
   const borderRadius = isMobile ? 5 : 10;
   const textColor = 'var(--foreground-1)';
   const labelColor = 'var(--foreground-2)';
-  const defaultDataLabelsEnabled = !isMobile;
-  const defaultSize = isMobile ? '100%' : '80%';
+  const defaultDataLabelsEnabled = !isTablet;
+  const defaultSize = isTablet ? '100%' : '80%';
   const colors = getChartColors(mode, data.length);
   const borderColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)';
 
@@ -35,18 +35,7 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
       enabled: false
     },
     legend: {
-      align: 'center',
-      layout: 'horizontal',
-      verticalAlign: 'bottom',
-      enabled: Boolean(isMobile),
-      itemStyle: {
-        color: textColor,
-        fontSize: '12px',
-        fontWeight: 'normal'
-      },
-      itemHoverStyle: {
-        color: isDark ? '#ffffff' : '#000000'
-      }
+      enabled: false
     },
     colors,
     tooltip: {
@@ -62,23 +51,11 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
       }
     },
     plotOptions: {
-      series: {
-        states: {
-          inactive: {
-            opacity: 1
-          }
-        }
-      },
       variablepie: {
         borderColor,
         borderRadius,
         borderWidth: 1,
         size: defaultSize,
-        states: {
-          inactive: {
-            opacity: 1
-          }
-        },
         point: {
           events: {
             legendItemClick: function () {
@@ -95,6 +72,11 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
           borderWidth: 1,
           borderRadius: 4,
           format: '{point.name}',
+          filter: {
+            property: 'y',
+            operator: '>',
+            value: 0
+          },
           borderColor: 'var(--background-1)',
           backgroundColor: 'var(--background-3)',
           style: {
@@ -126,39 +108,16 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
       rules: [
         {
           condition: {
-            maxWidth: 768
+            maxWidth: 1024
           },
           chartOptions: {
             legend: {
-              enabled: true,
-              align: 'center',
-              verticalAlign: 'bottom',
-              layout: 'horizontal',
-              itemStyle: {
-                color: textColor,
-                fontWeight: 'normal',
-                fontSize: '12px'
-              },
-              itemHoverStyle: {
-                color: isDark ? '#ffffff' : '#000000',
-              }
+              enabled: false
             },
             plotOptions: {
-              series: {
-                states: {
-                  inactive: {
-                    opacity: 1
-                  }
-                }
-              },
               variablepie: {
                 size: '100%',
                 borderRadius: 5,
-                states: {
-                  inactive: {
-                    opacity: 1
-                  }
-                },
                 dataLabels: {
                   enabled: false,
                 }

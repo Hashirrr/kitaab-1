@@ -1,8 +1,11 @@
 export const QUERY = {
-  create: 'create',
-  update: 'update',
-  display_order: 'display-order',
+  type: 'type',
   deeds: 'deeds',
+  range: 'range',
+  create: 'create',
   scales: 'scales',
-  records: 'records'
+  detail: 'detail',
+  update: 'update',
+  records: 'records',
+  display_order: 'display-order'
 };

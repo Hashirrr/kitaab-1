@@ -7,7 +7,7 @@ import Skeleton from '../skeleton/Skeleton';
 import { toSnakeCase } from '@/store/slices/utils';
 import { HTMLAttributeType } from '@/constants/enums';
 
-export default function Radio({ id, label, helper, skeleton, disabled, className, required, children, ...props }: RadioProps) {
+export default function Radio({ id, label, helper, skeleton, skeletonWidth, disabled, className, required, children, ...props }: RadioProps) {
   const content = label ?? children;
   const inputId = id || (typeof content === 'string' ? toSnakeCase(content).replace(/[^a-z0-9_-]/g, '') : undefined);
 
@@ -15,7 +15,7 @@ export default function Radio({ id, label, helper, skeleton, disabled, className
     return (
       <div className={clsx(styles.container, styles.skeleton__container, className)}>
         <Skeleton width={18} height={18} borderRadius="50%" />
-        {content && <Skeleton width={70} height={14} borderRadius={4} />}
+        <Skeleton width={skeletonWidth ?? 70} height={14} borderRadius={4} />
       </div>
     );
   }

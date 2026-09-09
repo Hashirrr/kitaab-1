@@ -23,3 +23,9 @@ export const selectCurrentScaleId = (state: RootState) =>
 
 export const selectMode = (state: RootState) =>
   state.ui.mode;
+
+export const selectStartDate = (state: RootState) =>
+  state.ui.startDate;
+
+export const selectEndDate = (state: RootState) =>
+  state.ui.endDate;

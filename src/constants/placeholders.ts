@@ -91,5 +91,9 @@ export const PLACEHOLDERS = {
   ADD_SCALE_CTA: 'Add Scale',
   NO_DEEDS_TO_SHOW: 'No deed was created at the following date.',
   RECORD_PREVIOUS_DAYS_REQUIRED: 'Kindly fill in the details for the previous days first so that you can complete today\'s details.',
-  FAILED_TO_LOAD_HIGHCHARTS: 'Failed to load Highcharts:'
+  FAILED_TO_LOAD_HIGHCHARTS: 'Failed to load Highcharts:',
+  SELECTION_REQUIRED: 'Selection Required',
+  ERROR_NO_SUB_DEED_SELECTED: 'Please select at least one sub-deed to display chart data.',
+  ERROR_NO_SCALE_SELECTED: 'Please select at least one scale to display chart data.',
+  ERROR_NO_SUB_DEED_AND_SCALE_SELECTED: 'Please select at least one sub-deed and one scale to display chart data.'
 };

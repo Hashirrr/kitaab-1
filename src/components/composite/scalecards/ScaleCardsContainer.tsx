@@ -9,8 +9,8 @@ import { PLACEHOLDERS } from '@/constants/placeholders';
 import DraggableScales from '../draggablescales/Draggables';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { selectCurrentDeedId } from '@/store/slices/selectors';
-import { useCreateScales, useGetScales } from '@/hooks/scales/hook';
 import { openModal, resetOpenModalStep } from '@/store/slices/uiSlice';
+import { useCreateScales, useGetScale, useGetScales, useUpdateScaleType } from '@/hooks/scales/hook';
 
 export default function ScaleCardsContainer() {
   const { scales } = QUERY;
@@ -20,6 +20,7 @@ export default function ScaleCardsContainer() {
   const [selected, setSelected] = useState(0);
   const { mutate: createScales } = useCreateScales();
   const deedId = useAppSelector(selectCurrentDeedId);
+  const { mutate: updateScaleType } = useUpdateScaleType();
   const { SCALES_EXAMPLE, SCALES_SELECT, SCALES_SELECTED } = PLACEHOLDERS;
 
   return (
@@ -47,8 +48,13 @@ export default function ScaleCardsContainer() {
               [styles.selected]: selected === index
             })} onClick={() => {
               setSelected(index);
-              if (index === 1) createScales(defaultScales);
+              if (index === 0) updateScaleType({ type: 'count' });
+              if (index === 1) {
+                updateScaleType({ type: 'scale' });
+                createScales(defaultScales);
+              }
               if (index === 2) {
+                updateScaleType({ type: 'scale' });
                 dispatch(resetOpenModalStep());
                 dispatch(openModal(ModalTypes.add_scale));
               }
