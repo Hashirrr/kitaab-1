@@ -30,6 +30,7 @@ export interface ScaleDetailResponse {
   type?: string;
   scale_id: string;
   items?: ScaleItem[];
+  is_locked?: boolean;
   deed_item_id?: string;
   [key: string]: unknown;
 };

@@ -2,16 +2,27 @@
 
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useState } from 'react';
 import styles from './calendar.module.css';
+import { useEffect, useState } from 'react';
 import { CalendarProps } from './interface';
 import { HTMLAttributeType } from '@/constants/enums';
 import { FaAnglesLeft, FaAnglesRight, FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
-import { DAYS_OF_WEEK, handleNextMonth, handleNextYear, handlePrevMonth, handlePrevYear, handleSelectDate, handleJumpToLatest, handleJumpToSelected, generateCalendarMatrix } from './utils';
+import { DAYS_OF_WEEK, handleNextMonth, handleNextYear, handlePrevMonth, handlePrevYear, handleSelectDate, generateCalendarMatrix } from './utils';
 
 export default function Calendar({ value, latestRecordedDate, onChange }: CalendarProps) {
-    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs>(value ? dayjs(value) : dayjs());
-    const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(value ? dayjs(value) : dayjs());
+    const [selectedDate, setSelectedDate] = useState<dayjs.Dayjs | null>(value ? dayjs(value) : null);
+    const [currentMonth, setCurrentMonth] = useState<dayjs.Dayjs>(value ? dayjs(value) : (latestRecordedDate ? dayjs(latestRecordedDate) : dayjs()));
+
+    useEffect(() => {
+        if (value) {
+            const valObj = dayjs(value);
+            setSelectedDate(valObj);
+            setCurrentMonth(valObj);
+        } else {
+            setSelectedDate(null);
+            if (latestRecordedDate) setCurrentMonth(dayjs(latestRecordedDate));
+        }
+    }, [value, latestRecordedDate]);
 
     const days = generateCalendarMatrix(currentMonth, selectedDate, latestRecordedDate);
 
@@ -20,7 +31,7 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
             <div className={styles.grid}>
                 <div className={styles.records__card}>
                     <span className={styles.records__date}>
-                        {selectedDate.format('MMMM D, YYYY')}
+                        {selectedDate ? selectedDate.format('MMMM D, YYYY') : '\u00A0'}
                     </span>
                 </div>
 
@@ -101,38 +112,6 @@ export default function Calendar({ value, latestRecordedDate, onChange }: Calend
                                 {day.dayNumber}
                             </button>
                         ))}
-                    </div>
-
-                    <hr className={styles.fading__line} />
-
-                    <div className={styles.footer}>
-                        <button
-                            title='Jump to selected date'
-                            className={styles.footer__btn}
-                            type={HTMLAttributeType.button}
-                            disabled={currentMonth.isSame(selectedDate, 'month')}
-                            onClick={() => handleJumpToSelected(selectedDate, setCurrentMonth)}
-                        >
-                            Selected: {selectedDate.format('D MMM YY')}
-                        </button>
-                        {latestRecordedDate && (
-                            <button
-                                className={styles.footer__btn}
-                                type={HTMLAttributeType.button}
-                                title='Jump to latest recorded date'
-                                disabled={selectedDate.isSame(dayjs(latestRecordedDate), 'day')}
-                                onClick={() =>
-                                    handleJumpToLatest({
-                                        latestRecordedDate,
-                                        onChange,
-                                        setSelectedDate,
-                                        setCurrentMonth
-                                    })
-                                }
-                            >
-                                Latest: {dayjs(latestRecordedDate).format('D MMM YY')}
-                            </button>
-                        )}
                     </div>
                 </div>
             </div>

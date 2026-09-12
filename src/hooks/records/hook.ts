@@ -3,7 +3,7 @@ import { CreateRecordsPayload } from './interface';
 import { createRecords, getRecordsByDate, getRecordsRange } from './api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-const { records, create, range } = QUERY;
+const { records, create, range, deeds } = QUERY;
 
 export const useGetRecords = (date: string) => {
   return useQuery({
@@ -30,6 +30,7 @@ export const useCreateRecords = () => {
     onSuccess: async (_, variables) => {
       const dates = Array.from(new Set(variables.records.map((r) => r.date)));
       await Promise.all([
+        queryClient.invalidateQueries({ queryKey: [deeds] }),
         queryClient.invalidateQueries({ queryKey: [records, range] }),
         ...dates.map((d) => queryClient.invalidateQueries({ queryKey: [records, d] }))
       ]);

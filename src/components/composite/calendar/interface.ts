@@ -2,9 +2,9 @@ import { Dayjs } from 'dayjs';
 import { Dispatch, SetStateAction } from 'react';
 
 export interface CalendarProps {
-  value?: Date | string;
-  onChange?: (date: Date) => void;
   latestRecordedDate?: string;
+  value?: Date | string | null;
+  onChange?: (date: Date) => void;
 }
 
 export interface CalendarDay {
@@ -19,13 +19,13 @@ export interface CalendarDay {
 export interface HandleSelectDateProps {
   date: Date;
   onChange?: (date: Date) => void;
-  setSelectedDate: Dispatch<SetStateAction<Dayjs>>;
   setCurrentMonth: Dispatch<SetStateAction<Dayjs>>;
+  setSelectedDate: Dispatch<SetStateAction<Dayjs | null>>;
 }
 
 export interface HandleJumpToLatestProps {
   onChange?: (date: Date) => void;
   latestRecordedDate: string;
-  setSelectedDate: Dispatch<SetStateAction<Dayjs>>;
   setCurrentMonth: Dispatch<SetStateAction<Dayjs>>;
+  setSelectedDate: Dispatch<SetStateAction<Dayjs | null>>;
 }

@@ -2,20 +2,20 @@
 
 import clsx from 'clsx';
 import styles from './styles.module.css';
-import { useEffect, useState } from 'react';
-import Chart from '@/components/composite/chart';
 import Radio from '@/components/primitive/radio';
 import { useGetDeeds } from '@/hooks/deeds/hook';
-import { useGetScales } from '@/hooks/scales/hook';
+import { useEffect, useMemo, useState } from 'react';
 import Dropdown from '@/components/primitive/dropdown';
 import Checkbox from '@/components/primitive/checkbox';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import MobileDeedsDropdown from './MobileDeedsDropdown';
+import { useGetRecordsRange } from '@/hooks/records/hook';
 import MobileScalesDropdown from './MobileScalesDropdown';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import { selectCurrentDeedId } from '@/store/slices/selectors';
+import Chart, { LineChart } from '@/components/composite/chart';
+import { useGetScale, useGetScales } from '@/hooks/scales/hook';
 import { setCurrentDeedId, setDateRange } from '@/store/slices/uiSlice';
-import { DEFAULT_SCALE_COUNTS } from '@/components/composite/chart/utils';
+import { selectCurrentDeedId, selectEndDate, selectStartDate } from '@/store/slices/selectors';
 import { getDateRangeFromTimeRange, TIME_RANGE_OPTIONS, isChecked, toggleChecked } from './utils';
 
 const SKELETON_DEED_WIDTHS = [65, 48, 76, 54];
@@ -23,14 +23,27 @@ const SKELETON_SCALE_WIDTHS = [78, 58, 42, 68];
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
+  const { data: scaleDetail } = useGetScale();
+  const endDate = useAppSelector(selectEndDate);
+  const startDate = useAppSelector(selectStartDate);
   const currentDeedId = useAppSelector(selectCurrentDeedId);
-  const { CARD_HEADING_DEEDS, CARD_HEADING_SCALES } = PLACEHOLDERS;
   const [timeRange, setTimeRange] = useState<string>('last_30_days');
+  const { data: recordsRange } = useGetRecordsRange(startDate, endDate);
   const { data: deeds = [], isPending: isDeedsPending } = useGetDeeds();
   const [checkedScales, setCheckedScales] = useState<Record<string, boolean>>({});
   const [checkedSubDeeds, setCheckedSubDeeds] = useState<Record<string, boolean>>({});
   const { data: scalesData = [], isPending: isScalesPending } = useGetScales(currentDeedId);
-  const scales = scalesData.length > 0 ? scalesData.map((scale) => scale.name) : Object.keys(DEFAULT_SCALE_COUNTS);
+  const { CARD_HEADING_DEEDS, CARD_HEADING_SCALES, NO_DEEDS_FOUND, NO_SCALES_FOUND } = PLACEHOLDERS;
+  const scales = deeds.length > 0 && scalesData.length > 0 ? scalesData.map((scale) => scale.name) : [];
+
+  const isCountDeed = useMemo(() => {
+    if (scaleDetail?.type?.toLowerCase() === 'count') return true;
+    const currentRecord = recordsRange?.find((r) => String(r.deed_item_id) === String(currentDeedId));
+    if (currentRecord?.type === 'count') return true;
+    if (currentRecord?.daily_counts && currentRecord.daily_counts.length > 0) return true;
+    if (currentRecord?.children?.some((c) => c.type === 'count' || (c.daily_counts && c.daily_counts.length > 0))) return true;
+    return false;
+  }, [scaleDetail, recordsRange, currentDeedId]);
 
   useEffect(() => {
     const { startDate, endDate } = getDateRangeFromTimeRange(timeRange);
@@ -38,10 +51,13 @@ export default function Dashboard() {
   }, [dispatch, timeRange]);
 
   useEffect(() => {
-    if (!currentDeedId && deeds.length > 0) {
-      dispatch(setCurrentDeedId(deeds[0].deed_item_id));
+    if (!isDeedsPending) {
+      if (deeds.length > 0) {
+        const currentExists = deeds.some((d) => String(d.deed_item_id) === String(currentDeedId));
+        if (!currentExists) dispatch(setCurrentDeedId(deeds[0].deed_item_id));
+      } else if (currentDeedId) dispatch(setCurrentDeedId(''));
     }
-  }, [deeds, currentDeedId, dispatch]);
+  }, [deeds, isDeedsPending, currentDeedId, dispatch]);
 
   useEffect(() => {
     setCheckedScales({});
@@ -50,7 +66,7 @@ export default function Dashboard() {
   return (
     <div className={styles.container}>
       <div className={styles.mobile__controls}>
-        <div className={styles.mobile__dropdowns__row}>
+        <div className={clsx(styles.mobile__dropdowns__row, { [styles.single__dropdown]: isCountDeed })}>
           <MobileDeedsDropdown
             deeds={deeds}
             currentDeedId={currentDeedId}
@@ -61,14 +77,16 @@ export default function Dashboard() {
               setCheckedSubDeeds((prev) => toggleChecked(prev, subDeedId))
             }
           />
-          <MobileScalesDropdown
-            scales={scales}
-            checkedScales={checkedScales}
-            isPending={isScalesPending}
-            onToggleScale={(scale) =>
-              setCheckedScales((prev) => toggleChecked(prev, scale))
-            }
-          />
+          {!isCountDeed && (
+            <MobileScalesDropdown
+              scales={scales}
+              checkedScales={checkedScales}
+              isPending={isScalesPending}
+              onToggleScale={(scale) =>
+                setCheckedScales((prev) => toggleChecked(prev, scale))
+              }
+            />
+          )}
         </div>
         <Dropdown
           value={timeRange}
@@ -76,16 +94,22 @@ export default function Dashboard() {
           onChange={setTimeRange}
         />
       </div>
-      <div className={styles.card}>
-        <Chart
-          checkedScales={checkedScales}
-          checkedSubDeeds={checkedSubDeeds}
-          onToggleScale={(scale, isVal) =>
-            setCheckedScales((prev) => toggleChecked(prev, scale, isVal))
-          }
-        />
-      </div>
-      <div className={styles.side__column}>
+      {isCountDeed ? (
+        <div className={styles.count__card}>
+          <LineChart checkedSubDeeds={checkedSubDeeds} />
+        </div>
+      ) : (
+        <div className={styles.card}>
+          <Chart
+            checkedScales={checkedScales}
+            checkedSubDeeds={checkedSubDeeds}
+            onToggleScale={(scale, isVal) =>
+              setCheckedScales((prev) => toggleChecked(prev, scale, isVal))
+            }
+          />
+        </div>
+      )}
+      <div className={clsx(styles.side__column, { [styles.count__side__column]: isCountDeed })}>
         <Dropdown
           value={timeRange}
           options={TIME_RANGE_OPTIONS}
@@ -97,68 +121,76 @@ export default function Dashboard() {
             <hr className={styles.fading__line} />
           </div>
           <div className={styles.deeds__list}>
-            {isDeedsPending && deeds.length === 0
-              ? SKELETON_DEED_WIDTHS.map((width, index) => (
-                  <div key={index} className={styles.deed__group}>
-                    <Radio skeleton skeletonWidth={width} />
-                  </div>
-                ))
-              : deeds.map((deed) => {
-                  const deedId = deed.deed_item_id;
-                  const isSelected = String(currentDeedId) === String(deedId);
-                  const hasChildren = Boolean(deed.children && deed.children.length > 0);
+            {isDeedsPending && deeds.length === 0 ? (
+              SKELETON_DEED_WIDTHS.map((width, index) => (
+                <div key={index} className={styles.deed__group}>
+                  <Radio skeleton skeletonWidth={width} />
+                </div>
+              ))
+            ) : deeds.length === 0 ? (
+              <p className={styles.no__data}>{NO_DEEDS_FOUND}</p>
+            ) : (
+              deeds.map((deed) => {
+                const deedId = deed.deed_item_id;
+                const isSelected = String(currentDeedId) === String(deedId);
+                const hasChildren = Boolean(deed.children && deed.children.length > 0);
 
-                  return (
-                    <div key={deedId} className={styles.deed__group}>
-                      <Radio
-                        name="selected_deed"
-                        label={deed.name}
-                        checked={isSelected}
-                        onChange={() => dispatch(setCurrentDeedId(deedId))}
-                      />
-                      {hasChildren && (
-                        <div
-                          className={clsx(styles.subdeeds__wrapper, {
-                            [styles.open]: isSelected
+                return (
+                  <div key={deedId} className={styles.deed__group}>
+                    <Radio
+                      name="selected_deed"
+                      label={deed.name}
+                      checked={isSelected}
+                      onChange={() => dispatch(setCurrentDeedId(deedId))}
+                    />
+                    {hasChildren && (
+                      <div
+                        className={clsx(styles.subdeeds__wrapper, {
+                          [styles.open]: isSelected
+                        })}
+                      >
+                        <div className={styles.subdeeds__inner}>
+                          {deed.children!.map((subDeed) => {
+                            const subDeedId = String(subDeed.deed_item_id || subDeed.name);
+                            return (
+                              <Checkbox
+                                key={subDeedId}
+                                label={subDeed.name}
+                                checked={isChecked(checkedSubDeeds, subDeedId)}
+                                onChange={() =>
+                                  setCheckedSubDeeds((prev) =>
+                                    toggleChecked(prev, subDeedId)
+                                  )
+                                }
+                              />
+                            );
                           })}
-                        >
-                          <div className={styles.subdeeds__inner}>
-                            {deed.children!.map((subDeed) => {
-                              const subDeedId = String(subDeed.deed_item_id || subDeed.name);
-                              return (
-                                <Checkbox
-                                  key={subDeedId}
-                                  label={subDeed.name}
-                                  checked={isChecked(checkedSubDeeds, subDeedId)}
-                                  onChange={() =>
-                                    setCheckedSubDeeds((prev) =>
-                                      toggleChecked(prev, subDeedId)
-                                    )
-                                  }
-                                />
-                              );
-                            })}
-                          </div>
                         </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })
+            )}
           </div>
         </div>
-        <div className={styles.side__card}>
-          <div className={styles.card__header}>
-            <h3 className={styles.title}>{CARD_HEADING_SCALES}</h3>
-            <hr className={styles.fading__line} />
-          </div>
-          <div className={styles.scales__list}>
-            {isScalesPending && scalesData.length === 0
-              ? SKELETON_SCALE_WIDTHS.map((width, index) => (
+        {!isCountDeed && (
+          <div className={styles.side__card}>
+            <div className={styles.card__header}>
+              <h3 className={styles.title}>{CARD_HEADING_SCALES}</h3>
+              <hr className={styles.fading__line} />
+            </div>
+            <div className={styles.scales__list}>
+              {isScalesPending && scalesData.length === 0 && deeds.length > 0 ? (
+                SKELETON_SCALE_WIDTHS.map((width, index) => (
                   <div key={index} className={styles.deed__group}>
                     <Checkbox skeleton skeletonWidth={width} />
                   </div>
                 ))
-              : scales.map((scale) => (
+              ) : scales.length === 0 ? (
+                <p className={styles.no__data}>{NO_SCALES_FOUND}</p>
+              ) : (
+                scales.map((scale) => (
                   <Checkbox
                     key={scale}
                     label={scale}
@@ -167,9 +199,11 @@ export default function Dashboard() {
                       setCheckedScales((prev) => toggleChecked(prev, scale))
                     }
                   />
-                ))}
+                ))
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

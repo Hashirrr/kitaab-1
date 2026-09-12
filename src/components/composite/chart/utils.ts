@@ -79,13 +79,15 @@ export const DEFAULT_SCALE_COUNTS: ScaleCountsObject = {
 };
 
 export const getScalesRecordData = (scales?: ScaleItem[], records?: DeedRangeItem[], currentDeedId?: string, checkedSubDeeds?: Record<string, boolean>): ScaleCountsObject => {
+  const counts: ScaleCountsObject = getScalesObject(scales);
+
   if (!records || records.length === 0 || !currentDeedId)
-    return getScalesObject(scales);
+    return counts;
 
   const currentRecord = records.find((r) => String(r.deed_item_id) === String(currentDeedId));
 
   if (!currentRecord)
-    return getScalesObject(scales);
+    return counts;
 
   const scaleNames: string[] = [];
   if (scales && scales.length > 0) {
@@ -105,10 +107,9 @@ export const getScalesRecordData = (scales?: ScaleItem[], records?: DeedRangeIte
   }
 
   if (scaleNames.length === 0) {
-    return getScalesObject(scales);
+    return counts;
   }
 
-  const counts: ScaleCountsObject = {};
   scaleNames.forEach((name) => {
     counts[name] = 0;
   });
@@ -129,45 +130,39 @@ export const getScalesRecordData = (scales?: ScaleItem[], records?: DeedRangeIte
 
     if (activeChildren.length === 0) return counts;
 
-    let hasAnyScaleCounts = false;
     activeChildren.forEach((child) => {
       if (child.scales && Array.isArray(child.scales)) {
         child.scales.forEach((scale) => {
           counts[scale.name] = (counts[scale.name] || 0) + (scale.count || 0);
-          if (scale.count > 0) hasAnyScaleCounts = true;
         });
       }
     });
-
-    if (!hasAnyScaleCounts && currentRecord.total === 0) return getScalesObject(scales);
 
     return counts;
   }
 
   if (currentRecord.scales && Array.isArray(currentRecord.scales)) {
-    let hasAnyScaleCounts = false;
     currentRecord.scales.forEach((scale) => {
       counts[scale.name] = (counts[scale.name] || 0) + (scale.count || 0);
-      if (scale.count > 0) hasAnyScaleCounts = true;
     });
-
-    if (!hasAnyScaleCounts && currentRecord.total === 0) return getScalesObject(scales);
 
     return counts;
   }
 
-  return getScalesObject(scales);
+  return counts;
 };
 
-export const getScalesObject = (scales?: Array<{ name: string }>, fallback: ScaleCountsObject = DEFAULT_SCALE_COUNTS): ScaleCountsObject => {
-  if (!scales || scales.length === 0) return fallback;
+export const getScalesObject = (scales?: Array<{ name: string }>): ScaleCountsObject => {
+  if (!scales || scales.length === 0) return {};
 
   const result: ScaleCountsObject = {};
-  scales.forEach((scale, index) => result[scale.name] = fallback[scale.name] ?? (25 - (index % 5) * 3));
+  scales.forEach((scale) => {
+    result[scale.name] = 0;
+  });
   return result;
 };
 
-export const formatChartDataFromObject = (scalesObject: ScaleCountsObject = DEFAULT_SCALE_COUNTS): ChartDataPoint[] => {
+export const formatChartDataFromObject = (scalesObject: ScaleCountsObject = {}): ChartDataPoint[] => {
   return Object.entries(scalesObject).map(([name, y]) => ({ y, name, z: DEFAULT_CHART_WEIGHT }));
 };
 

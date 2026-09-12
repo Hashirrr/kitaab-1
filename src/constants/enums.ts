@@ -53,7 +53,8 @@ export enum ModalTypes {
   edit_deed = 'edit_deed',
   edit_scale = 'edit_scale',
   delete_deed = 'delete_deed',
-  delete_scale = 'delete_scale'
+  delete_scale = 'delete_scale',
+  scale_type_warning = 'scale_type_warning'
 }
 
 export enum ButtonType {

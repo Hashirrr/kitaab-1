@@ -68,6 +68,12 @@ const uiSlice = createSlice({
     setDateRange(state, action: PayloadAction<DateRangePayload>) {
       state.startDate = action.payload.startDate;
       state.endDate = action.payload.endDate;
+    },
+    setIsChangingScaleType(state, action: PayloadAction<boolean>) {
+      state.isChangingScaleType = action.payload;
+    },
+    setPendingScaleCardIndex(state, action: PayloadAction<number | null>) {
+      state.pendingScaleCardIndex = action.payload;
     }
   }
 });
@@ -89,5 +95,7 @@ export const {
   setCurrentScaleId,
   setSidebarExpanded,
   resetOpenModalStep,
-  incementOpenModalStep
+  incementOpenModalStep,
+  setIsChangingScaleType,
+  setPendingScaleCardIndex
 } = uiSlice.actions;

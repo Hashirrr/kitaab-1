@@ -6,6 +6,7 @@ import styles from './styles.module.css';
 import { FaChevronDown } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
 import Checkbox from '@/components/primitive/checkbox';
+import { PLACEHOLDERS } from '@/constants/placeholders';
 import type { MobileScalesDropdownProps } from './interface';
 import Skeleton from '@/components/primitive/skeleton/Skeleton';
 
@@ -13,8 +14,9 @@ export default function MobileScalesDropdown({ scales, checkedScales, isPending,
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const hasScales = scales.length > 0;
   const selectedCount = scales.filter((scale) => isChecked(checkedScales, scale)).length;
-  const triggerLabel = selectedCount === scales.length ? 'All Scales' : `Scales (${selectedCount}/${scales.length})`;
+  const triggerLabel = !hasScales ? PLACEHOLDERS.NO_SCALES_FOUND : selectedCount === scales.length ? 'All Scales' : `Scales (${selectedCount}/${scales.length})`;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -41,20 +43,24 @@ export default function MobileScalesDropdown({ scales, checkedScales, isPending,
     <div ref={containerRef} className={styles.mobile__dropdown__wrapper}>
       <button
         type="button"
+        disabled={!hasScales}
         className={clsx(styles.mobile__dropdown__trigger, {
-          [styles.open]: isOpen
+          [styles.open]: isOpen,
+          [styles.disabled]: !hasScales
         })}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => hasScales && setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
       >
         <span className={styles.mobile__dropdown__label}>{triggerLabel}</span>
-        <span
-          className={clsx(styles.mobile__dropdown__chevron, {
-            [styles.open]: isOpen
-          })}
-        >
-          <FaChevronDown size={11} />
-        </span>
+        {hasScales && (
+          <span
+            className={clsx(styles.mobile__dropdown__chevron, {
+              [styles.open]: isOpen
+            })}
+          >
+            <FaChevronDown size={11} />
+          </span>
+        )}
       </button>
 
       {isOpen && (

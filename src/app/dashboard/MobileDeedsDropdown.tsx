@@ -7,6 +7,7 @@ import { FaChevronDown } from 'react-icons/fa6';
 import Radio from '@/components/primitive/radio';
 import { useEffect, useRef, useState } from 'react';
 import Checkbox from '@/components/primitive/checkbox';
+import { PLACEHOLDERS } from '@/constants/placeholders';
 import type { MobileDeedsDropdownProps } from './interface';
 import Skeleton from '@/components/primitive/skeleton/Skeleton';
 
@@ -14,8 +15,9 @@ export default function MobileDeedsDropdown({ deeds, currentDeedId, checkedSubDe
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const hasDeeds = deeds.length > 0;
   const currentDeed = deeds.find((d) => String(d.deed_item_id) === String(currentDeedId));
-  const triggerLabel = currentDeed?.name || 'Deeds';
+  const triggerLabel = hasDeeds ? (currentDeed?.name || 'Deeds') : PLACEHOLDERS.NO_DEEDS_FOUND;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -42,20 +44,24 @@ export default function MobileDeedsDropdown({ deeds, currentDeedId, checkedSubDe
     <div ref={containerRef} className={styles.mobile__dropdown__wrapper}>
       <button
         type="button"
+        disabled={!hasDeeds}
         className={clsx(styles.mobile__dropdown__trigger, {
-          [styles.open]: isOpen
+          [styles.open]: isOpen,
+          [styles.disabled]: !hasDeeds
         })}
-        onClick={() => setIsOpen((prev) => !prev)}
+        onClick={() => hasDeeds && setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
       >
         <span className={styles.mobile__dropdown__label}>{triggerLabel}</span>
-        <span
-          className={clsx(styles.mobile__dropdown__chevron, {
-            [styles.open]: isOpen
-          })}
-        >
-          <FaChevronDown size={11} />
-        </span>
+        {hasDeeds && (
+          <span
+            className={clsx(styles.mobile__dropdown__chevron, {
+              [styles.open]: isOpen
+            })}
+          >
+            <FaChevronDown size={11} />
+          </span>
+        )}
       </button>
 
       {isOpen && (

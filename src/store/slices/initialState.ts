@@ -19,5 +19,7 @@ export const initialState: UIState = {
   mode: Mode.light,
   currentDeedId: '',
   currentScaleId: '',
+  isChangingScaleType: false,
+  pendingScaleCardIndex: null,
   deedCategory: DeedCategory.hasanaat
 };

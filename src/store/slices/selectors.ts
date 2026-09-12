@@ -29,3 +29,9 @@ export const selectStartDate = (state: RootState) =>
 
 export const selectEndDate = (state: RootState) =>
   state.ui.endDate;
+
+export const selectIsChangingScaleType = (state: RootState) =>
+  state.ui.isChangingScaleType;
+
+export const selectPendingScaleCardIndex = (state: RootState) =>
+  state.ui.pendingScaleCardIndex;

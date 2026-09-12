@@ -121,7 +121,6 @@
 }
 
 .day__cell {
-    border: none;
     display: flex;
     outline: none;
     aspect-ratio: 1;
@@ -133,7 +132,8 @@
     justify-content: center;
     background: transparent;
     color: var(--foreground-2);
-    transition: background-color 200ms ease, color 200ms ease;
+    border: 2px solid transparent;
+    transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease;
 }
 
 .day__cell:hover:not(.selected) {
@@ -145,9 +145,9 @@
     color: var(--foreground-3);
 }
 
-.latest:not(.selected) {
+.latest {
     font-weight: 700;
-    border: 1.5px solid var(--foreground-3);
+    border-color: var(--foreground-3);
 }
 
 .selected {
@@ -156,41 +156,12 @@
     background: var(--foreground-2);
 }
 
+.latest.selected {
+    border-color: var(--foreground-1);
+}
+
 .selected:hover {
     background: var(--foreground-1);
-}
-
-.footer {
-    gap: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.footer__btn {
-    flex: 1;
-    display: flex;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 600;
-    padding: 6px 8px;
-    border-radius: 6px;
-    align-items: center;
-    justify-content: center;
-    color: var(--foreground-2);
-    background: var(--background-2);
-    border: 2px solid rgba(0, 0, 0, 0.01);
-    transition: background-color 200ms ease, color 200ms ease;
-}
-
-.footer__btn:hover:not(:disabled) {
-    color: var(--foreground-2);
-    background: var(--background-1);
-}
-
-.footer__btn:disabled {
-    opacity: 0.45;
-    cursor: default;
 }
 
 @media (max-width: 1024px) {

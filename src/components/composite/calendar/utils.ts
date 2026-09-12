@@ -5,7 +5,7 @@ import { CalendarDay, HandleJumpToLatestProps, HandleSelectDateProps } from './i
 const TOTAL_CALENDAR_CELLS = 42;
 export const DAYS_OF_WEEK = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-export const generateCalendarMatrix = (currentMonth: dayjs.Dayjs, selectedDate: dayjs.Dayjs, latestRecordedDate?: string): CalendarDay[] => {
+export const generateCalendarMatrix = (currentMonth: dayjs.Dayjs, selectedDate?: dayjs.Dayjs | null, latestRecordedDate?: string): CalendarDay[] => {
   const startOfMonth = currentMonth.startOf('month');
   const startDayOfWeek = startOfMonth.day();
   const daysInMonth = currentMonth.daysInMonth();
@@ -22,7 +22,7 @@ export const generateCalendarMatrix = (currentMonth: dayjs.Dayjs, selectedDate: 
       isCurrentMonth: false,
       dayNumber: daysInPrevMonth - i,
       isToday: d.isSame(dayjs(), 'day'),
-      isSelected: d.isSame(selectedDate, 'day'),
+      isSelected: Boolean(selectedDate && d.isSame(selectedDate, 'day')),
       isLatest: Boolean(latestDateObj && d.isSame(latestDateObj, 'day'))
     });
   }
@@ -34,7 +34,7 @@ export const generateCalendarMatrix = (currentMonth: dayjs.Dayjs, selectedDate: 
       dayNumber: i,
       isCurrentMonth: true,
       isToday: d.isSame(dayjs(), 'day'),
-      isSelected: d.isSame(selectedDate, 'day'),
+      isSelected: Boolean(selectedDate && d.isSame(selectedDate, 'day')),
       isLatest: Boolean(latestDateObj && d.isSame(latestDateObj, 'day'))
     });
   }
@@ -48,7 +48,7 @@ export const generateCalendarMatrix = (currentMonth: dayjs.Dayjs, selectedDate: 
       date: d.toDate(),
       isCurrentMonth: false,
       isToday: d.isSame(dayjs(), 'day'),
-      isSelected: d.isSame(selectedDate, 'day'),
+      isSelected: Boolean(selectedDate && d.isSame(selectedDate, 'day')),
       isLatest: Boolean(latestDateObj && d.isSame(latestDateObj, 'day'))
     });
   }
