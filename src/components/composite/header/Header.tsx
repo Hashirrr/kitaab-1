@@ -2,11 +2,10 @@
 
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { isNestedRoute } from './utils';
 import styles from './header.module.css';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { toggleTheme } from '@/store/slices/utils';
-import { PLACEHOLDERS } from '@/constants/placeholders';
+import { getPageTitle, isNestedRoute } from './utils';
 import { usePathname, useRouter } from 'next/navigation';
 import { setDeedCategory } from '@/store/slices/uiSlice';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
@@ -20,7 +19,7 @@ export default function Header() {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const mode = useAppSelector(selectMode);
-  const { PAGE_NAME_DEEDS } = PLACEHOLDERS;
+  const pageTitle = getPageTitle(pathname);
   const [mounted, setMounted] = useState(false);
   const deedCategory = useAppSelector(selectDeedCategory);
   const isHasanaat = deedCategory === DeedCategory.hasanaat;
@@ -38,7 +37,7 @@ export default function Header() {
         variant={IconButtonBackground.secondary}
         icon={<FaArrowLeftLong size={12} />}
       />}
-      <h2 className={styles.page__name}>{PAGE_NAME_DEEDS}</h2>
+      <h2 className={styles.page__name}>{pageTitle}</h2>
       <button className={clsx(styles.hasanaat__saiyyiaat, {
         [styles.flipped]: !isHasanaat
       })}
