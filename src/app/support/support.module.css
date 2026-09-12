@@ -1,0 +1,191 @@
+.container {
+  width: 100%;
+  display: flex;
+  position: relative;
+  flex-direction: column;
+}
+
+.messages__area {
+  gap: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0 120px 0;
+}
+
+.date__divider {
+  width: 100%;
+  display: flex;
+  position: relative;
+  align-items: center;
+  margin: 16px 0 10px 0;
+  justify-content: center;
+}
+
+.date__divider::before {
+  left: 0;
+  top: 50%;
+  right: 0;
+  z-index: 1;
+  content: '';
+  height: 1px;
+  position: absolute;
+  background-image: var(--hr-image);
+}
+
+.date__badge {
+  z-index: 2;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 14px;
+  position: relative;
+  border-radius: 12px;
+  letter-spacing: 0.5px;
+  color: var(--foreground-3);
+  box-shadow: var(--box-shadow);
+  background: var(--background-3);
+  border: 1px solid var(--background-1);
+}
+
+.message__row {
+  display: flex;
+  max-width: 75%;
+  flex-direction: column;
+  animation: messageEnter 150ms ease-out;
+}
+
+.message__row.self {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message__row.other {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.message__sender {
+  padding: 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--foreground-3);
+}
+
+.message__bubble {
+  padding: 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: var(--box-shadow);
+}
+
+.message__row.self .message__bubble {
+  color: var(--background-3);
+  background: var(--foreground-1);
+  border-radius: 12px 12px 2px 12px;
+}
+
+.message__row.other .message__bubble {
+  color: var(--foreground-1);
+  background: var(--background-3);
+  border-radius: 12px 12px 12px 2px;
+  border: 1px solid var(--background-1);
+}
+
+.message__time {
+  padding: 0 4px;
+  font-size: 10px;
+  margin-top: 4px;
+  color: var(--foreground-3);
+}
+
+.input__card__container {
+  bottom: 0;
+  z-index: 100;
+  display: flex;
+  padding: 16px 0;
+  position: fixed;
+  background: var(--background-2);
+  left: max(132px, calc(50% - 442px));
+  right: max(16px, calc(50% - 558px));
+}
+
+.input__card {
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  border-radius: 8px;
+  align-items: flex-end;
+  box-shadow: var(--box-shadow);
+  background: var(--background-3);
+  transition: box-shadow 250ms ease;
+}
+
+.input__card:hover {
+  box-shadow: var(--box-shadow-hover);
+}
+
+.textarea__wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.textarea {
+  width: 100%;
+  resize: none;
+  padding: 10px;
+  font-size: 14px;
+  min-height: 40px;
+  max-height: 86px;
+  line-height: 20px;
+  overflow-y: hidden;
+  border-radius: 5px;
+  font-family: inherit;
+  color: var(--foreground-2);
+  background: var(--background-2);
+  border: 1px solid var(--background-1);
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.textarea:hover {
+  background: var(--background-3);
+  border-color: var(--foreground-2);
+}
+
+.textarea:focus {
+  outline: none;
+  background: var(--background-3);
+  border-color: var(--foreground-2);
+  box-shadow: 0 0 0 1px var(--foreground-2);
+}
+
+.textarea::placeholder {
+  color: var(--foreground-3);
+}
+
+@keyframes messageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .input__card__container {
+    left: 0;
+    right: 0;
+    padding: 16px;
+  }
+
+  .message__row {
+    max-width: 88%;
+  }
+}

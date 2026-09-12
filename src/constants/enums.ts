@@ -115,3 +115,8 @@ export const DeedCategoryApi = {
   [DeedCategory.hasanaat]: 'hasanaat',
   [DeedCategory.sayyiaat]: 'saiyyiaat'
 } as const;
+
+export enum MessageSender {
+  me = 'me',
+  other = 'other'
+};
