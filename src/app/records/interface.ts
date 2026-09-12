@@ -1,5 +1,6 @@
 import { DeedTypes } from '@/constants/enums';
 import { Dispatch, SetStateAction } from 'react';
+import { CreateRecordsPayload } from '@/hooks/records/interface';
 
 export const NOT_SELECTED = 'Not Selected';
 
@@ -24,8 +25,9 @@ export interface RecordCardProps {
 }
 
 export interface RecordCardsProps {
-  selectedDate: Date;
+  selectedDate?: Date | null;
   latestRecordedDate?: string;
+  onSaveSuccess?: (savedDate: Date) => void;
 }
 
 export interface HandleUpdateSubDeedOptionProps {
@@ -54,4 +56,23 @@ export interface HandleUpdateCountProps {
   deedId: string;
   count: number | null;
   setDeeds: Dispatch<SetStateAction<DeedRecordItem[]>>;
+}
+
+export interface HandleSaveSuccessProps {
+  savedDate: Date;
+  setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+}
+
+export interface HandleDateChangeProps {
+  date: Date;
+  setSelectedDate: Dispatch<SetStateAction<Date | null>>;
+  isInitializedRef: React.MutableRefObject<boolean>;
+}
+
+export interface HandleSaveProps {
+  formattedDate: string;
+  deeds: DeedRecordItem[];
+  selectedDate?: Date | null;
+  onSaveSuccess?: (savedDate: Date) => void;
+  createRecords: (payload: CreateRecordsPayload) => Promise<unknown>;
 }

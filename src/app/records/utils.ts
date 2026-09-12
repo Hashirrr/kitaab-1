@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import { DeedTypes } from '@/constants/enums';
 import { DeedItem } from '@/hooks/deeds/interface';
 import { ScaleItem } from '@/hooks/scales/interface';
-import { RecordPayload, RecordResponse } from '@/hooks/records/interface';
-import { NOT_SELECTED, DeedRecordItem, HandleUpdateCountProps, HandleUpdateOptionProps, HandleUpdateSubDeedCountProps, HandleUpdateSubDeedOptionProps } from './interface';
+import { RecordPayload, RecordResponse, RecordsRangeResponse, DeedRangeItem, DeedRangeChild } from '@/hooks/records/interface';
+import { NOT_SELECTED, DeedRecordItem, HandleUpdateCountProps, HandleUpdateOptionProps, HandleUpdateSubDeedCountProps, HandleUpdateSubDeedOptionProps, HandleSaveSuccessProps, HandleDateChangeProps, HandleSaveProps } from './interface';
 
 export const getScaleItemId = (optionName: string, scales?: ScaleItem[]): string | null => {
   if (optionName === NOT_SELECTED) return null;
@@ -199,26 +199,73 @@ export const isSaveRecordsDisabled = (deeds: DeedRecordItem[]) => {
   });
 };
 
-export const getLatestDate = (deeds?: DeedItem[]): string => {
-  const recordedDates: dayjs.Dayjs[] = [];
+export const getLatestDate = (deeds?: DeedItem[], recordsRange?: RecordsRangeResponse): string => {
+  if (!deeds || !deeds.length) {
+    return dayjs().format('YYYY-MM-DD');
+  }
 
-  const extractRecordedDate = (item: DeedItem) => {
-    const rawDate = (item as unknown as { last_recorded?: string; last_recorded_at?: string }).last_recorded ||
-      (item as unknown as { last_recorded?: string; last_recorded_at?: string }).last_recorded_at;
-    if (rawDate && dayjs(rawDate).isValid()) {
-      recordedDates.push(dayjs(rawDate));
+  const rangeMap = new Map<string, number>();
+  if (recordsRange && recordsRange.length > 0) {
+    const mapItem = (item: DeedRangeItem | DeedRangeChild) => {
+      const id = String(item.deed_item_id);
+      const count = item.daily_counts ? item.daily_counts.length : (item.total || 0);
+      rangeMap.set(id, count);
+      if ('children' in item && item.children) {
+        item.children.forEach(mapItem);
+      }
+    };
+    recordsRange.forEach(mapItem);
+  }
+
+  const nextDates: dayjs.Dayjs[] = [];
+
+  const processDeed = (item: DeedItem, parentCreatedAt?: string) => {
+    const effectiveCreatedAt = item.created_at || parentCreatedAt;
+
+    if (item.children && item.children.length > 0) {
+      item.children.forEach(child => processDeed(child, effectiveCreatedAt));
+      return;
     }
-    if (item.children?.length) {
-      item.children.forEach(extractRecordedDate);
+
+    const itemId = String(item.deed_item_id);
+    if (rangeMap.has(itemId) && effectiveCreatedAt && dayjs(effectiveCreatedAt).isValid()) {
+      const daysRecorded = rangeMap.get(itemId)!;
+      nextDates.push(dayjs(effectiveCreatedAt).startOf('day').add(daysRecorded, 'day'));
+      return;
+    }
+
+    if (effectiveCreatedAt && dayjs(effectiveCreatedAt).isValid()) {
+      nextDates.push(dayjs(effectiveCreatedAt).startOf('day'));
     }
   };
 
-  deeds?.forEach(extractRecordedDate);
+  deeds.forEach(deed => processDeed(deed));
 
-  if (recordedDates.length > 0) {
-    const maxDate = recordedDates.reduce((max, curr) => (curr.isAfter(max) ? curr : max));
-    return maxDate.add(1, 'day').format('YYYY-MM-DD');
+  if (nextDates.length > 0) {
+    const minNextDate = nextDates.reduce((min, curr) => (curr.isBefore(min) ? curr : min));
+    return minNextDate.format('YYYY-MM-DD');
   }
 
-  return dayjs().add(1, 'day').format('YYYY-MM-DD');
+  return dayjs().format('YYYY-MM-DD');
+};
+
+export const handleSaveSuccess = ({ savedDate, setSelectedDate }: HandleSaveSuccessProps) => {
+  const nextDate = dayjs(savedDate).add(1, 'day');
+  const isNextFuture = nextDate.startOf('day').isAfter(dayjs().startOf('day'));
+  if (!isNextFuture) {
+    setSelectedDate(nextDate.toDate());
+  }
+};
+
+export const handleDateChange = ({ date, setSelectedDate, isInitializedRef }: HandleDateChangeProps) => {
+  isInitializedRef.current = true;
+  setSelectedDate(date);
+};
+
+export const handleSave = async ({ deeds, formattedDate, selectedDate, createRecords, onSaveSuccess }: HandleSaveProps) => {
+  if (!selectedDate || !formattedDate) return;
+  const recordsPayload = buildRecordsPayload(deeds, formattedDate);
+  if (!recordsPayload.length) return;
+  await createRecords({ records: recordsPayload });
+  onSaveSuccess?.(selectedDate);
 };

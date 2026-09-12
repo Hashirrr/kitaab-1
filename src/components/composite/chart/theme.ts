@@ -40,11 +40,15 @@ export const getDefaultChartOptions = (mode: Mode = Mode.light, data: ChartDataP
     colors,
     tooltip: {
       headerFormat: '',
-      pointFormat:
-        '<span style="color:{point.color}">\u25CF</span> <b>{point.name}</b><br/>' +
-        'Value: <b>{point.y:.0f}</b><br/>' +
-        'Weight: <b>{point.z}</b><br/>',
-        borderColor: 'var(--background-2)',
+      pointFormatter: function (this: Highcharts.Point) {
+        const pct = typeof this.percentage === 'number' ? this.percentage % 1 === 0 ? this.percentage.toFixed(0) : this.percentage.toFixed(1) : '0';
+        return (
+          `<span style="color:${this.color}">\u25CF</span> <b>${this.name}</b><br/>` +
+          `Value: <b>${Math.round(this.y || 0)}</b><br/>` +
+          `Percentage: <b>${pct}%</b><br/>`
+        );
+      },
+      borderColor: 'var(--background-2)',
       backgroundColor: 'var(--background-3)',
       style: {
         color: textColor

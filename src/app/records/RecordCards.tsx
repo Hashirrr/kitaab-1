@@ -10,34 +10,34 @@ import RecordCardSkeleton from './RecordCardSkeleton';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { DeedRecordItem, RecordCardsProps } from './interface';
 import { useCreateRecords, useGetRecords } from '@/hooks/records/hook';
-import { buildRecordsPayload, getRecordDeeds, handleUpdateCount, handleUpdateOption, handleUpdateSubDeedCount, handleUpdateSubDeedOption, isSaveRecordsDisabled } from './utils';
+import { getRecordDeeds, handleSave, handleUpdateCount, handleUpdateOption, handleUpdateSubDeedCount, handleUpdateSubDeedOption, isSaveRecordsDisabled } from './utils';
 
-export default function RecordCards({ selectedDate = new Date(), latestRecordedDate }: Partial<RecordCardsProps>) {
+export default function RecordCards({ selectedDate, latestRecordedDate, onSaveSuccess }: RecordCardsProps) {
   const isFutureDate = Boolean(
-    latestRecordedDate && dayjs(selectedDate).startOf('day').isAfter(dayjs(latestRecordedDate).startOf('day'))
+    selectedDate && latestRecordedDate && dayjs(selectedDate).startOf('day').isAfter(dayjs(latestRecordedDate).startOf('day'))
   );
 
-  const formattedDate = dayjs(selectedDate).format('YYYY-MM-DD');
+  const formattedDate = selectedDate ? dayjs(selectedDate).format('YYYY-MM-DD') : '';
 
   const { data: getDeeds, isPending: isDeedsPending } = useGetDeeds();
   const { data: getRecords, isPending: isRecordsPending } = useGetRecords(formattedDate);
   const { mutateAsync: createRecords, isPending: isCreateRecordsPending } = useCreateRecords();
 
   const initialDeeds = useMemo(
-    () => getRecordDeeds(getDeeds, undefined, getRecords, selectedDate),
+    () => (selectedDate ? getRecordDeeds(getDeeds, undefined, getRecords, selectedDate) : []),
     [getDeeds, getRecords, selectedDate]
   );
   const [deeds, setDeeds] = useState<DeedRecordItem[]>(initialDeeds);
 
   useEffect(() => {
-    setDeeds(getRecordDeeds(getDeeds, undefined, getRecords, selectedDate));
+    if (selectedDate) {
+      setDeeds(getRecordDeeds(getDeeds, undefined, getRecords, selectedDate));
+    }
   }, [getDeeds, getRecords, selectedDate]);
 
-  const handleSave = async () => {
-    const recordsPayload = buildRecordsPayload(deeds, formattedDate);
-    if (!recordsPayload.length) return;
-    await createRecords({ records: recordsPayload });
-  };
+  if (!selectedDate) {
+    return <RecordCardSkeleton />;
+  }
 
   if (isFutureDate) {
     return (
@@ -78,10 +78,10 @@ export default function RecordCards({ selectedDate = new Date(), latestRecordedD
 
           <div className={styles.submit__container}>
             <button
-              onClick={handleSave}
               className={styles.submit__btn}
               type={HTMLAttributeType.button}
               disabled={isSaveRecordsDisabled(deeds) || isCreateRecordsPending}
+              onClick={() => handleSave({ deeds, formattedDate, selectedDate, createRecords, onSaveSuccess })}
             >
               {isCreateRecordsPending ? 'Saving...' : 'Save'}
             </button>

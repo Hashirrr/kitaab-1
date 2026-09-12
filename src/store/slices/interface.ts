@@ -19,7 +19,9 @@ export interface UIState {
   openModalStep: number,
   currentScaleId: string,
   sidebarExpanded: boolean,
-  deedCategory: DeedCategory
+  deedCategory: DeedCategory,
+  isChangingScaleType: boolean,
+  pendingScaleCardIndex: number | null
 };
 
 export interface DateRangePayload {

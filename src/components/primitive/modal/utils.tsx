@@ -2,15 +2,16 @@ import { AppDispatch } from '@/store';
 import styles from './modal.module.css';
 import { Dispatch, SetStateAction } from 'react';
 import { DeedItem } from '@/hooks/deeds/interface';
-import { ScaleItem } from '@/hooks/scales/interface';
 import DeedAddForm from '@/form/deedadd/DeedAddForm';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import ScaleEditForm from '@/form/scaleedit/ScaleEditForm';
 import { DeedAddFormValues } from '@/form/deedadd/interface';
 import { Keys, ModalCTA, ModalTypes } from '@/constants/enums';
 import { ScaleEditFormValues } from '@/form/scaleedit/interface';
-import { closeModal, incementOpenModalStep } from '@/store/slices/uiSlice';
+import { defaultScales } from '@/components/composite/scalecards/utils';
+import { CreateScaleItemPayload, ScaleItem } from '@/hooks/scales/interface';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { closeModal, incementOpenModalStep, setIsChangingScaleType, openModal, resetOpenModalStep } from '@/store/slices/uiSlice';
 
 const {
   MODAL_ADD_DEED_TITLE,
@@ -19,11 +20,12 @@ const {
   MODAL_DELETE_SCALE_TITLE,
   MODAL_ADD_SUB_DEED_TITLE,
   DEED_UPDATE_FORM_TOOLTIP,
+  SCALE_TYPE_WARNING_TITLE,
   MODAL_VIEW_EDIT_DEED_TITLE,
   MODAL_VIEW_EDIT_SCALE_TITLE,
   MODAL_DELETE_DEED_DESCRIPTION,
+  SCALE_TYPE_WARNING_DESCRIPTION,
   MODAL_DELETE_SCALE_DESCRIPTION,
-  MODAL_ADD_SCALE_QUESTION_TITLE,
   MODAL_ADD_SUB_DEED_QUESTION_TITLE,
   MODAL_ADD_SCALE_QUESTION_DESCRIPTION,
   MODAL_ADD_SCALE_ANOTHER_QUESTION_TITLE,
@@ -53,6 +55,8 @@ export const handleKeyDown = (e: KeyboardEvent, close: () => void) => {
 
 export const getModalTitle = (type: string, step: number) => {
   switch (type) {
+    case ModalTypes.scale_type_warning:
+      return SCALE_TYPE_WARNING_TITLE;
     case ModalTypes.add_deed:
       switch (step % 2) {
         case 1:
@@ -92,6 +96,8 @@ export const getModalTitle = (type: string, step: number) => {
 
 export const modalActionType = (type: string, step: number) => {
   switch (type) {
+    case ModalTypes.scale_type_warning:
+      return <p className={styles.content}>{SCALE_TYPE_WARNING_DESCRIPTION}</p>;
     case ModalTypes.add_deed:
       switch (step % 2) {
         case 1:
@@ -131,9 +137,12 @@ export const getModalPrimaryBtn = (
   isUpdateDeedPending?: boolean,
   isUpdateScalePending?: boolean,
   isDeleteScalePending?: boolean,
-  isCreateScalePending?: boolean
+  isCreateScalePending?: boolean,
+  isScaleWarningPending?: boolean
 ) => {
   switch (type) {
+    case ModalTypes.scale_type_warning:
+      return isScaleWarningPending ? ModalCTA.updating : ModalCTA.confirm;
     case ModalTypes.add_deed:
       switch (step % 2) {
         case 1:
@@ -167,6 +176,8 @@ export const getModalPrimaryBtn = (
 
 export const getModalSecondaryBtn = (type: string, step: number) => {
   switch (type) {
+    case ModalTypes.scale_type_warning:
+      return ModalCTA.cancel;
     case ModalTypes.add_deed:
       if (step === 1)
         return ModalCTA.back;
@@ -209,6 +220,7 @@ export const isForm = (type: string, step: number) => {
     default:
     case ModalTypes.delete_deed:
     case ModalTypes.delete_scale:
+    case ModalTypes.scale_type_warning:
       return false;
   }
 };
@@ -220,6 +232,7 @@ export const onClose = (type: string, step: number, dispatch: AppDispatch, route
     case ModalTypes.delete_deed:
     case ModalTypes.delete_scale:
     case ModalTypes.add_scale:
+    case ModalTypes.scale_type_warning:
       dispatch(closeModal());
       return;
     case ModalTypes.add_deed:
@@ -233,7 +246,7 @@ export const onClose = (type: string, step: number, dispatch: AppDispatch, route
   }
 };
 
-export const onConfirm = async (type: string, deleteDeed: () => void, deleteScale: () => void, dispatch: AppDispatch) => {
+export const onConfirm = async (type: string, deleteDeed: () => void, deleteScale: () => void, dispatch: AppDispatch, updateScaleType?: (payload: { type: string }) => Promise<unknown>, createScales?: (payload: CreateScaleItemPayload[]) => Promise<unknown>, pendingScaleCardIndex?: number | null) => {
   switch (type) {
     case ModalTypes.delete_deed:
       await deleteDeed();
@@ -241,6 +254,22 @@ export const onConfirm = async (type: string, deleteDeed: () => void, deleteScal
       return;
     case ModalTypes.delete_scale:
       await deleteScale();
+      dispatch(closeModal());
+      return;
+    case ModalTypes.scale_type_warning:
+      if (pendingScaleCardIndex === null || pendingScaleCardIndex === undefined) return;
+      if (pendingScaleCardIndex === 0 && updateScaleType) await updateScaleType({ type: 'count' });
+      else {
+        if (updateScaleType) await updateScaleType({ type: 'scale' });
+        if (pendingScaleCardIndex === 1 && createScales) await createScales(defaultScales);
+        else if (pendingScaleCardIndex === 2) {
+          dispatch(resetOpenModalStep());
+          dispatch(openModal(ModalTypes.add_scale));
+          dispatch(setIsChangingScaleType(false));
+          return;
+        }
+      }
+      dispatch(setIsChangingScaleType(false));
       dispatch(closeModal());
       return;
     case ModalTypes.add_deed:
