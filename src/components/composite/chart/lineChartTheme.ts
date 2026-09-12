@@ -3,26 +3,48 @@ import type * as Highcharts from 'highcharts';
 import { LineChartSeries } from './interface';
 
 export const getLineColors = (mode: Mode = Mode.light, count: number = 1): string[] => {
+  const isDark = mode === Mode.dark;
+
   if (count <= 1) {
-    return ['var(--foreground-1)'];
+    return [isDark ? '#818cf8' : '#6366f1'];
   }
 
-  const palette = [
-    'var(--foreground-1)',
-    'var(--foreground-2)',
-    'var(--foreground-3)',
-    'var(--background-1)'
-  ];
+  // Bright, luminous, similar-tone palette in the Electric Indigo -> Sky -> Cyan spectrum
+  if (count === 2) {
+    return isDark ? ['#818cf8', '#38bdf8'] : ['#6366f1', '#0ea5e9'];
+  }
+  if (count === 3) {
+    return isDark ? ['#818cf8', '#60a5fa', '#22d3ee'] : ['#6366f1', '#3b82f6', '#06b6d4'];
+  }
+  if (count === 4) {
+    return isDark
+      ? ['#a78bfa', '#818cf8', '#38bdf8', '#22d3ee']
+      : ['#8b5cf6', '#6366f1', '#0ea5e9', '#06b6d4'];
+  }
+  if (count === 5) {
+    return isDark
+      ? ['#c084fc', '#818cf8', '#60a5fa', '#38bdf8', '#22d3ee']
+      : ['#a855f7', '#6366f1', '#3b82f6', '#0ea5e9', '#06b6d4'];
+  }
+
+  const lightTones = ['#a855f7', '#8b5cf6', '#6366f1', '#3b82f6', '#0284c7', '#0ea5e9', '#06b6d4', '#14b8a6'];
+  const darkTones = ['#c084fc', '#a78bfa', '#818cf8', '#60a5fa', '#38bdf8', '#22d3ee', '#2dd4bf', '#34d399'];
+  const palette = isDark ? darkTones : lightTones;
 
   return Array.from({ length: count }, (_, i) => palette[i % palette.length]);
 };
 
-export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: LineChartSeries[] = [], isMobile?: boolean, onToggleSeries?: (seriesName: string, isVisible: boolean) => void): Highcharts.Options => {
+export const getDefaultLineChartOptions = (
+  mode: Mode = Mode.light,
+  seriesData: LineChartSeries[] = [],
+  isMobile?: boolean,
+  onToggleSeries?: (seriesName: string, isVisible: boolean) => void
+): Highcharts.Options => {
   const isDark = mode === Mode.dark;
   const textColor = 'var(--foreground-1)';
   const labelColor = 'var(--foreground-3)';
-  const gridLineColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
-  const axisLineColor = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.1)';
+  const gridLineColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(15, 23, 42, 0.05)';
+  const axisLineColor = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(15, 23, 42, 0.08)';
   const colors = getLineColors(mode, seriesData.length);
 
   return {
@@ -51,15 +73,17 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
       shared: true,
       useHTML: true,
       xDateFormat: '%a, %b %e, %Y',
-      backgroundColor: 'var(--background-3)',
-      borderColor: 'var(--background-2)',
+      backgroundColor: isDark ? '#131b2e' : '#ffffff',
+      borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(15, 23, 42, 0.1)',
       borderRadius: 8,
       shadow: true,
       style: {
         color: textColor,
-        fontSize: '12px'
+        fontSize: '12px',
+        fontFamily: 'inherit'
       },
-      headerFormat: '<span style="font-size: 11px; color: var(--foreground-3); font-weight: 500;">{point.key}</span><br/>',
+      headerFormat:
+        '<span style="font-size: 11px; color: var(--foreground-3); font-weight: 600;">{point.key}</span><br/>',
       pointFormat:
         '<span style="color:{point.color}">\u25CF</span> <b>{series.name}</b>: <b>{point.y}</b><br/>'
     },
@@ -67,7 +91,7 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
       type: 'datetime',
       crosshair: {
         width: 1,
-        color: isDark ? 'rgba(255, 255, 255, 0.22)' : 'rgba(0, 0, 0, 0.16)',
+        color: isDark ? 'rgba(255, 255, 255, 0.22)' : 'rgba(15, 23, 42, 0.18)',
         dashStyle: 'Dash',
         zIndex: 3
       },
@@ -77,7 +101,8 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
       labels: {
         style: {
           color: labelColor,
-          fontSize: isMobile ? '10px' : '11px'
+          fontSize: isMobile ? '10px' : '11px',
+          fontFamily: 'inherit'
         }
       }
     },
@@ -91,7 +116,8 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
       labels: {
         style: {
           color: labelColor,
-          fontSize: isMobile ? '10px' : '11px'
+          fontSize: isMobile ? '10px' : '11px',
+          fontFamily: 'inherit'
         }
       }
     },
@@ -100,15 +126,13 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
         lineWidth: 2.5,
         marker: {
           enabled: false,
-          radius: 3.5,
+          radius: 4,
           lineWidth: 0,
-          fillColor: seriesData.length <= 1 ? 'var(--foreground-1)' : undefined,
           states: {
             hover: {
               enabled: true,
-              radius: 5,
-              lineWidth: 0,
-              fillColor: seriesData.length <= 1 ? 'var(--foreground-1)' : undefined
+              radius: 5.5,
+              lineWidth: 0
             }
           }
         },
@@ -129,14 +153,31 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
         }
       }
     },
-    series: seriesData.map((s, index) => ({
-      type: 'spline',
-      id: s.id,
-      name: s.name,
-      data: s.data,
-      visible: s.visible !== false,
-      color: s.color || colors[index % colors.length],
-    })) as Highcharts.SeriesOptionsType[],
+    series: seriesData.map((s, index) => {
+      const lineColor = s.color || colors[index % colors.length];
+      return {
+        type: 'spline',
+        id: s.id,
+        name: s.name,
+        data: s.data,
+        visible: s.visible !== false,
+        color: lineColor,
+        marker: {
+          enabled: false,
+          radius: 4,
+          lineWidth: 0,
+          fillColor: lineColor,
+          states: {
+            hover: {
+              enabled: true,
+              radius: 5.5,
+              lineWidth: 0,
+              fillColor: lineColor
+            }
+          }
+        }
+      };
+    }) as Highcharts.SeriesOptionsType[],
     responsive: {
       rules: [
         {

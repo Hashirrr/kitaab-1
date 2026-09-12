@@ -6,11 +6,12 @@ import { themeScript } from '@/store/slices/utils';
 import { ChildrenProps } from '@/store/slices/interface';
 import Header from '@/components/composite/header/Header';
 import Sidebar from '@/components/composite/sidebar/Sidebar';
+import AmbientBackground from '@/components/composite/ambient';
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#3c3c3c' },
-    { media: '(prefers-color-scheme: light)', color: '#f0f0f0' }
+    { media: '(prefers-color-scheme: dark)', color: '#0b0f19' },
+    { media: '(prefers-color-scheme: light)', color: '#f1f5f9' }
   ],
 };
 
@@ -50,6 +51,7 @@ export default function RootLayout({ children }: Readonly<ChildrenProps>) {
       </head>
       <body>
         <StoreProvider>
+          <AmbientBackground />
           <div className={styles.wrapper}>
             <Sidebar />
             <div className={styles.container}>
