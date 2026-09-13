@@ -15,8 +15,8 @@ import Tooltip from '@/components/primitive/tooltip/Tooltip';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { useDeleteDeed, useGetDeeds } from '@/hooks/deeds/hook';
 import IconButton from '@/components/primitive/iconbutton/IconButton';
-import { useDeleteScaleItem, useGetScales, useUpdateScaleType, useCreateScales } from '@/hooks/scales/hook';
 import { ButtonType, Cursor, EventListeners, Form, IconButtonBackground, ModalTypes, Overflow } from '@/constants/enums';
+import { useDeleteScaleItem, useGetScales, useUpdateScaleType, useCreateScales, useDeleteAllScales } from '@/hooks/scales/hook';
 import { selectCurrentDeedId, selectCurrentScaleId, selectModal, selectOpenModalStep, selectPendingScaleCardIndex } from '@/store/slices/selectors';
 import { backdropCondition, createCloseHandler, getModalPrimaryBtn, getModalSecondaryBtn, getModalTitle, handleKeyDown, isDeedUpdateFormChanged, isDeedUpdateFormChangedTooltip, isForm, isScaleUpdateFormChanged, modalActionType, onClose, onConfirm } from './utils';
 
@@ -62,7 +62,8 @@ export default function Modal() {
   const scaleUpdateFormChanged = isScaleUpdateFormChanged(currentScale, scaleForm?.values);
   const { mutateAsync: createScales, isPending: isCreateScalesMutationPending } = useCreateScales();
   const { mutateAsync: updateScaleType, isPending: isUpdateScaleTypePending } = useUpdateScaleType();
-  const isScaleWarningPending = isUpdateScaleTypePending || isCreateScalesMutationPending;
+  const { mutateAsync: deleteAllScales, isPending: isDeleteAllScalesPending } = useDeleteAllScales();
+  const isScaleWarningPending = isUpdateScaleTypePending || isCreateScalesMutationPending || isDeleteAllScalesPending;
   const isFormChanged = type === ModalTypes.edit_scale ? scaleUpdateFormChanged : (type === ModalTypes.edit_deed ? deedUpdateFormChanged : true);
   const isUpdatePending = type === ModalTypes.edit_scale ? isUpdateScalePending : (type === ModalTypes.add_scale ? isCreateScalePending : isUpdateDeedPending);
   const isDeletePending = type === ModalTypes.delete_scale ? isDeleteScalePending : (type === ModalTypes.delete_deed ? isDeleteDeedPending : (type === ModalTypes.scale_type_warning ? isScaleWarningPending : false));
@@ -146,7 +147,7 @@ export default function Modal() {
                 type={ButtonType.button}
                 disabled={isDeletePending}
                 className={styles.primary__btn}
-                onClick={() => onConfirm(type, deleteDeed, deleteScale, dispatch, updateScaleType, createScales, pendingScaleCardIndex)}
+                onClick={() => onConfirm(type, deleteDeed, deleteScale, dispatch, updateScaleType, createScales, pendingScaleCardIndex, deleteAllScales, getScales)}
               >
                 {getModalPrimaryBtn(type, step, undefined, isDeleteDeedPending, undefined, undefined, isDeleteScalePending, undefined, isScaleWarningPending)}
               </button>

@@ -246,7 +246,7 @@ export const onClose = (type: string, step: number, dispatch: AppDispatch, route
   }
 };
 
-export const onConfirm = async (type: string, deleteDeed: () => void, deleteScale: () => void, dispatch: AppDispatch, updateScaleType?: (payload: { type: string }) => Promise<unknown>, createScales?: (payload: CreateScaleItemPayload[]) => Promise<unknown>, pendingScaleCardIndex?: number | null) => {
+export const onConfirm = async (type: string, deleteDeed: () => void, deleteScale: () => void, dispatch: AppDispatch, updateScaleType?: (payload: { type: string }) => Promise<unknown>, createScales?: (payload: CreateScaleItemPayload[]) => Promise<unknown>, pendingScaleCardIndex?: number | null, deleteAllScales?: (items?: ScaleItem[]) => Promise<unknown>, getScales?: ScaleItem[]) => {
   switch (type) {
     case ModalTypes.delete_deed:
       await deleteDeed();
@@ -258,6 +258,7 @@ export const onConfirm = async (type: string, deleteDeed: () => void, deleteScal
       return;
     case ModalTypes.scale_type_warning:
       if (pendingScaleCardIndex === null || pendingScaleCardIndex === undefined) return;
+      if (deleteAllScales) await deleteAllScales(getScales);
       if (pendingScaleCardIndex === 0 && updateScaleType) await updateScaleType({ type: 'count' });
       else {
         if (updateScaleType) await updateScaleType({ type: 'scale' });

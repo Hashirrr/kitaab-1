@@ -103,5 +103,7 @@ export const PLACEHOLDERS = {
   SELECTION_REQUIRED: 'Selection Required',
   ERROR_NO_SUB_DEED_SELECTED: 'Please select at least one sub-deed to display chart data.',
   ERROR_NO_SCALE_SELECTED: 'Please select at least one scale to display chart data.',
-  ERROR_NO_SUB_DEED_AND_SCALE_SELECTED: 'Please select at least one sub-deed and one scale to display chart data.'
+  ERROR_NO_SUB_DEED_AND_SCALE_SELECTED: 'Please select at least one sub-deed and one scale to display chart data.',
+  NO_NOTIFICATIONS_TITLE: 'No notifications to show',
+  NO_NOTIFICATIONS_DESCRIPTION: 'All the notifications will be shown here.'
 };

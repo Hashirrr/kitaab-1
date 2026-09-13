@@ -2,8 +2,8 @@ import { BiSupport } from 'react-icons/bi';
 import styles from './sidebaritem.module.css';
 import { FaNoteSticky } from 'react-icons/fa6';
 import { BsFillGrid3X3GapFill } from 'react-icons/bs';
+import { FaFolderOpen, FaBell } from 'react-icons/fa';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import { FaFolderOpen, FaComment } from 'react-icons/fa';
 
 const {
   SIDEBAR_LI_DEEDS,
@@ -35,7 +35,7 @@ export const sidebarItems = [
     logo: <FaFolderOpen size={24}/>
   },
   {
-    logo: <FaComment size={20}/>,
+    logo: <FaBell size={20}/>,
     text: SIDEBAR_LI_NOTIFICATIONS,
     href: SIDEBAR_LI_HREF_NOTIFICATIONS
   },

@@ -36,3 +36,8 @@ export const deleteScale = async (scaleId: string, itemId: string): Promise<void
 export const updateScalesDisplayOrder = async (scaleId: string, payload: UpdateScalesDisplayOrderPayload): Promise<void> => {
   await axios.patch(update_scales_display_order(scaleId), payload);
 };
+
+export const deleteAllScales = async (scaleId: string, items?: ScaleItem[]): Promise<void> => {
+  const scaleItems = items ?? (await getScales(scaleId));
+  if (scaleItems && scaleItems.length > 0) await Promise.all(scaleItems.map((item) => deleteScale(scaleId, item.scale_items_id)));
+};

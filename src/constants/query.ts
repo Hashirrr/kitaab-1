@@ -7,5 +7,6 @@ export const QUERY = {
   detail: 'detail',
   update: 'update',
   records: 'records',
+  delete_all: 'delete_all',
   display_order: 'display-order'
 };
