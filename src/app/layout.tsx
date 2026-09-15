@@ -1,11 +1,9 @@
 import './globals.css';
-import styles from './layout.module.css';
+import AppLayout from './AppLayout';
 import StoreProvider from '@/store/Provider';
 import type { Metadata, Viewport } from 'next';
 import { themeScript } from '@/store/slices/utils';
 import { ChildrenProps } from '@/store/slices/interface';
-import Header from '@/components/composite/header/Header';
-import Sidebar from '@/components/composite/sidebar/Sidebar';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -50,13 +48,7 @@ export default function RootLayout({ children }: Readonly<ChildrenProps>) {
       </head>
       <body>
         <StoreProvider>
-          <div className={styles.wrapper}>
-            <Sidebar />
-            <div className={styles.container}>
-              <Header />
-              {children}
-            </div>
-          </div>
+          <AppLayout>{children}</AppLayout>
         </StoreProvider>
       </body>
     </html>

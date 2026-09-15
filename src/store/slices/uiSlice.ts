@@ -1,8 +1,8 @@
 import { initialState } from './initialState';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { DateRangePayload, ViewportPayload } from './interface';
-import { DeedCategory, LocalStorage, Mode } from '@/constants/enums';
+import { DateRangePayload, SnackbarPayload, ViewportPayload } from './interface';
+import { DeedCategory, LocalStorage, Mode, SnackbarVariant } from '@/constants/enums';
 
 const { UNDEFINED } = PLACEHOLDERS;
 
@@ -39,6 +39,22 @@ const uiSlice = createSlice({
     },
     closeModal(state) {
       state.modal.isOpen = false;
+    },
+    openSnackbar(state, action: PayloadAction<SnackbarPayload | string>) {
+      if (typeof action.payload === 'string') {
+        state.snackbar.message = action.payload;
+        state.snackbar.variant = SnackbarVariant.error;
+      } else {
+        state.snackbar.message = action.payload.message;
+        state.snackbar.variant = action.payload.variant ?? SnackbarVariant.default;
+        if (action.payload.duration !== undefined) {
+          state.snackbar.duration = action.payload.duration;
+        }
+      }
+      state.snackbar.open = true;
+    },
+    closeSnackbar(state) {
+      state.snackbar.open = false;
     },
     setDeedCategory(state, action: PayloadAction<DeedCategory>) {
       state.deedCategory = action.payload;
@@ -88,6 +104,8 @@ export const {
   setViewport,
   setStartDate,
   setDateRange,
+  openSnackbar,
+  closeSnackbar,
   setModalError,
   setDeedCategory,
   setCurrentDeedId,

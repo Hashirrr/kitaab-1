@@ -2,21 +2,22 @@
 
 import clsx from 'clsx';
 import styles from './styles.module.css';
-import Radio from '@/components/primitive/radio';
 import { useGetDeeds } from '@/hooks/deeds/hook';
 import { useEffect, useMemo, useState } from 'react';
-import Dropdown from '@/components/primitive/dropdown';
-import Checkbox from '@/components/primitive/checkbox';
+import Radio from '@/components/primitive/radio/Radio';
+import Chart from '@/components/composite/chart/Chart';
 import { PLACEHOLDERS } from '@/constants/placeholders';
-import MobileDeedsDropdown from './MobileDeedsDropdown';
 import { useGetRecordsRange } from '@/hooks/records/hook';
-import MobileScalesDropdown from './MobileScalesDropdown';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
-import Chart, { LineChart } from '@/components/composite/chart';
+import LineChart from '@/components/composite/chart/LineChart';
+import Dropdown from '@/components/primitive/dropdown/Dropdown';
+import Checkbox from '@/components/primitive/checkbox/Checkbox';
 import { useGetScale, useGetScales } from '@/hooks/scales/hook';
 import { setCurrentDeedId, setDateRange } from '@/store/slices/uiSlice';
 import { selectCurrentDeedId, selectEndDate, selectStartDate } from '@/store/slices/selectors';
+import MobileDeedsDropdown from '@/components/composite/mobiledeedsdropdown/MobileDeedsDropdown';
 import { getDateRangeFromTimeRange, TIME_RANGE_OPTIONS, isChecked, toggleChecked } from './utils';
+import MobileScalesDropdown from '@/components/composite/mobilescalesdropdown/MobileScalesDropdown';
 
 const SKELETON_DEED_WIDTHS = [65, 48, 76, 54];
 const SKELETON_SCALE_WIDTHS = [78, 58, 42, 68];

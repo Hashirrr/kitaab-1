@@ -2,13 +2,13 @@
 
 import clsx from 'clsx';
 import { isChecked } from './utils';
-import styles from './styles.module.css';
 import { FaChevronDown } from 'react-icons/fa6';
-import Radio from '@/components/primitive/radio';
 import { useEffect, useRef, useState } from 'react';
-import Checkbox from '@/components/primitive/checkbox';
+import styles from './mobiledeedsdropdown.module.css';
+import Radio from '@/components/primitive/radio/Radio';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import type { MobileDeedsDropdownProps } from './interface';
+import Checkbox from '@/components/primitive/checkbox/Checkbox';
 import Skeleton from '@/components/primitive/skeleton/Skeleton';
 
 export default function MobileDeedsDropdown({ deeds, currentDeedId, checkedSubDeeds, isPending, onSelectDeed, onToggleSubDeed }: MobileDeedsDropdownProps) {
@@ -47,7 +47,7 @@ export default function MobileDeedsDropdown({ deeds, currentDeedId, checkedSubDe
         disabled={!hasDeeds}
         className={clsx(styles.mobile__dropdown__trigger, {
           [styles.open]: isOpen,
-          [styles.disabled]: !hasDeeds
+          [styles.disabled]: !hasDeeds,
         })}
         onClick={() => hasDeeds && setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
@@ -56,7 +56,7 @@ export default function MobileDeedsDropdown({ deeds, currentDeedId, checkedSubDe
         {hasDeeds && (
           <span
             className={clsx(styles.mobile__dropdown__chevron, {
-              [styles.open]: isOpen
+              [styles.open]: isOpen,
             })}
           >
             <FaChevronDown size={11} />
