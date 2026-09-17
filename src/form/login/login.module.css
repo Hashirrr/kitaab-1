@@ -1,0 +1,123 @@
+.form {
+  gap: 10px;
+  width: 100%;
+  display: flex;
+  margin-top: 12px;
+  flex-direction: column;
+}
+
+.forgot__password__wrapper {
+  width: 100%;
+  display: flex;
+  margin-top: -4px;
+  justify-content: flex-end;
+}
+
+.forgot__password {
+  border: none;
+  outline: none;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 0 5px 0 0;
+  text-decoration: none;
+  background: transparent;
+  color: var(--foreground-3);
+  transition: color 200ms ease, text-decoration 200ms ease;
+}
+
+.forgot__password:hover {
+  color: var(--foreground-1);
+  text-decoration: underline;
+}
+
+.button__group {
+  gap: 8px;
+  width: 100%;
+  display: flex;
+  margin-top: 16px;
+}
+
+.btn__wrapper {
+  flex: 1;
+  display: flex;
+}
+
+.btn__wrapper .btn {
+  width: 100%;
+}
+
+.btn {
+  flex: 1;
+  height: 36px;
+  border: none;
+  outline: none;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 6px;
+  align-items: center;
+  white-space: nowrap;
+  display: inline-flex;
+  justify-content: center;
+  box-shadow: var(--box-shadow);
+  transition: background-color 250ms ease, color 250ms ease, transform 150ms ease, box-shadow 200ms ease;
+}
+
+.btn:hover:not(:disabled) {
+  box-shadow: var(--box-shadow-hover);
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  transform: none;
+  box-shadow: none;
+}
+
+.primary__btn {
+  color: var(--background-3);
+  background: var(--foreground-1);
+}
+
+.primary__btn:hover:not(:disabled) {
+  background: var(--foreground-2);
+}
+
+.primary__btn:disabled {
+  opacity: 0.5;
+  box-shadow: none;
+  cursor: var(--not-allowed-cursor);
+}
+
+.secondary__btn {
+  box-shadow: none;
+  color: var(--foreground-3);
+  background: var(--background-2);
+}
+
+.secondary__btn:hover {
+  box-shadow: none;
+  color: var(--foreground-2);
+  background: var(--background-1);
+}
+
+.visibility__btn {
+  padding: 0;
+  border: none;
+  outline: none;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  pointer-events: auto;
+  justify-content: center;
+  background: transparent;
+  color: var(--foreground-3);
+  transition: color 200ms ease;
+}
+
+.visibility__btn:hover {
+  color: var(--foreground-1);
+}

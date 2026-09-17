@@ -59,7 +59,7 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
         color: textColor,
         fontSize: '12px'
       },
-      headerFormat: '<span style="font-size: 11px; color: var(--foreground-3); font-weight: 500;">{point.key}</span><br/>',
+      headerFormat: '<span style="font-size: 12px; color: var(--foreground-3); font-weight: 500;">{point.key}</span><br/>',
       pointFormat:
         '<span style="color:{point.color}">\u25CF</span> <b>{series.name}</b>: <b>{point.y}</b><br/>'
     },
@@ -77,7 +77,7 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
       labels: {
         style: {
           color: labelColor,
-          fontSize: isMobile ? '10px' : '11px'
+          fontSize: isMobile ? '10px' : '12px'
         }
       }
     },
@@ -91,7 +91,7 @@ export const getDefaultLineChartOptions = (mode: Mode = Mode.light, seriesData: 
       labels: {
         style: {
           color: labelColor,
-          fontSize: isMobile ? '10px' : '11px'
+          fontSize: isMobile ? '10px' : '12px'
         }
       }
     },

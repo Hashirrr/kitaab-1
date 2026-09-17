@@ -90,17 +90,21 @@
 .left__icon {
   top: 50%;
   left: 10px;
+  display: flex;
   position: absolute;
+  align-items: center;
   pointer-events: none;
-  color: var(--foreground-2);
+  color: var(--foreground-3);
   transform: translateY(-50%);
 }
 
 .right__icon {
   top: 50%;
   right: 10px;
+  display: flex;
   position: absolute;
+  align-items: center;
   pointer-events: none;
-  color: var(--foreground-2);
+  color: var(--foreground-3);
   transform: translateY(-50%);
 }

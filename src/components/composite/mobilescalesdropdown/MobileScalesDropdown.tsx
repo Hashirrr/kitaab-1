@@ -2,12 +2,12 @@
 
 import clsx from 'clsx';
 import { isChecked } from './utils';
-import styles from './styles.module.css';
 import { FaChevronDown } from 'react-icons/fa6';
 import { useEffect, useRef, useState } from 'react';
-import Checkbox from '@/components/primitive/checkbox';
+import styles from './mobilescalesdropdown.module.css';
 import { PLACEHOLDERS } from '@/constants/placeholders';
 import type { MobileScalesDropdownProps } from './interface';
+import Checkbox from '@/components/primitive/checkbox/Checkbox';
 import Skeleton from '@/components/primitive/skeleton/Skeleton';
 
 export default function MobileScalesDropdown({ scales, checkedScales, isPending, onToggleScale }: MobileScalesDropdownProps) {
@@ -16,7 +16,7 @@ export default function MobileScalesDropdown({ scales, checkedScales, isPending,
 
   const hasScales = scales.length > 0;
   const selectedCount = scales.filter((scale) => isChecked(checkedScales, scale)).length;
-  const triggerLabel = !hasScales ? PLACEHOLDERS.NO_SCALES_FOUND : selectedCount === scales.length ? 'All Scales' : `Scales (${selectedCount}/${scales.length})`;
+  const triggerLabel = !hasScales? PLACEHOLDERS.NO_SCALES_FOUND : selectedCount === scales.length ? 'All Scales' : `Scales (${selectedCount}/${scales.length})`;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -46,7 +46,7 @@ export default function MobileScalesDropdown({ scales, checkedScales, isPending,
         disabled={!hasScales}
         className={clsx(styles.mobile__dropdown__trigger, {
           [styles.open]: isOpen,
-          [styles.disabled]: !hasScales
+          [styles.disabled]: !hasScales,
         })}
         onClick={() => hasScales && setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
@@ -55,7 +55,7 @@ export default function MobileScalesDropdown({ scales, checkedScales, isPending,
         {hasScales && (
           <span
             className={clsx(styles.mobile__dropdown__chevron, {
-              [styles.open]: isOpen
+              [styles.open]: isOpen,
             })}
           >
             <FaChevronDown size={11} />

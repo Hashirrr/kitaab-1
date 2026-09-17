@@ -120,3 +120,11 @@ export enum MessageSender {
   me = 'me',
   other = 'other'
 };
+
+export enum SnackbarVariant {
+  info = 'info',
+  error = 'error',
+  default = 'default',
+  success = 'success',
+  warning = 'warning'
+}

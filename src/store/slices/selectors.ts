@@ -35,3 +35,6 @@ export const selectIsChangingScaleType = (state: RootState) =>
 
 export const selectPendingScaleCardIndex = (state: RootState) =>
   state.ui.pendingScaleCardIndex;
+
+export const selectSnackbar = (state: RootState) =>
+  state.ui.snackbar;

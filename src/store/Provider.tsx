@@ -6,6 +6,7 @@ import { FormProvider } from './FormProvider';
 import { ChildrenProps } from './slices/interface';
 import Modal from '@/components/primitive/modal/Modal';
 import { ViewportWatcher } from './slices/ViewportWatcher';
+import Snackbar from '@/components/primitive/snackbar/Snackbar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
@@ -25,6 +26,7 @@ export default function StoreProvider({ children }: ChildrenProps) {
           <ViewportWatcher />
           {children}
           <Modal />
+          <Snackbar />
         </FormProvider>
       </QueryClientProvider>
     </Provider>

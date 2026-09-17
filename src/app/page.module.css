@@ -1,0 +1,35 @@
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  height: 40px;
+  border: none;
+  outline: none;
+  padding: 0 24px;
+  font-size: 14px;
+  cursor: pointer;
+  min-width: 140px;
+  font-weight: 600;
+  border-radius: 6px;
+  align-items: center;
+  white-space: nowrap;
+  display: inline-flex;
+  justify-content: center;
+  color: var(--background-3);
+  box-shadow: var(--box-shadow);
+  background: var(--foreground-1);
+  transition: background-color 250ms ease, color 250ms ease, transform 150ms ease, box-shadow 200ms ease;
+}
+
+.button:hover {
+  background: var(--foreground-2);
+  box-shadow: var(--box-shadow-hover);
+}
+
+.button:active {
+  transform: scale(0.98);
+}
